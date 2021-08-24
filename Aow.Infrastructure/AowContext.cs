@@ -1,10 +1,10 @@
 ﻿using Aow.Infrastructure.Domain;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace Aow.Infrastructure
 {
-    public class AowContext : DbContext
+    public class AowContext : IdentityDbContext
     {
         public AowContext(DbContextOptions<AowContext> options)
            : base(options)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Aow.Infrastructure.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -31,5 +32,7 @@ namespace Aow.Infrastructure.Paging
 
             return new PagedList<T>(items, count, pageNumber, pageSize);
         }
+
+      
     }
 }

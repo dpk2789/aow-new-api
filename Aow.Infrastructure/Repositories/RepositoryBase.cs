@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Aow.Infrastructure.Repositories
 {
@@ -16,6 +18,12 @@ namespace Aow.Infrastructure.Repositories
         {
             return this.RepositoryContext.Set<T>().AsNoTracking();
         }
+
+        public async Task<List<T>> GetAll()
+        {
+            return await this.RepositoryContext.Set<T>().ToListAsync();
+        }
+
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
         {
             return this.RepositoryContext.Set<T>().Where(expression).AsNoTracking();

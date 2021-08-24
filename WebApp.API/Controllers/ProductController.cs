@@ -1,12 +1,9 @@
-﻿using Aow.Infrastructure.Domain;
-using Aow.Infrastructure.Paging;
+﻿using Aow.Infrastructure.Paging;
 using Aow.Infrastructure.Repositories;
 using Aow.Services.Products;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using static Aow.Services.Products.GetProducts;
+
 
 namespace WebApp.API.Controllers
 {
@@ -14,11 +11,9 @@ namespace WebApp.API.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IProductRepository _productRepository;
-
-        public ProductController(IProductRepository productRepository)
+        public ProductController()
         {
-            _productRepository = productRepository;
+
         }
 
         [HttpGet("api/Products/GetProducts")]
@@ -27,10 +22,10 @@ namespace WebApp.API.Controllers
             return Ok(getProduct.Do(pagingParameters));
         }
 
-        [HttpGet("api/Products/GetProductByName")]
-        public IActionResult GetProductById(Guid Id)
+        [HttpGet("api/Products/GetProductById")]
+        public IActionResult GetProductById(Guid Id, [FromServices] GetProduct getProduct)
         {
-            var product = _productRepository.GetProduct(Id);
+            var product = getProduct.Do(Id);
             if (product == null)
             {
                 return NotFound();

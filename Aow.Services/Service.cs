@@ -2,7 +2,6 @@
 
 namespace Aow.Services
 {
-    public class Class1
-    {
-    }
+    public class Service : Attribute { }
+   
 }

@@ -2,10 +2,11 @@
 using Aow.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace Aow.Services.Products
 {
+    [Service]
     public class GetProducts
     {
         private IProductRepository _productRepository;
@@ -33,11 +34,16 @@ namespace Aow.Services.Products
             public string Type { get; set; }
             public string Extention { get; set; }
         }
-        public async Task<IEnumerable<ProductViewModelResponse>> Do(PagingParameters pagingParameters)
+        public IEnumerable<ProductViewModelResponse> Do(PagingParameters pagingParameters)
         {
-            var list = _productRepository.GetProducts(pagingParameters);
-            
-            return list;
+            var list = _productRepository.GetProducts(pagingParameters).GetAwaiter().GetResult();
+            var newList = list.Select(x => new ProductViewModelResponse
+            {
+                Id = x.Id
+            });
+
+            return newList;
+
         }
     }
 }
