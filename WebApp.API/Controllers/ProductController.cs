@@ -1,5 +1,4 @@
 ﻿using Aow.Infrastructure.Paging;
-using Aow.Infrastructure.Repositories;
 using Aow.Services.Products;
 using Microsoft.AspNetCore.Mvc;
 using System;

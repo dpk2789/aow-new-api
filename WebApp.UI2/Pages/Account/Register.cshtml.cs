@@ -90,7 +90,7 @@ namespace WebApp.UI2.Pages.Account
             //    values: new { userId = data.UserId, code = data.Msg, returnUrl },
             //    protocol: Request.Scheme);
 
-            var url = "https://localhost:44324/Account/ConfirmEmail?userId=" + data.UserId + "&code=" + data.Msg;
+            var url = "https://localhost:44320/Account/ConfirmEmail?userId=" + data.UserId + "&code=" + data.Code;
             var link = $"<a href='{url}'>Click here</a>";
 
             await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",

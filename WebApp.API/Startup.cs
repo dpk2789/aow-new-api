@@ -1,4 +1,5 @@
 using Aow.Infrastructure;
+using Aow.Infrastructure.Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -38,8 +39,8 @@ namespace WebApp.API
                     Configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(AowContext).Assembly.FullName)));
 
-            services.AddIdentity<IdentityUser,IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-               .AddEntityFrameworkStores<AowContext>();
+            services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+               .AddEntityFrameworkStores<AowContext>().AddDefaultTokenProviders(); ;
 
             services.AddApplicationServices();
         }
