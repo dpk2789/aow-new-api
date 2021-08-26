@@ -1,14 +1,10 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WebApp.UI2.Helpers;
 
 namespace WebApp.UI2
@@ -26,8 +22,9 @@ namespace WebApp.UI2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services
-               .AddMvc(o => o.EnableEndpointRouting = false);
+            services.AddMvc(o => o.EnableEndpointRouting = false);
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+
             services.AddTransient<IEmailSender, EmailSender>(i =>
                    new EmailSender(
                        Configuration["EmailSender:Host"],
@@ -58,12 +55,14 @@ namespace WebApp.UI2
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapRazorPages();
-            });
+            app.UseMvcWithDefaultRoute();
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapRazorPages();
+            //});
         }
     }
 }

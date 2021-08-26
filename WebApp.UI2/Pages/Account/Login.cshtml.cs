@@ -9,9 +9,7 @@ using System;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Security.Claims;
-using WebApp.UI.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
-
 using System.Net.Http.Headers;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
@@ -26,10 +24,8 @@ namespace WebApp.RazorPages.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-
         [BindProperty]
         public InputModel Input { get; set; }
-
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public string ReturnUrl { get; set; }
@@ -132,8 +128,6 @@ namespace WebApp.RazorPages.Areas.Identity.Pages.Account
                     IsPersistent = true,
                     ExpiresUtc = DateTime.UtcNow.AddHours((securitytoken.expires_in))
                 };
-
-
 
                 var claimsIdentity = new ClaimsIdentity(claims, "ApplicationCookie");
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);

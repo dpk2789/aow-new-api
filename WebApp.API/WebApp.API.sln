@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aow.Infrastructure", "..\Ao
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aow.Services", "..\Aow.Services\Aow.Services.csproj", "{8060BB9D-BC6B-474A-BB5B-8E42ACB06E2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.UI2", "..\WebApp.UI2\WebApp.UI2.csproj", "{A416895A-1DB3-43DC-948B-6CE2D6EA3494}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp.UI2", "..\WebApp.UI2\WebApp.UI2.csproj", "{A416895A-1DB3-43DC-948B-6CE2D6EA3494}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

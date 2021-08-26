@@ -14,7 +14,11 @@ namespace Aow.Services.Account
         {
             _userManager = userManager;
         }
-
+        public class ConfirmEmailRequest
+        {
+            public string UserId { get; set; }
+            public string Code { get; set; }           
+        }
         public class ConfirmEmailResponse
         {
             public string UserId { get; set; }

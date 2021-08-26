@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
 using WebApp.UI2.Helpers;
 
@@ -19,6 +15,9 @@ namespace WebApp.RazorPages.Areas.Identity.Pages.Account
     {
         [TempData]
         public string StatusMessage { get; set; }
+
+        [BindProperty]
+        public ConfirmEmailResponse Input { get; set; }
         public class ConfirmEmailResponse
         {           
             public string StatusMessage { get; set; }
@@ -41,6 +40,7 @@ namespace WebApp.RazorPages.Areas.Identity.Pages.Account
             //postTask.Wait();
             var result = postTask.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             var data = JsonConvert.DeserializeObject<ConfirmEmailResponse>(result);
+            Input = data;
             return Page();
         }
     }
