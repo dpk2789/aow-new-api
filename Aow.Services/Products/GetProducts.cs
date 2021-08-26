@@ -43,7 +43,6 @@ namespace Aow.Services.Products
             });
 
             return newList;
-
         }
     }
 }
