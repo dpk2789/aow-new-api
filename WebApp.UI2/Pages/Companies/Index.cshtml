@@ -1,4 +1,35 @@
 ﻿@page
-@model WebApp.UI2.Pages.Companies.IndexModel
+@model IndexModel
 @{
 }
+<h1>Companies</h1>
+<a class="btn btn-success" asp-page="/Companies/Add">Add New Company</a>
+<div id="product-main">
+    <table class="table">
+        <tr>
+            <th>Id</th>
+            <th>Product</th>
+
+            <th></th>
+        </tr>
+        <tbody>
+            @foreach (var product in Model.Companies)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.Name)
+                    </td>
+
+                    <td>
+                        <a asp-route-id="@product.Id" asp-page="Companies/Edit" class="fa fa-edit">Edit</a> |
+                        @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                        <button onclick="confirmAction(event)" data-product-id="@product.Id" type="button" class="btn-danger small">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

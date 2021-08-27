@@ -1,4 +1,4 @@
-﻿namespace WebApp.UI.Models
+﻿namespace WebApp.UI2.Models
 {
     public class ApiResponse
     {

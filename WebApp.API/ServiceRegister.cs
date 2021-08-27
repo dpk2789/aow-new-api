@@ -23,7 +23,7 @@ namespace WebApp.API
             }
           
             @this.AddTransient<IProductRepository, ProductRepository>();
-          
+            @this.AddTransient<ICompanyRepository, CompanyRepository>();
             return @this;
         }
     }
