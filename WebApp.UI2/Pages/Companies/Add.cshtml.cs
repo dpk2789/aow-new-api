@@ -19,8 +19,7 @@ namespace WebApp.UI2.Pages.Companies
         public class InputModel
         {
             public string Name { get; set; }
-            public string Description { get; set; }
-            public decimal Value { get; set; }          
+          
         }
         public void OnGet()
         {
@@ -29,10 +28,10 @@ namespace WebApp.UI2.Pages.Companies
         {
             if (!ModelState.IsValid) return Page();
             using var client = new HttpClient();
-            var addProductsUri = new Uri(ApiUrls.Product.Create);
+            var addProductsUri = new Uri(ApiUrls.Company.Create);
           
           
-            var json = JsonConvert.SerializeObject(new { Input.Name, Input.Value, Input.Description });
+            var json = JsonConvert.SerializeObject(new { Input.Name});
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var userAccessToken = User.Claims.FirstOrDefault(x => x.Type == "AcessToken")?.Value;

@@ -13,6 +13,11 @@ namespace WebApp.UI2.Pages.Companies
 {
     public class IndexModel : PageModel
     {
+        public string ApiUrl { get; }
+        public IndexModel()
+        {
+            ApiUrl = ApiUrls.Rootlocal;
+        }
         public class CompanyViewModel
         {
             public Guid Id { get; set; }

@@ -27,7 +27,8 @@ namespace Aow.Services.Companies
             var list = _companyRepository.GetCompanies(pagingParameters).GetAwaiter().GetResult();
             var newList = list.Select(x => new CompaniesResponse
             {
-                Id = x.Id
+                Id = x.Id,
+                Name=x.Name
             });
 
             return newList;

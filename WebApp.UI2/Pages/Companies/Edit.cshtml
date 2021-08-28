@@ -2,3 +2,24 @@
 @model WebApp.UI2.Pages.Companies.EditModel
 @{
 }
+
+<form method="post" enctype="multipart/form-data">
+    <h4>Update Company</h4>
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" asp-for="Input.Id" />
+
+    <div class="mb-3 row">
+        <label asp-for="Input.Name" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-6">
+            <input asp-for="Input.Name" class="form-control" />
+        </div>
+        <span asp-validation-for="Input.Name" class="text-danger"></span>
+    </div>
+
+    <div class="d-grid gap-2 d-md-flex offset-6">
+        <button class="btn btn-primary me-md-2" type="button">Cancel</button>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+
+</form>

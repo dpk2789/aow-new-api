@@ -22,10 +22,10 @@
         public static class Company
         {
             public const string GetCompanies = Rootlocal + "/api/Companies/GetCompanies";
-            public const string GetCompany = Rootlocal + "/api/Companies/GetCompany";
+            public const string GetCompany = Rootlocal + "/api/Company/GetCompany";
             public const string GetCompanyByName = Rootlocal + "/api/Companies/GetCompanyByName";
-            public const string Create = Rootlocal + "/api/Companies/CreateProduct";
-            public const string Update = Rootlocal + "/api/Companies/UpdateProduct";
+            public const string Create = Rootlocal + "/api/Company/CreateCompany";
+            public const string Update = Rootlocal + "/api/Company/UpdateCompany";
             public const string Delete = Rootlocal + "/Companies/{postId}";
         }
         public static class Cart

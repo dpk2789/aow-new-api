@@ -9,7 +9,6 @@ namespace Aow.Services.Companies
     public class AddCompany
     {
         private ICompanyRepository _companyRepository;
-
         public AddCompany(ICompanyRepository companyRepository)
         {
             _companyRepository = companyRepository;
@@ -41,14 +40,22 @@ namespace Aow.Services.Companies
             int i = await _companyRepository.Save();
             if (i <= 0)
             {
-                throw new Exception("Failed to create product");
+                return new CreateResponse
+                {                   
+                    Name = product.Name,
+                    Success = false
+                };
             }
-
-            return new CreateResponse
+            else
             {
-                Id = product.Id,
-                Name = product.Name
-            };
+                return new CreateResponse
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Success=true
+                };
+            }
+          
         }
     }
 }
