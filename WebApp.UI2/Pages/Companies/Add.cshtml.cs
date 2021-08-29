@@ -18,8 +18,7 @@ namespace WebApp.UI2.Pages.Companies
 
         public class InputModel
         {
-            public string Name { get; set; }
-          
+            public string Name { get; set; }          
         }
         public void OnGet()
         {
