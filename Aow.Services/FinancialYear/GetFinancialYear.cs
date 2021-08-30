@@ -1,11 +1,18 @@
-﻿using System;
+﻿using Aow.Infrastructure.Repositories;
+using System;
 
 namespace Aow.Services.FinancialYear
 {
     public class GetFinancialYear
     {
+        private IFinancialYearRepository _financialYearRepository;
+        public GetFinancialYear(IFinancialYearRepository financialYearRepository)
+        {
+            _financialYearRepository = financialYearRepository;
+        }
         public class GetFinancialYearResponse
         {
+            public Guid Id { get; set; }
             public string Name { get; set; }
             public DateTime? Start { get; set; }
             public DateTime? End { get; set; }
@@ -13,7 +20,7 @@ namespace Aow.Services.FinancialYear
             public bool IsActive { get; set; }
             public bool? IsLocked { get; set; }
             public Guid CompanyId { get; set; }
-           
+            public bool Success { get; set; }
             public string FinancialYearName
             {
                 get
@@ -22,6 +29,19 @@ namespace Aow.Services.FinancialYear
                     return financialYearName == "<br/>" ? string.Empty : financialYearName;
                 }
             }
+        }
+
+     
+        public GetFinancialYearResponse Do(Guid id)
+        {
+            var company = _financialYearRepository.GetFinancialYear(id);
+            GetFinancialYearResponse getCompanyResponse = new GetFinancialYearResponse
+            {
+                Id = company.Id,
+                Name = company.Name
+            };
+
+            return getCompanyResponse;
         }
     }
 }
