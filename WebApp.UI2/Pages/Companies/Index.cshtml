@@ -13,20 +13,20 @@
             <th></th>
         </tr>
         <tbody>
-            @foreach (var product in Model.Companies)
+            @foreach (var company in Model.Companies)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => product.Id)
+                        @Html.DisplayFor(modelItem => company.Id)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => product.Name)
+                        @Html.DisplayFor(modelItem => company.Name)
                     </td>
 
                     <td>
-                        <a asp-route-id="@product.Id" asp-page="/Companies/Edit" class="fa fa-edit">Edit</a> |
-                        <a asp-page="/MyBooks/Dashboard">My Books</a> |
-                        <button onclick="confirmAction(event)" data-product-id="@product.Id" type="button" class="btn-danger small">Delete</button>
+                        <a asp-route-id="@company.Id" asp-page="/Companies/Edit" class="fa fa-edit">Edit</a> |
+                        <a asp-page="/MyBooks/Dashboard" asp-route-companyId="@company.Id">My Books</a> |
+                        <button onclick="confirmAction(event)" data-product-id="@company.Id" type="button" class="btn-danger small">Delete</button>
                     </td>
                 </tr>
             }

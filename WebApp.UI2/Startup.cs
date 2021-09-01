@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,6 +35,8 @@ namespace WebApp.UI2
                        Configuration["EmailSender:Password"]
                    )
                );
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<ICookieHelper, CookieHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

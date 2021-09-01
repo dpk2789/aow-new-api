@@ -1,7 +1,6 @@
 ﻿@page
 @model WebApp.UI2.Pages.MyBooks.FinancialYear.AddModel
-@{
-}
+
 @{
     var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
 }
@@ -54,7 +53,16 @@
                                     </div>
                                     <span asp-validation-for="Input.Name" class="text-danger"></span>
                                 </div>
-
+                                <div class="mb-3 row">
+                                    <label asp-for="Input.Start" class="control-label"></label>
+                                    <input name="Start" class="form-control StartDate" placeholder="Start Date" />
+                                    <span asp-validation-for="Input.Start" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label asp-for="Input.End" class="control-label"></label>
+                                    <input name="End" class="form-control EndDate" placeholder="End Date" />
+                                    <span asp-validation-for="Input.End" class="text-danger"></span>
+                                </div>
                             </form>
                         </div>
 
@@ -73,11 +81,39 @@
 
         </div>
         <!-- /.container-fluid -->
+
+        <div class="card card-warning card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-edit"></i>
+                    Toastr Examples
+                </h3>
+            </div>
+            <div class="card-body">
+                <button type="button" class="btn btn-success toastrDefaultSuccess">
+                    Launch Success Toast
+                </button>
+                <button type="button" class="btn btn-info toastrDefaultInfo">
+                    Launch Info Toast
+                </button>
+                <button type="button" class="btn btn-danger toastrDefaultError">
+                    Launch Error Toast
+                </button>
+                <button type="button" class="btn btn-warning toastrDefaultWarning">
+                    Launch Warning Toast
+                </button>
+                <div class="text-muted mt-3">
+                    For more examples look at <a href="https://codeseven.github.io/toastr/">https://codeseven.github.io/toastr/</a>
+                </div>
+            </div>
+            <!-- /.card -->
+        </div>
     </section>
 
 </div>
 <div class="panel-body" id="getResult1"></div>
 <input type="hidden" value="@userId" id="userId" />
+<input type="hidden" value="@Model.Input.CompanyId" id="cmpId" />
 @section scripts{
     @*<script src="~/js/product.js"></script>*@
     <script>
@@ -115,15 +151,20 @@
         }
 
         var addFinancialYearRequest = {
-            "name": "f1",
-            "start": "2021-04-01",
-            "end": "2022-03-31",
-            "isActive": true,
-            "isLocked": true,
-            "companyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            name: "f1",
+            start: "2021-04-01",
+            end: "2022-03-31",
+            isActive: true,
+            isLocked: true,
+            companyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         };
         function performPostRequest(e) {
             let el = document.getElementById('userId');
+            let fName = document.getElementById('Input_Name').value;
+            let cmpId = document.getElementById('cmpId').value;
+            addFinancialYearRequest.name = fName;
+            addFinancialYearRequest.companyId = cmpId;
+            alert(fName + " _" + cmpId);
             let userAccessToken = el.value;
             console.log(userAccessToken);
 
@@ -134,14 +175,26 @@
             })
                  .then(function (response) {
                      console.log(response);
+                     toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
                 })
                 .catch(function (error) {
                     console.log(error);
+                    toastr.error('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
                 });
-
-
             e.preventDefault();
         }
 
+        $('.toastrDefaultSuccess').click(function () {
+            toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+        });
+        $('.toastrDefaultInfo').click(function () {
+            toastr.info('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+        });
+        $('.toastrDefaultError').click(function () {
+            toastr.error('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+        });
+        $('.toastrDefaultWarning').click(function () {
+            toastr.warning('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+        });
     </script>
 }

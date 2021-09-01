@@ -1,16 +1,19 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WebApp.UI2.Helpers;
 
 namespace WebApp.UI2.Pages.MyBooks
 {
     public class DashboardModel : PageModel
     {
-        public void OnGet()
+        private readonly ICookieHelper _cookieHelper;     
+        public DashboardModel(ICookieHelper cookieHelper)
+        {          
+            _cookieHelper = cookieHelper;
+        }
+        public void OnGet(Guid companyId)
         {
+            _cookieHelper.Set("cmpCookee", companyId.ToString(), 60);
         }
     }
 }

@@ -14,18 +14,36 @@ namespace WebApp.UI2.Pages.MyBooks.FinancialYear
 {
     public class AddModel : PageModel
     {
+        private readonly ICookieHelper _cookieHelper;
         public string ApiUrl { get; }
-        public AddModel()
+        public AddModel(ICookieHelper cookieHelper)
         {
             ApiUrl = ApiUrls.Rootlocal;
+            _cookieHelper = cookieHelper;
         }
         [BindProperty] public InputModel Input { get; set; }
         public class InputModel
         {
             public string Name { get; set; }
+            public DateTime? Start { get; set; }
+            public DateTime? End { get; set; }
+            public bool IsActive { get; set; }
+            public bool IsLocked { get; set; }          
+            public string CompanyName { get; set; }
+            public string CompanyId { get; set; }
         }
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            var cmpid = _cookieHelper.Get("cmpCookee");
+
+            if (string.IsNullOrEmpty(cmpid) && string.IsNullOrEmpty(cmpid))
+            {
+                return RedirectToPage("/");
+            }
+            InputModel inputModel = new InputModel();
+            inputModel.CompanyId = cmpid;
+            Input = inputModel;
+            return Page();
         }
 
         public async Task<IActionResult> OnPost()
