@@ -1,0 +1,34 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "moment.js@2.29.1",
+      "destination": "wwwroot/moment.js/",
+      "files": [
+        "moment.min.js",
+        "moment.js"
+      ]
+    },
+    {
+      "library": "bootstrap@4.6.0",
+      "destination": "wwwroot/bootstrap/",
+      "files": [
+        "js/bootstrap.min.js",
+        "js/bootstrap.js",
+        "css/bootstrap.css",
+        "css/bootstrap.min.css",
+        "js/bootstrap.bundle.js",
+        "js/bootstrap.bundle.min.js"
+      ]
+    },
+    {
+      "library": "tempusdominus-bootstrap-4@5.39.0",
+      "destination": "wwwroot/tempusdominus-bootstrap-4/"
+    },
+    {
+      "library": "toastr.js@2.1.4",
+      "destination": "wwwroot/toastr.js/"
+    }
+  ]
+}

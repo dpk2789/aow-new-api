@@ -54,13 +54,19 @@
                                     <span asp-validation-for="Input.Name" class="text-danger"></span>
                                 </div>
                                 <div class="mb-3 row">
-                                    <label asp-for="Input.Start" class="control-label"></label>
-                                    <input name="Start" class="form-control StartDate" placeholder="Start Date" />
+                                    <label asp-for="Input.Start" class="col-sm-2 col-form-label"></label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control datetimepicker-input" id="StartDate"
+                                               data-toggle="datetimepicker" data-target="#StartDate" />
+                                    </div>
                                     <span asp-validation-for="Input.Start" class="text-danger"></span>
                                 </div>
                                 <div class="mb-3 row">
-                                    <label asp-for="Input.End" class="control-label"></label>
-                                    <input name="End" class="form-control EndDate" placeholder="End Date" />
+                                    <label asp-for="Input.Start" class="col-sm-2 col-form-label"></label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control datetimepicker-input" id="EndDate"
+                                               data-toggle="datetimepicker" data-target="#EndDate" />
+                                    </div>
                                     <span asp-validation-for="Input.End" class="text-danger"></span>
                                 </div>
                             </form>
@@ -117,8 +123,15 @@
 @section scripts{
     @*<script src="~/js/product.js"></script>*@
     <script>
-      //  var apiUrl = "https://localhost:44347";
-        // var apiUrl = "http://api.robustpackagingeshop.com";
+        //Date picker
+        $('#StartDate').datetimepicker({
+           /* format: 'L',*/
+            format: 'YYYY/MM/DD'
+        });
+        $('#EndDate').datetimepicker({
+            /* format: 'L',*/
+            format: 'YYYY/MM/DD'
+        });
         var apiUrl = '@Model.ApiUrl';
         axios.interceptors.request.use(function (config) {
 
@@ -159,13 +172,17 @@
             companyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         };
         function performPostRequest(e) {
-            let el = document.getElementById('userId');
+            let userId = document.getElementById('userId');
             let fName = document.getElementById('Input_Name').value;
             let cmpId = document.getElementById('cmpId').value;
+            let startDate = document.getElementById('StartDate').value;
+            let endDate = document.getElementById('EndDate').value;
             addFinancialYearRequest.name = fName;
             addFinancialYearRequest.companyId = cmpId;
+            addFinancialYearRequest.start = startDate;
+            addFinancialYearRequest.end = endDate;
             alert(fName + " _" + cmpId);
-            let userAccessToken = el.value;
+            let userAccessToken = userId.value;
             console.log(userAccessToken);
 
              axios.post(`${apiUrl}/api/FinancialYear/AddFinancialYear`, this.addFinancialYearRequest, {
