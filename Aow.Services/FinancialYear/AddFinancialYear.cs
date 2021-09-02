@@ -15,12 +15,11 @@ namespace Aow.Services.FinancialYear
         public class AddFinancialYearRequest
         {
             public string Name { get; set; }
-            public DateTime? Start { get; set; }
-            public DateTime? End { get; set; }
-         
+            public string Start { get; set; }
+            public string End { get; set; }
             public string CompanyId { get; set; }
-
         }
+
         public class AddFinancialYearResponse
         {
             public Guid Id { get; set; }
@@ -35,7 +34,11 @@ namespace Aow.Services.FinancialYear
             {
                 Id = ProductId,
                 Name = request.Name,
+                Start = Convert.ToDateTime(request.Start),
+                End = Convert.ToDateTime(request.End),
+                CompanyId = Guid.Parse(request.CompanyId)
             };
+
             _financialYearRepository.Create(financialYear);
             int i = await _financialYearRepository.Save();
             if (i <= 0)

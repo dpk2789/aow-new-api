@@ -62,7 +62,7 @@
                                     <span asp-validation-for="Input.Start" class="text-danger"></span>
                                 </div>
                                 <div class="mb-3 row">
-                                    <label asp-for="Input.Start" class="col-sm-2 col-form-label"></label>
+                                    <label asp-for="Input.End" class="col-sm-2 col-form-label"></label>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control datetimepicker-input" id="EndDate"
                                                data-toggle="datetimepicker" data-target="#EndDate" />
@@ -176,9 +176,9 @@
             let endDate = document.getElementById('EndDate').value;
             addFinancialYearRequest.name = fName;
             addFinancialYearRequest.companyId = cmpId;
-            //addFinancialYearRequest.start = startDate;
-            //addFinancialYearRequest.end = endDate;
-            alert(fName + " _" + cmpId);
+            addFinancialYearRequest.start = startDate;
+            addFinancialYearRequest.end = endDate;
+          
             let userAccessToken = userId.value;
             console.log(this.addFinancialYearRequest);
 
@@ -189,11 +189,12 @@
             })
                  .then(function (response) {
                      console.log(response);
-                     toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+                     toastr.success('Financial Year Created Successfully')
+                     window.location.href = '/MyBooks/FinancialYear/index'
                 })
                 .catch(function (error) {
                     console.log(error);
-                    toastr.error('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+                    toastr.error('Some Error Occur!!')
                 });
             e.preventDefault();
         }

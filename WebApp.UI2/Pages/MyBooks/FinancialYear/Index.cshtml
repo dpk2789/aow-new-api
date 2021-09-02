@@ -1,7 +1,5 @@
 ﻿@page
 @model WebApp.UI2.Pages.MyBooks.FinancialYear.IndexModel
-@{
-}
 
 
 <div class="content-wrapper">
@@ -23,4 +21,36 @@
     </div>
     <!-- /.content-header -->
     <a class="btn btn-success" asp-page="/MyBooks/FinancialYear/Add">Add New FinancialYear</a>
+
+
+    <div id="product-main">
+        <table class="table">
+            <tr>              
+                <th>Name</th>
+                <th>Start</th>
+                <th>End</th>
+                <th></th>
+            </tr>
+            <tbody>
+                @foreach (var company in Model.FinancialYears)
+                {
+                    <tr>                      
+                        <td>
+                            @Html.DisplayFor(modelItem => company.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => company.Start)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => company.End)
+                        </td>
+                        <td>
+                            <a asp-route-id="@company.Id" asp-page="/Companies/Edit" class="fa fa-edit">Edit</a> |
+                            <button onclick="confirmAction(event)" data-product-id="@company.Id" type="button" class="btn-danger small">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>

@@ -28,6 +28,15 @@
             public const string Update = Rootlocal + "/api/Company/UpdateCompany";
             public const string Delete = Rootlocal + "/Companies/{postId}";
         }
+        public static class FinancialYear
+        {
+            public const string GetFinancialYears = Rootlocal + "/api/FinancialYear/GetFinancialYears";
+            public const string GetFinancialYear = Rootlocal + "/api/FinancialYear/GetFinancialYear";
+            public const string GetCompanyByName = Rootlocal + "/api/FinancialYear/GetCompanyByName";
+            public const string Create = Rootlocal + "/api/FinancialYear/AddFinancialYear";
+            public const string Update = Rootlocal + "/api/FinancialYear/UpdateCompany";
+            public const string Delete = Rootlocal + "/FinancialYear/{postId}";
+        }
         public static class Cart
         {
             public const string GetCartItems = Rootlocal + "/api/Cart/GetCartItems";
