@@ -17,9 +17,8 @@ namespace Aow.Services.FinancialYear
             public string Name { get; set; }
             public DateTime? Start { get; set; }
             public DateTime? End { get; set; }
-            public bool IsActive { get; set; }
-            public bool IsLocked { get; set; }
-            public Guid CompanyId { get; set; }
+         
+            public string CompanyId { get; set; }
 
         }
         public class AddFinancialYearResponse

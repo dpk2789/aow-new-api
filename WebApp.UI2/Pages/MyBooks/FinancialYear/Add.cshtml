@@ -159,16 +159,13 @@
 
         function AddCompany(e) {
            // let confirmAction = confirm("Are you sure to delete this product?");
-            performPostRequest(e);
-            alert("Successfully Fyr Created");
+            performPostRequest(e);           
         }
 
         var addFinancialYearRequest = {
             name: "f1",
-            start: "2021-04-01",
-            end: "2022-03-31",
-            isActive: true,
-            isLocked: true,
+            start: "2021-09-02T06:28:30.163Z",
+            end: "2021-09-02T06:28:30.163Z",
             companyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         };
         function performPostRequest(e) {
@@ -179,11 +176,11 @@
             let endDate = document.getElementById('EndDate').value;
             addFinancialYearRequest.name = fName;
             addFinancialYearRequest.companyId = cmpId;
-            addFinancialYearRequest.start = startDate;
-            addFinancialYearRequest.end = endDate;
+            //addFinancialYearRequest.start = startDate;
+            //addFinancialYearRequest.end = endDate;
             alert(fName + " _" + cmpId);
             let userAccessToken = userId.value;
-            console.log(userAccessToken);
+            console.log(this.addFinancialYearRequest);
 
              axios.post(`${apiUrl}/api/FinancialYear/AddFinancialYear`, this.addFinancialYearRequest, {
                 headers: {
