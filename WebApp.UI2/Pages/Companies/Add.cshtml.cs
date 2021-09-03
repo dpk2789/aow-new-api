@@ -18,7 +18,8 @@ namespace WebApp.UI2.Pages.Companies
 
         public class InputModel
         {
-            public string Name { get; set; }          
+            public string Name { get; set; }
+            public string UserName { get; set; }
         }
         public void OnGet()
         {
@@ -28,9 +29,9 @@ namespace WebApp.UI2.Pages.Companies
             if (!ModelState.IsValid) return Page();
             using var client = new HttpClient();
             var addProductsUri = new Uri(ApiUrls.Company.Create);
-          
-          
-            var json = JsonConvert.SerializeObject(new { Input.Name});
+
+            Input.UserName = User.Identity.Name;
+            var json = JsonConvert.SerializeObject(new { Input.Name, Input.UserName });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var userAccessToken = User.Claims.FirstOrDefault(x => x.Type == "AcessToken")?.Value;

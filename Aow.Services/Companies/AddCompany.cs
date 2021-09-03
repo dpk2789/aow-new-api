@@ -1,5 +1,6 @@
 ﻿using Aow.Infrastructure.Domain;
-using Aow.Infrastructure.Repositories;
+using Aow.Infrastructure.IRepositories;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
 
@@ -8,13 +9,17 @@ namespace Aow.Services.Companies
     [Service]
     public class AddCompany
     {
-        private ICompanyRepository _companyRepository;
-        public AddCompany(ICompanyRepository companyRepository)
+        private IRepositoryWrapper _repoWrapper;
+        private readonly UserManager<AppUser> _userManager;
+
+        public AddCompany(IRepositoryWrapper repoWrapper, UserManager<AppUser> userManager)
         {
-            _companyRepository = companyRepository;
+            _repoWrapper = repoWrapper;
+            _userManager = userManager;
         }
         public class CreateRequest
         {
+            public string UserName { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
             public decimal Value { get; set; }
@@ -29,20 +34,33 @@ namespace Aow.Services.Companies
         }
         public async Task<CreateResponse> Do(CreateRequest request)
         {
-            Guid ProductId = Guid.NewGuid();
-            var product = new Company
+            Guid companyId = Guid.NewGuid();
+            var user = await _userManager.FindByEmailAsync(request.UserName);
+            if (user == null)
             {
-                Id = ProductId,
+                return null;
+            };
+            var company = new Company
+            {
+                Id = companyId,
                 Name = request.Name,
             };
+            _repoWrapper.CompanyRepo.Create(company);
+            var appUserCompany = new AppUserCompany
+            {
+                Id = Guid.NewGuid(),
+                CompanyId = companyId,
+                ApplicationUserId = user.Id
+            };
+            _repoWrapper.UserCompanyRepo.Create(appUserCompany);
 
-            _companyRepository.Create(product);
-            int i = await _companyRepository.Save();
+            int i = await _repoWrapper.SaveNew();
+
             if (i <= 0)
             {
                 return new CreateResponse
-                {                   
-                    Name = product.Name,
+                {
+                    Name = company.Name,
                     Success = false
                 };
             }
@@ -50,12 +68,12 @@ namespace Aow.Services.Companies
             {
                 return new CreateResponse
                 {
-                    Id = product.Id,
-                    Name = product.Name,
-                    Success=true
+                    Id = company.Id,
+                    Name = company.Name,
+                    Success = true
                 };
             }
-          
+
         }
     }
 }

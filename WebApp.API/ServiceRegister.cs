@@ -1,4 +1,5 @@
-﻿using Aow.Infrastructure.Repositories;
+﻿using Aow.Infrastructure.IRepositories;
+using Aow.Infrastructure.Repositories;
 using Aow.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
@@ -25,6 +26,8 @@ namespace WebApp.API
             @this.AddTransient<IProductRepository, ProductRepository>();
             @this.AddTransient<ICompanyRepository, CompanyRepository>();
             @this.AddTransient<IFinancialYearRepository, FinancialYearRepository>();
+            @this.AddTransient<IUserCompanyRepository, UserCompanyRepository>();
+            @this.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             return @this;
         }
     }
