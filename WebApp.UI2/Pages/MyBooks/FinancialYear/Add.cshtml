@@ -57,7 +57,7 @@
                                     <label asp-for="Input.Start" class="col-sm-2 col-form-label"></label>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control datetimepicker-input" id="StartDate"
-                                               data-toggle="datetimepicker" data-target="#StartDate" />
+                                               data-toggle="datetimepicker" data-target="#StartDate" autocomplete="off"/>
                                     </div>
                                     <span asp-validation-for="Input.Start" class="text-danger"></span>
                                 </div>
@@ -65,7 +65,7 @@
                                     <label asp-for="Input.End" class="col-sm-2 col-form-label"></label>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control datetimepicker-input" id="EndDate"
-                                               data-toggle="datetimepicker" data-target="#EndDate" />
+                                               data-toggle="datetimepicker" data-target="#EndDate" autocomplete="off"/>
                                     </div>
                                     <span asp-validation-for="Input.End" class="text-danger"></span>
                                 </div>

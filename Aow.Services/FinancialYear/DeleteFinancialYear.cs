@@ -19,12 +19,12 @@ namespace Aow.Services.FinancialYear
         }
         public async Task<DeleteFinancialYearResponse> Do(Guid id)
         {
-            var company = _financialYearRepository.GetFinancialYear(id);
-            if (company == null)
+            var financialYear = _financialYearRepository.GetFinancialYear(id);
+            if (financialYear == null)
             {
                 return null;
             }
-            _financialYearRepository.Delete(company);
+            _financialYearRepository.Delete(financialYear);
             int i = await _financialYearRepository.Save();
             if (i <= 0)
             {

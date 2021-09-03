@@ -1,7 +1,9 @@
 ﻿@page
 @model WebApp.UI2.Pages.MyBooks.FinancialYear.IndexModel
 
-
+@{
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
+}
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -27,10 +29,11 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><a class="btn btn-success" asp-page="/FinancialYear/Add">Add New Financial Year</a></h3>
+                            <h3 class="card-title"><a class="btn btn-success" asp-page="/MyBooks/FinancialYear/Add">Add New Financial Year</a></h3>
                         </div>
+                        <input type="hidden" value="@userId" id="userId" />
                         <!-- /.card-header -->
-                        <div class="card-body">
+                        <div class="card-body" id="product-main">
                             <partial name="_FyrListPartial" model="@Model.FinancialYears" />
                         </div>
                         <!-- /.card-body -->
@@ -44,6 +47,7 @@
 
 @section scripts{
     <script>
+        var apiUrl = '@Model.ApiUrl';
         function confirmAction(e) {
             let confirmAction = confirm("Are you sure to delete this product?");
             if (confirmAction) {
@@ -55,11 +59,10 @@
         };
 
         var getProducts = function () {
-            axios.get('/UserAccount/GetAdminProductsPartialView')
+            axios.get('/Partials/GetFinancialYearsPartialView')
                 .then(res => {
                     var html = res.data;
                     var el = document.getElementById('product-main');
-
                     el.outerHTML = html;
                 })
         }
@@ -68,20 +71,19 @@
             let fyrId = e.target.dataset.fyrId;
             let el = document.getElementById('userId');
             let userAccessToken = el.value;
-            console.log(userAccessToken);
+            console.log(fyrId);
 
             axios.delete(apiUrl + "/api/FinancialYear/DeleteFinancialYear?id=" + fyrId, {
                 headers: {
                     Authorization: "Bearer " + userAccessToken
                 }
+            }).then(res => {
+                console.log(res);
+                if (res.data.success) {
+                    alert(res.data.message)
+                }
+                getProducts();
             })
-                .then(res => {
-                    console.log(res);
-                    if (res.data.success) {
-                        alert(res.data.msg)
-                    }
-                    getProducts();
-                })
                 .catch(err => {
                     alert(err.error);
                 })

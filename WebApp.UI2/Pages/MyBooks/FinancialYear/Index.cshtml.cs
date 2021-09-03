@@ -13,6 +13,11 @@ namespace WebApp.UI2.Pages.MyBooks.FinancialYear
 {
     public class IndexModel : PageModel
     {
+        public string ApiUrl { get; }
+        public IndexModel()
+        {
+            ApiUrl = ApiUrls.Rootlocal;
+        }
         public class FinancialYearViewModel
         {
             public Guid Id { get; set; }
