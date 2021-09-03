@@ -19,7 +19,6 @@ namespace Aow.Services.FinancialYear
             public string End { get; set; }
             public string CompanyId { get; set; }
         }
-
         public class AddFinancialYearResponse
         {
             public Guid Id { get; set; }

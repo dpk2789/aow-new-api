@@ -34,5 +34,22 @@ namespace WebApp.API.Controllers
             return Ok(response);
         }
 
+        [HttpDelete("api/FinancialYear/DeleteFinancialYear")]
+        public async Task<IActionResult> DeleteFinancialYear(Guid id, [FromServices] DeleteFinancialYear deleteFinancialYear)
+        {
+            var result = await deleteFinancialYear.Do(id);
+            if (!result.Success)
+            {
+                return BadRequest();
+            }
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        } 
+
+      
+     
     }
 }

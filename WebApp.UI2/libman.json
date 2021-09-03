@@ -11,24 +11,48 @@
       ]
     },
     {
-      "library": "bootstrap@4.6.0",
-      "destination": "wwwroot/bootstrap/",
-      "files": [
-        "js/bootstrap.min.js",
-        "js/bootstrap.js",
-        "css/bootstrap.css",
-        "css/bootstrap.min.css",
-        "js/bootstrap.bundle.js",
-        "js/bootstrap.bundle.min.js"
-      ]
-    },
-    {
       "library": "tempusdominus-bootstrap-4@5.39.0",
       "destination": "wwwroot/tempusdominus-bootstrap-4/"
     },
     {
       "library": "toastr.js@2.1.4",
       "destination": "wwwroot/toastr.js/"
+    },
+    //{
+    //  "library": "datatables.net-bs4@3.2.2",
+    //  "destination": "wwwroot/datatables.net-bs4/"
+    //},
+    {
+      "library": "datatables.net-responsive-bs4@2.2.9",
+      "destination": "wwwroot/datatables.net-responsive-bs4/"
+    },
+    {
+      "library": "datatables.net-responsive@2.2.9",
+      "destination": "wwwroot/datatables.net-responsive/"
+    },
+    {
+      "library": "pdfmake@0.2.2",
+      "destination": "wwwroot/pdfmake/"
+    },
+    {
+      "library": "jszip@3.7.1",
+      "destination": "wwwroot/jszip/"
+    },
+    {
+      "library": "datatables.net@2.1.1",
+      "destination": "wwwroot/datatables.net/"
+    },
+    {
+      "library": "datatables.net-buttons@2.2.0",
+      "destination": "wwwroot/datatables.net-buttons/"
+    },
+    {
+      "library": "datatables.net-buttons-bs4@2.2.0",
+      "destination": "wwwroot/datatables.net-buttons-bs4/"
+    },
+    {
+      "library": "bootstrap@4.6.0",
+      "destination": "wwwroot/bootstrap/"
     }
   ]
 }

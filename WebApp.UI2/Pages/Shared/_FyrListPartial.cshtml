@@ -1,0 +1,37 @@
+﻿@model IEnumerable<WebApp.UI2.Pages.MyBooks.FinancialYear.IndexModel.FinancialYearViewModel>
+
+<table id="example1" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Is Locked</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var financialYear in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => financialYear.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => financialYear.Start)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => financialYear.End)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => financialYear.IsLocked)
+                </td>
+                <td>
+                    <a asp-route-id="@financialYear.Id" asp-page="/Companies/Edit" class="fa fa-edit">Edit</a> |
+                    <button onclick="confirmAction(event)" data-fyr-id="@financialYear.Id" type="button" class="btn-danger small">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
