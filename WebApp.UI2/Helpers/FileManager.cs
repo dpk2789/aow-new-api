@@ -10,8 +10,7 @@ namespace WebApp.UI.Helpers
     public class FileManager
     {
         private IWebHostEnvironment _env;
-        private List<ProductImageFileManager> Files;
-        private int Id;
+        private List<ProductImageFileManager> Files;     
 
         private readonly List<(int Width, int Height)> imgSizes = new List<(int, int)>
             {

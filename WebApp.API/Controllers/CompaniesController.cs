@@ -11,9 +11,9 @@ namespace WebApp.API.Controllers
     public class CompaniesController : ControllerBase
     {
         [HttpGet("api/Companies/GetCompanies")]
-        public IActionResult GetCompanies([FromQuery] PagingParameters pagingParameters, [FromServices] GetCompanies getCompanies)
+        public IActionResult GetCompanies([FromQuery] PagingParameters pagingParameters,string userName, [FromServices] GetCompanies getCompanies)
         {
-            return Ok(getCompanies.Do(pagingParameters));
+            return Ok(getCompanies.Do(pagingParameters, userName));
         }
 
         [HttpGet("api/Company/GetCompany")]
