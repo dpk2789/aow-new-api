@@ -47,7 +47,6 @@ namespace WebApp.API.Controllers
             return Ok(response);
         }
 
-
         [HttpDelete("api/Company/DeleteCompany")]
         public async Task<IActionResult> DeleteCompany(Guid id, [FromServices] DeleteCompany deleteProduct)
         {

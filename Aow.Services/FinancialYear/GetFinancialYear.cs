@@ -3,6 +3,7 @@ using System;
 
 namespace Aow.Services.FinancialYear
 {
+    [Service]
     public class GetFinancialYear
     {
         private IRepositoryWrapper _repoWrapper;
@@ -20,15 +21,7 @@ namespace Aow.Services.FinancialYear
             public bool IsActive { get; set; }
             public bool? IsLocked { get; set; }
             public Guid CompanyId { get; set; }
-            public bool Success { get; set; }
-            public string FinancialYearName
-            {
-                get
-                {
-                    string financialYearName = string.Format("{0} - {1}", Start.Value.ToString("yyyy-MM-dd"), End.Value.ToString("yyyy-MM-dd")).Trim();
-                    return financialYearName == "<br/>" ? string.Empty : financialYearName;
-                }
-            }
+            public bool Success { get; set; }           
         }
 
      

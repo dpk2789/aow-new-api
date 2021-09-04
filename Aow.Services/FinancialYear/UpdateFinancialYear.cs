@@ -5,48 +5,47 @@ using System.Threading.Tasks;
 namespace Aow.Services.FinancialYear
 {
     [Service]
-    public class AddFinancialYear
+    public class UpdateFinancialYear
     {
         private IRepositoryWrapper _repoWrapper;
-        public AddFinancialYear(IRepositoryWrapper repoWrapper)
+        public UpdateFinancialYear(IRepositoryWrapper repoWrapper)
         {
             _repoWrapper = repoWrapper;
         }
-        public class AddFinancialYearRequest
+        public class UpdateFinancialYearRequest
         {
             public string Name { get; set; }
             public string Start { get; set; }
             public string End { get; set; }
             public string CompanyId { get; set; }
         }
-        public class AddFinancialYearResponse
+        public class UpdateFinancialYearResponse
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
             public bool Success { get; set; }
         }
-        public async Task<AddFinancialYearResponse> Do(AddFinancialYearRequest request)
+        public async Task<UpdateFinancialYearResponse> Do(UpdateFinancialYearRequest request)
         {
             try
-            {              
+            {
                 Guid ProductId = Guid.NewGuid();
-                Guid cmpId = Guid.Parse(request.CompanyId);              
+               
                 var financialYear = new Aow.Infrastructure.Domain.FinancialYear
                 {
                     Id = ProductId,
                     Name = request.Name,
                     Start = Convert.ToDateTime(request.Start),
-                    End = Convert.ToDateTime(request.End),
-                    CompanyId = cmpId,
+                    End = Convert.ToDateTime(request.End),                  
                     IsActive = true
                 };
 
-                _repoWrapper.FinancialYearRepo.Create(financialYear);
+                _repoWrapper.FinancialYearRepo.Update(financialYear);
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {
-                    return new AddFinancialYearResponse
+                    return new UpdateFinancialYearResponse
                     {
                         Name = request.Name,
                         Success = false
@@ -54,7 +53,7 @@ namespace Aow.Services.FinancialYear
                 }
                 else
                 {
-                    return new AddFinancialYearResponse
+                    return new UpdateFinancialYearResponse
                     {
                         Id = financialYear.Id,
                         Name = request.Name,
@@ -64,7 +63,7 @@ namespace Aow.Services.FinancialYear
             }
             catch (Exception ex)
             {
-                return new AddFinancialYearResponse
+                return new UpdateFinancialYearResponse
                 {
                     Name = request.Name,
                     Success = false,

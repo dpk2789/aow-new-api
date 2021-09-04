@@ -34,7 +34,7 @@
             public const string GetFinancialYear = Rootlocal + "/api/FinancialYear/GetFinancialYear";
             public const string GetCompanyByName = Rootlocal + "/api/FinancialYear/GetCompanyByName";
             public const string Create = Rootlocal + "/api/FinancialYear/AddFinancialYear";
-            public const string Update = Rootlocal + "/api/FinancialYear/UpdateCompany";
+            public const string Update = Rootlocal + "/api/FinancialYear/UpdateFinancialYear";
             public const string Delete = Rootlocal + "/FinancialYear/{postId}";
         }
         public static class Cart

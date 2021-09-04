@@ -17,9 +17,10 @@ namespace WebApp.API.Controllers
         }
 
         [HttpGet("api/FinancialYear/GetFinancialYear")]
-        public IActionResult GetFinancialYear(Guid id, [FromServices] GetFinancialYear getProduct)
+        public IActionResult GetFinancialYear([FromQuery] Guid id, [FromServices] GetFinancialYear getProduct)
         {
-            return Ok(getProduct.Do(id));
+            var result = getProduct.Do(id);
+            return Ok(result);
         }
 
         [HttpPost("api/FinancialYear/AddFinancialYear")]
@@ -30,6 +31,18 @@ namespace WebApp.API.Controllers
             if (!response.Success)
             {
                 return BadRequest("Failed to add to cart");
+            }
+            return Ok(response);
+        }
+
+        [HttpPut("api/FinancialYear/UpdateFinancialYear")]
+        public async Task<IActionResult> UpdateFinancialYear([FromBody] UpdateFinancialYear.UpdateFinancialYearRequest request, [FromServices] UpdateFinancialYear updateFinancialYear)
+        {
+            var response = await updateFinancialYear.Do(request);
+
+            if (!response.Success)
+            {
+                return BadRequest("Failed to update");
             }
             return Ok(response);
         }

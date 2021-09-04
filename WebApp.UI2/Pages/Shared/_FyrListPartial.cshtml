@@ -27,7 +27,7 @@
                     @Html.DisplayFor(modelItem => financialYear.IsLocked)
                 </td>
                 <td>
-                    <a asp-route-id="@financialYear.Id" asp-page="/Companies/Edit" class="fa fa-edit">Edit</a> |
+                    <a asp-route-id="@financialYear.Id" asp-page="/MyBooks/FinancialYear/Edit" class="fa fa-edit">Edit</a> |
                     <button onclick="confirmAction(event)" data-fyr-id="@financialYear.Id" type="button" class="btn-danger small">Delete</button>
                 </td>
             </tr>

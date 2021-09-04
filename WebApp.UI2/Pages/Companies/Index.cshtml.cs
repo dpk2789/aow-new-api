@@ -39,8 +39,12 @@ namespace WebApp.UI2.Pages.Companies
             var getUserInfo = await client.GetAsync(getProductsUri);
 
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            var data = JsonConvert.DeserializeObject<IEnumerable<CompanyViewModel>>(resultuerinfo);
-            Companies = data;
+            if (resultuerinfo != null)
+            {
+                var data = JsonConvert.DeserializeObject<IEnumerable<CompanyViewModel>>(resultuerinfo);
+                Companies = data;
+            }
+          
         }
 
     }
