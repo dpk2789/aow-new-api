@@ -8,6 +8,6 @@ namespace Aow.Infrastructure.Repositories
     public interface IFinancialYearRepository : IRepositoryBase<FinancialYear>
     {
         FinancialYear GetFinancialYear(Guid Id);
-        Task<PagedList<FinancialYear>> GetFinancialYears(PagingParameters ownerParameters);
+        Task<PagedList<FinancialYear>> GetFinancialYears(PagingParameters ownerParameters, Guid cmpId);
     }
 }

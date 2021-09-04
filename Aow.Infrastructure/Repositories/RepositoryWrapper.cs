@@ -1,18 +1,37 @@
-﻿using Aow.Infrastructure.IRepositories;
+﻿using Aow.Infrastructure.Domain;
+using Aow.Infrastructure.IRepositories;
+using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 
 namespace Aow.Infrastructure.Repositories
 {
     public class RepositoryWrapper : IRepositoryWrapper
     {
-        public RepositoryWrapper(AowContext repositoryContext)
+        private readonly UserManager<AppUser> _userManager;
+
+        public RepositoryWrapper(AowContext repositoryContext, UserManager<AppUser> userManager)
         {
             _repoContext = repositoryContext;
+            _userManager = userManager;
         }
         private AowContext _repoContext;
         private ICompanyRepository _owner;
         private IFinancialYearRepository _account;
         private IUserCompanyRepository _userCompanyRepository;
+        private IUserRepository _userRepository;
+
+        public IUserRepository UserRepo
+        {
+            get
+            {
+                if (_userRepository == null)
+                {
+                    _userRepository = new UserRepository(_userManager);
+                }
+                return _userRepository;
+            }
+        }
+
         public ICompanyRepository CompanyRepo
         {
             get
@@ -48,10 +67,17 @@ namespace Aow.Infrastructure.Repositories
             }
         }
 
-        public Task<int> SaveNew()
+        public async Task<int> SaveNew()
         {
-            return _repoContext.SaveChangesAsync();
+            var result = await _repoContext.SaveChangesAsync();
+            return result;
         }
-        
+
+        public int Save()
+        {
+            var result = _repoContext.SaveChanges();
+            return result;
+        }
+
     }
 }

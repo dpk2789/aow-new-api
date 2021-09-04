@@ -1,5 +1,5 @@
-﻿using Aow.Infrastructure.Paging;
-using Aow.Infrastructure.Repositories;
+﻿using Aow.Infrastructure.IRepositories;
+using Aow.Infrastructure.Paging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +9,10 @@ namespace Aow.Services.FinancialYear
     [Service]
     public class GetFinancialYears
     {
-        private IFinancialYearRepository _financialYearRepository;
-        public GetFinancialYears(IFinancialYearRepository financialYearRepository)
+        private IRepositoryWrapper _repoWrapper;
+        public GetFinancialYears(IRepositoryWrapper repoWrapper)
         {
-            _financialYearRepository = financialYearRepository;
+            _repoWrapper = repoWrapper;
         }
         public class FinancialYearsResponse
         {
@@ -24,9 +24,14 @@ namespace Aow.Services.FinancialYear
             public bool? IsLocked { get; set; }
         }
 
-        public IEnumerable<FinancialYearsResponse> Do(PagingParameters pagingParameters)
+        public IEnumerable<FinancialYearsResponse> Do(PagingParameters pagingParameters, Guid companyId)
         {
-            var list = _financialYearRepository.GetFinancialYears(pagingParameters).GetAwaiter().GetResult();
+            var user = _repoWrapper.CompanyRepo.GetCompany(companyId);
+            if (user == null)
+            {
+                return null;
+            };
+            var list = _repoWrapper.FinancialYearRepo.GetFinancialYears(pagingParameters, companyId).GetAwaiter().GetResult();
             var newList = list.Select(x => new FinancialYearsResponse
             {
                 Id = x.Id,

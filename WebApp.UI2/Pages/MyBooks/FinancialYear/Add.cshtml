@@ -57,7 +57,7 @@
                                     <label asp-for="Input.Start" class="col-sm-2 col-form-label"></label>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control datetimepicker-input" id="StartDate"
-                                               data-toggle="datetimepicker" data-target="#StartDate" autocomplete="off"/>
+                                               data-toggle="datetimepicker" data-target="#StartDate" autocomplete="off" />
                                     </div>
                                     <span asp-validation-for="Input.Start" class="text-danger"></span>
                                 </div>
@@ -65,7 +65,7 @@
                                     <label asp-for="Input.End" class="col-sm-2 col-form-label"></label>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control datetimepicker-input" id="EndDate"
-                                               data-toggle="datetimepicker" data-target="#EndDate" autocomplete="off"/>
+                                               data-toggle="datetimepicker" data-target="#EndDate" autocomplete="off" />
                                     </div>
                                     <span asp-validation-for="Input.End" class="text-danger"></span>
                                 </div>
@@ -88,7 +88,7 @@
         </div>
         <!-- /.container-fluid -->
 
-        
+
     </section>
 
 </div>
@@ -134,7 +134,7 @@
 
         function AddCompany(e) {
            // let confirmAction = confirm("Are you sure to delete this product?");
-            performPostRequest(e);           
+            performPostRequest(e);
         }
 
         var addFinancialYearRequest = {
@@ -153,7 +153,7 @@
             addFinancialYearRequest.companyId = cmpId;
             addFinancialYearRequest.start = startDate;
             addFinancialYearRequest.end = endDate;
-          
+
             let userAccessToken = userId.value;
             console.log(this.addFinancialYearRequest);
 
@@ -167,7 +167,7 @@
                      toastr.success('Financial Year Created Successfully')
                      window.location.href = '/MyBooks/FinancialYear/index'
                 })
-                .catch(function (error) {
+                .catch(function (response) {
                     console.log(error);
                     toastr.error('Some Error Occur!!')
                 });

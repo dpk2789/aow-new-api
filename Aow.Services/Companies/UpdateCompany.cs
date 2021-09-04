@@ -1,4 +1,4 @@
-﻿using Aow.Infrastructure.Repositories;
+﻿using Aow.Infrastructure.IRepositories;
 using System;
 using System.Threading.Tasks;
 
@@ -7,11 +7,10 @@ namespace Aow.Services.Companies
     [Service]
     public class UpdateCompany
     {
-        private ICompanyRepository _companyRepository;
-
-        public UpdateCompany(ICompanyRepository companyRepository)
+        private IRepositoryWrapper _repoWrapper;
+        public UpdateCompany(IRepositoryWrapper repoWrapper)
         {
-            _companyRepository = companyRepository;
+            _repoWrapper = repoWrapper;
         }
         public class UpdateCompanyRequest
         {
@@ -30,10 +29,10 @@ namespace Aow.Services.Companies
         }
         public async Task<UpdateCompanyResponse> Do(UpdateCompanyRequest request)
         {
-            var product = _companyRepository.GetCompany(request.Id);
-            product.Name = request.Name;           
-            _companyRepository.Update(product);
-            int i = await _companyRepository.Save();
+            var product = _repoWrapper.CompanyRepo.GetCompany(request.Id);
+            product.Name = request.Name;
+            _repoWrapper.CompanyRepo.Update(product);
+            int i = await _repoWrapper.SaveNew();
             if (i <= 0)
             {
                 return new UpdateCompanyResponse

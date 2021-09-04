@@ -21,7 +21,7 @@ namespace WebApp.UI2.Pages.Companies
         public class CompanyViewModel
         {
             public Guid Id { get; set; }
-            public string Name { get; set; }           
+            public string Name { get; set; }
         }
 
         [BindProperty]
@@ -30,7 +30,7 @@ namespace WebApp.UI2.Pages.Companies
         public async Task OnGet()
         {
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.Company.GetCompanies+ "?PageNumber=1&PageSize=10");
+            var getProductsUri = new Uri(ApiUrls.Company.GetCompanies + "?PageNumber=1&PageSize=10&userName=" + User.Identity.Name);
 
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
 
@@ -42,6 +42,6 @@ namespace WebApp.UI2.Pages.Companies
             var data = JsonConvert.DeserializeObject<IEnumerable<CompanyViewModel>>(resultuerinfo);
             Companies = data;
         }
-     
+
     }
 }

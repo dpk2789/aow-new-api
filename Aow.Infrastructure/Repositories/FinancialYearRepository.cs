@@ -18,9 +18,9 @@ namespace Aow.Infrastructure.Repositories
             return FindByCondition(x => x.Id == Id).FirstOrDefault();
         }
 
-        public Task<PagedList<FinancialYear>> GetFinancialYears(PagingParameters ownerParameters)
+        public Task<PagedList<FinancialYear>> GetFinancialYears(PagingParameters ownerParameters, Guid cmpId)
         {
-            return Task.FromResult(PagedList<FinancialYear>.ToPagedList(FindAll().OrderBy(on => on.Name),
+            return Task.FromResult(PagedList<FinancialYear>.ToPagedList(FindAll().Where(x => x.CompanyId == cmpId).OrderBy(on => on.Name),
                                     ownerParameters.PageNumber, ownerParameters.PageSize));
         }
     }

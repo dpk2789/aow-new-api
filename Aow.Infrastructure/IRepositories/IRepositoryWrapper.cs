@@ -8,6 +8,8 @@ namespace Aow.Infrastructure.IRepositories
         ICompanyRepository CompanyRepo { get; }
         IFinancialYearRepository FinancialYearRepo { get; }
         IUserCompanyRepository UserCompanyRepo { get; }
-        public Task<int> SaveNew();
+        IUserRepository UserRepo { get; }
+        Task<int> SaveNew();
+        int Save();
     }
 }

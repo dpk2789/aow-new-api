@@ -12,11 +12,22 @@ namespace WebApp.UI2.Controllers
 {
     public class PartialsController : Controller
     {
+        private readonly ICookieHelper _cookieHelper;
+        public PartialsController(ICookieHelper cookieHelper)
+        {            
+            _cookieHelper = cookieHelper;
+        }
         [HttpGet]
         public async Task<IActionResult> GetFinancialYearsPartialView()
         {
+            var cmpid = _cookieHelper.Get("cmpCookee");
+
+            if (string.IsNullOrEmpty(cmpid) && string.IsNullOrEmpty(cmpid))
+            {
+                return RedirectToPage("/");
+            }
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.FinancialYear.GetFinancialYears + "?PageNumber=1&PageSize=10");
+            var getProductsUri = new Uri(ApiUrls.FinancialYear.GetFinancialYears + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
 
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;          
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);

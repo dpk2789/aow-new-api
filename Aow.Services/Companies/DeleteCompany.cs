@@ -1,4 +1,4 @@
-﻿using Aow.Infrastructure.Repositories;
+﻿using Aow.Infrastructure.IRepositories;
 using System;
 using System.Threading.Tasks;
 
@@ -7,11 +7,11 @@ namespace Aow.Services.Companies
     [Service]
     public class DeleteCompany
     {
-        private ICompanyRepository _companyRepository;
+        private IRepositoryWrapper _repoWrapper;
 
-        public DeleteCompany(ICompanyRepository companyRepository)
+        public DeleteCompany(IRepositoryWrapper repoWrapper)
         {
-            _companyRepository = companyRepository;
+            _repoWrapper = repoWrapper;
         }
         public class DeleteCompanyResponse
         {
@@ -20,13 +20,13 @@ namespace Aow.Services.Companies
         }
         public async Task<DeleteCompanyResponse> Do(Guid id)
         {
-            var company = _companyRepository.GetCompany(id);
+            var company = _repoWrapper.CompanyRepo.GetCompany(id);
             if (company == null)
             {
                 return null;
             }
-            _companyRepository.Delete(company);
-            int i = await _companyRepository.Save();
+            _repoWrapper.CompanyRepo.Delete(company);
+            int i = await _repoWrapper.SaveNew();
             if (i <= 0)
             {
                 return new DeleteCompanyResponse

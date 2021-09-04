@@ -1,14 +1,14 @@
-﻿using Aow.Infrastructure.Repositories;
+﻿using Aow.Infrastructure.IRepositories;
 using System;
 
 namespace Aow.Services.FinancialYear
 {
     public class GetFinancialYear
     {
-        private IFinancialYearRepository _financialYearRepository;
-        public GetFinancialYear(IFinancialYearRepository financialYearRepository)
+        private IRepositoryWrapper _repoWrapper;
+        public GetFinancialYear(IRepositoryWrapper repoWrapper)
         {
-            _financialYearRepository = financialYearRepository;
+            _repoWrapper = repoWrapper;
         }
         public class GetFinancialYearResponse
         {
@@ -34,7 +34,7 @@ namespace Aow.Services.FinancialYear
      
         public GetFinancialYearResponse Do(Guid id)
         {
-            var company = _financialYearRepository.GetFinancialYear(id);
+            var company = _repoWrapper.FinancialYearRepo.GetFinancialYear(id);
             GetFinancialYearResponse getCompanyResponse = new GetFinancialYearResponse
             {
                 Id = company.Id,

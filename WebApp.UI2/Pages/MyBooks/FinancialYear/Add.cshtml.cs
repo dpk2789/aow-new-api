@@ -50,7 +50,7 @@ namespace WebApp.UI2.Pages.MyBooks.FinancialYear
         {
             if (!ModelState.IsValid) return Page();
             using var client = new HttpClient();
-            var addProductsUri = new Uri(ApiUrls.Company.Create);
+            var addProductsUri = new Uri(ApiUrls.FinancialYear.Create);
 
 
             var json = JsonConvert.SerializeObject(new { Input.Name });

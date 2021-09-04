@@ -1,6 +1,5 @@
 ﻿using Aow.Infrastructure.Domain;
 using Aow.Infrastructure.IRepositories;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
 
@@ -9,13 +8,11 @@ namespace Aow.Services.Companies
     [Service]
     public class AddCompany
     {
-        private IRepositoryWrapper _repoWrapper;
-        private readonly UserManager<AppUser> _userManager;
+        private IRepositoryWrapper _repoWrapper;     
 
-        public AddCompany(IRepositoryWrapper repoWrapper, UserManager<AppUser> userManager)
+        public AddCompany(IRepositoryWrapper repoWrapper)
         {
-            _repoWrapper = repoWrapper;
-            _userManager = userManager;
+            _repoWrapper = repoWrapper;         
         }
         public class CreateRequest
         {
@@ -24,7 +21,6 @@ namespace Aow.Services.Companies
             public string Description { get; set; }
             public decimal Value { get; set; }
         }
-
         public class CreateResponse
         {
             public Guid Id { get; set; }
@@ -35,7 +31,7 @@ namespace Aow.Services.Companies
         public async Task<CreateResponse> Do(CreateRequest request)
         {
             Guid companyId = Guid.NewGuid();
-            var user = await _userManager.FindByEmailAsync(request.UserName);
+            var user = await _repoWrapper.UserRepo.GetUserByName(request.UserName);
             if (user == null)
             {
                 return null;

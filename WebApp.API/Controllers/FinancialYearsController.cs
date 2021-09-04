@@ -11,9 +11,9 @@ namespace WebApp.API.Controllers
     public class FinancialYearsController : ControllerBase
     {
         [HttpGet("api/FinancialYear/GetFinancialYears")]
-        public IActionResult GetFinancialYears([FromQuery] PagingParameters pagingParameters, [FromServices] GetFinancialYears getFinancialYears)
+        public IActionResult GetFinancialYears([FromQuery] PagingParameters pagingParameters, Guid cmpId, [FromServices] GetFinancialYears getFinancialYears)
         {
-            return Ok(getFinancialYears.Do(pagingParameters));
+            return Ok(getFinancialYears.Do(pagingParameters, cmpId));
         }
 
         [HttpGet("api/FinancialYear/GetFinancialYear")]
@@ -47,9 +47,7 @@ namespace WebApp.API.Controllers
                 return NotFound();
             }
             return Ok(result);
-        } 
+        }
 
-      
-     
     }
 }

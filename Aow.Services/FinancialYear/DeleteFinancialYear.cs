@@ -1,4 +1,5 @@
-﻿using Aow.Infrastructure.Repositories;
+﻿using Aow.Infrastructure.IRepositories;
+using Aow.Infrastructure.Repositories;
 using System;
 using System.Threading.Tasks;
 
@@ -7,10 +8,10 @@ namespace Aow.Services.FinancialYear
     [Service]
     public class DeleteFinancialYear
     {
-        private IFinancialYearRepository _financialYearRepository;
-        public DeleteFinancialYear(IFinancialYearRepository financialYearRepository)
+        private IRepositoryWrapper _repoWrapper;
+        public DeleteFinancialYear(IRepositoryWrapper repoWrapper)
         {
-            _financialYearRepository = financialYearRepository;
+            _repoWrapper = repoWrapper;
         }
         public class DeleteFinancialYearResponse
         {
@@ -19,13 +20,13 @@ namespace Aow.Services.FinancialYear
         }
         public async Task<DeleteFinancialYearResponse> Do(Guid id)
         {
-            var financialYear = _financialYearRepository.GetFinancialYear(id);
+            var financialYear = _repoWrapper.FinancialYearRepo.GetFinancialYear(id);
             if (financialYear == null)
             {
                 return null;
             }
-            _financialYearRepository.Delete(financialYear);
-            int i = await _financialYearRepository.Save();
+            _repoWrapper.FinancialYearRepo.Delete(financialYear);
+            int i = await _repoWrapper.SaveNew();
             if (i <= 0)
             {
                 return new DeleteFinancialYearResponse

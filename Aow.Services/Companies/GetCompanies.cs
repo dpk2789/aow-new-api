@@ -3,16 +3,17 @@ using Aow.Infrastructure.Paging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Aow.Services.Companies
 {
     [Service]
     public class GetCompanies
     {
-        private IRepositoryWrapper _repoWrapper;
+        private IRepositoryWrapper _repoWrapper;      
         public GetCompanies(IRepositoryWrapper repoWrapper)
         {
-            _repoWrapper = repoWrapper;
+            _repoWrapper = repoWrapper;           
         }
         public class CompaniesResponse
         {
@@ -22,13 +23,19 @@ namespace Aow.Services.Companies
             public decimal Value { get; set; }
         }
 
-        public IEnumerable<CompaniesResponse> Do(PagingParameters pagingParameters, string userName)
+        public async Task<IEnumerable<CompaniesResponse>> Do(PagingParameters pagingParameters, string userName)
         {
-            var list = _repoWrapper.UserCompanyRepo.GetCompaniesByUser(pagingParameters, userName).GetAwaiter().GetResult();
+            var user = await _repoWrapper.UserRepo.GetUserByName(userName);
+            if (user == null)
+            {
+                return null;
+            };
+            var list = _repoWrapper.UserCompanyRepo.GetCompaniesByUser(pagingParameters, user.Id).GetAwaiter().GetResult();
             //  var list = _companyRepository.GetCompanies(pagingParameters).GetAwaiter().GetResult();
+
             var newList = list.Select(x => new CompaniesResponse
             {
-                Id = x.Id,
+                Id = x.Company.Id,
                 Name = x.Company.Name
             });
 

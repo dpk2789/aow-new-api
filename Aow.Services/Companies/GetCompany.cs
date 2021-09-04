@@ -1,20 +1,15 @@
-﻿using Aow.Infrastructure.Domain;
-using Aow.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Identity;
+﻿using Aow.Infrastructure.IRepositories;
 using System;
-using System.Threading.Tasks;
 
 namespace Aow.Services.Companies
 {
     [Service]
     public class GetCompany
     {
-        private ICompanyRepository _companyRepository;
-        private readonly UserManager<AppUser> _userManager;
-        public GetCompany(ICompanyRepository companyRepository, UserManager<AppUser> userManager)
+        private IRepositoryWrapper _repoWrapper;
+        public GetCompany(IRepositoryWrapper repoWrapper)
         {
-            _companyRepository = companyRepository;
-            _userManager = userManager;
+            _repoWrapper = repoWrapper;
         }
 
         public class GetCompanyResponse
@@ -27,7 +22,7 @@ namespace Aow.Services.Companies
 
         public GetCompanyResponse Do(Guid id)
         {
-            var company = _companyRepository.GetCompany(id);
+            var company = _repoWrapper.CompanyRepo.GetCompany(id);
 
             GetCompanyResponse getCompanyResponse = new GetCompanyResponse
             {

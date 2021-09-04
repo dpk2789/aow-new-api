@@ -34,7 +34,11 @@
                         <input type="hidden" value="@userId" id="userId" />
                         <!-- /.card-header -->
                         <div class="card-body" id="product-main">
-                            <partial name="_FyrListPartial" model="@Model.FinancialYears" />
+                            @if (Model.FinancialYears != null)
+                            {
+                                <partial name="_FyrListPartial" model="@Model.FinancialYears" />
+                            }
+
                         </div>
                         <!-- /.card-body -->
                     </div>

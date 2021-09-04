@@ -11,9 +11,10 @@ namespace WebApp.API.Controllers
     public class CompaniesController : ControllerBase
     {
         [HttpGet("api/Companies/GetCompanies")]
-        public IActionResult GetCompanies([FromQuery] PagingParameters pagingParameters,string userName, [FromServices] GetCompanies getCompanies)
+        public async Task<IActionResult> GetCompanies([FromQuery] PagingParameters pagingParameters, string userName, [FromServices] GetCompanies getCompanies)
         {
-            return Ok(getCompanies.Do(pagingParameters, userName));
+            var result = await getCompanies.Do(pagingParameters, userName);
+            return Ok(result);
         }
 
         [HttpGet("api/Company/GetCompany")]
