@@ -1,5 +1,6 @@
 ﻿using Aow.Infrastructure.IRepositories;
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Aow.Services.FinancialYear
@@ -38,9 +39,14 @@ namespace Aow.Services.FinancialYear
                 }
                 financialYear.Name = request.Name;
                 financialYear.Start = Convert.ToDateTime(request.Start);
-                DateTime dt = DateTime.Parse(request.End);
+                DateTime dt = Convert.ToDateTime(request.End);
+                DateTime dt2;
+                var success = DateTimeOffset.TryParse(request.End, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var result);
+                dt2 = result.UtcDateTime;
+                var date2 = result.ToLocalTime();
                 financialYear.End = dt;
                 _repoWrapper.FinancialYearRepo.Update(financialYear);
+                var newr = Convert.ToDateTime(dt2);
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {

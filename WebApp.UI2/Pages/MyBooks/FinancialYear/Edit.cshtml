@@ -101,9 +101,11 @@
         $('#StartDate').datetimepicker({
            // format: 'L',
            // format: 'YYYY/MM/DD'
+          //  format: 'DD/MM/YYYY HH:mm',
+
         });
         $('#EndDate').datetimepicker({
-           // format: 'L',
+          //  format: 'L',
           //  format: 'YYYY/MM/DD'
         });
         var apiUrl = '@Model.ApiUrl';
@@ -143,7 +145,7 @@
             end: "2021-09-02T06:28:30.163Z",
             companyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         };
-        function performPostRequest(e) {           
+        function performPostRequest(e) {
             let userId = document.getElementById('userId');
             let fyrId = document.getElementById('fyrId').value;
             let fName = document.getElementById('Input_Name').value;
@@ -153,10 +155,10 @@
             addFinancialYearRequest.name = fName;
             addFinancialYearRequest.start = startDate;
             var date = new Date(endDate);
-            addFinancialYearRequest.end = endDate;
-           
-            date.toJSON();
-            alert(date);
+            addFinancialYearRequest.end = date.toJSON();
+
+
+            alert(date.toJSON());
             let userAccessToken = userId.value;
             console.log(this.addFinancialYearRequest);
 
@@ -173,7 +175,7 @@
                      } else {
                          toastr.error(response.data.description)
                      }
-                    
+
                 })
                 .catch(function (response) {
                     console.log(error);
