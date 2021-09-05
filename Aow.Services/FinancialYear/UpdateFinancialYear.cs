@@ -14,6 +14,7 @@ namespace Aow.Services.FinancialYear
         }
         public class UpdateFinancialYearRequest
         {
+            public Guid Id { get; set; }
             public string Name { get; set; }
             public string Start { get; set; }
             public string End { get; set; }
@@ -30,17 +31,15 @@ namespace Aow.Services.FinancialYear
         {
             try
             {
-                Guid ProductId = Guid.NewGuid();
-               
-                var financialYear = new Aow.Infrastructure.Domain.FinancialYear
+                var financialYear = _repoWrapper.FinancialYearRepo.GetFinancialYear(request.Id);
+                if (financialYear == null)
                 {
-                    Id = ProductId,
-                    Name = request.Name,
-                    Start = Convert.ToDateTime(request.Start),
-                    End = Convert.ToDateTime(request.End),                  
-                    IsActive = true
-                };
-
+                    return null;
+                }
+                financialYear.Name = request.Name;
+                financialYear.Start = Convert.ToDateTime(request.Start);
+                DateTime dt = DateTime.Parse(request.End);
+                financialYear.End = dt;
                 _repoWrapper.FinancialYearRepo.Update(financialYear);
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)

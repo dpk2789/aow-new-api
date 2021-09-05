@@ -21,17 +21,20 @@ namespace Aow.Services.FinancialYear
             public bool IsActive { get; set; }
             public bool? IsLocked { get; set; }
             public Guid CompanyId { get; set; }
-            public bool Success { get; set; }           
+            public bool Success { get; set; }
         }
 
-     
+
         public GetFinancialYearResponse Do(Guid id)
         {
-            var company = _repoWrapper.FinancialYearRepo.GetFinancialYear(id);
+            var financialYear = _repoWrapper.FinancialYearRepo.GetFinancialYear(id);
             GetFinancialYearResponse getCompanyResponse = new GetFinancialYearResponse
             {
-                Id = company.Id,
-                Name = company.Name
+                Id = financialYear.Id,
+                CompanyId = financialYear.Id,
+                Name = financialYear.Name,
+                Start = financialYear.Start,
+                End = financialYear.End
             };
 
             return getCompanyResponse;

@@ -40,7 +40,7 @@ namespace WebApp.API.Controllers
         {
             var response = await updateFinancialYear.Do(request);
 
-            if (!response.Success)
+            if (response == null)
             {
                 return BadRequest("Failed to update");
             }

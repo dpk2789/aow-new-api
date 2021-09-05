@@ -11,10 +11,16 @@ using WebApp.UI2.Helpers;
 namespace WebApp.UI2.Pages.MyBooks.FinancialYear
 {
     public class EditModel : PageModel
-    {
+    {      
+        public string ApiUrl { get; }
+        public EditModel()
+        {
+            ApiUrl = ApiUrls.Rootlocal;            
+        }
         [BindProperty] public InputModel Input { get; set; }
         public class InputModel
         {
+            public Guid Id { get; set; }
             public string Name { get; set; }
             public DateTime? Start { get; set; }
             public DateTime? End { get; set; }

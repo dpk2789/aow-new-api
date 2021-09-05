@@ -29,15 +29,19 @@ namespace Aow.Services.Companies
         }
         public async Task<UpdateCompanyResponse> Do(UpdateCompanyRequest request)
         {
-            var product = _repoWrapper.CompanyRepo.GetCompany(request.Id);
-            product.Name = request.Name;
-            _repoWrapper.CompanyRepo.Update(product);
+            var company = _repoWrapper.CompanyRepo.GetCompany(request.Id);
+            if (company == null)
+            {
+                return null;
+            }
+            company.Name = request.Name;
+            _repoWrapper.CompanyRepo.Update(company);
             int i = await _repoWrapper.SaveNew();
             if (i <= 0)
             {
                 return new UpdateCompanyResponse
                 {
-                    Name = product.Name,
+                    Name = company.Name,
                     Success = false
                 };
             }
@@ -45,8 +49,8 @@ namespace Aow.Services.Companies
             {
                 return new UpdateCompanyResponse
                 {
-                    Id = product.Id,
-                    Name = product.Name,
+                    Id = company.Id,
+                    Name = company.Name,
                     Success = true
                 };
             }

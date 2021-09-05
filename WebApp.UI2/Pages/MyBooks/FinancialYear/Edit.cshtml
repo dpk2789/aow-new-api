@@ -1,7 +1,9 @@
 ﻿@page
 @model WebApp.UI2.Pages.MyBooks.FinancialYear.EditModel
 
-
+@{
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
+}
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -42,7 +44,7 @@
                     <div class="row">
                         <div class="col-12">
                             <form method="post" enctype="multipart/form-data">
-
+                                <input type="hidden" asp-for="Input.Id" id="fyrId" />
                                 <div asp-validation-summary="All" class="text-danger"></div>
                                 <div class="mb-3 row">
                                     <label asp-for="Input.Name" class="col-sm-2 col-form-label"></label>
@@ -54,7 +56,7 @@
                                 <div class="mb-3 row">
                                     <label asp-for="Input.Start" class="col-sm-2 col-form-label"></label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control datetimepicker-input" id="StartDate"
+                                        <input type="text" class="form-control datetimepicker-input" id="StartDate" asp-for="Input.Start"
                                                data-toggle="datetimepicker" data-target="#StartDate" autocomplete="off" />
                                     </div>
                                     <span asp-validation-for="Input.Start" class="text-danger"></span>
@@ -62,7 +64,7 @@
                                 <div class="mb-3 row">
                                     <label asp-for="Input.End" class="col-sm-2 col-form-label"></label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control datetimepicker-input" id="EndDate"
+                                        <input type="text" class="form-control datetimepicker-input" id="EndDate" asp-for="Input.End"
                                                data-toggle="datetimepicker" data-target="#EndDate" autocomplete="off" />
                                     </div>
                                     <span asp-validation-for="Input.End" class="text-danger"></span>
@@ -77,7 +79,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                    <button onclick="AddCompany(event)" class="btn btn-info float-right" style="margin-left:20px">Save</button>
+                    <button onclick="EditFinancialYear(event)" class="btn btn-info float-right" style="margin-left:20px">Save</button>
                     <button type="submit" class="btn btn-default float-right">Cancel</button>
                 </div>
             </div>
@@ -90,3 +92,107 @@
     </section>
 
 </div>
+<input type="hidden" value="@userId" id="userId" />
+
+@section scripts{
+    @*<script src="~/js/product.js"></script>*@
+    <script>
+        //Date picker
+        $('#StartDate').datetimepicker({
+           // format: 'L',
+           // format: 'YYYY/MM/DD'
+        });
+        $('#EndDate').datetimepicker({
+           // format: 'L',
+          //  format: 'YYYY/MM/DD'
+        });
+        var apiUrl = '@Model.ApiUrl';
+        axios.interceptors.request.use(function (config) {
+
+            // spinning start to show
+            // UPDATE: Add this code to show global loading indicator
+            document.body.classList.add('loading-indicator');
+
+
+            return config
+        }, function (error) {
+            return Promise.reject(error);
+        });
+
+        axios.interceptors.response.use(function (response) {
+
+            // spinning hide
+            // UPDATE: Add this code to hide global loading indicator
+            document.body.classList.remove('loading-indicator');
+
+            return response;
+        }, function (error) {
+            return Promise.reject(error);
+        });
+
+
+        function EditFinancialYear(e) {
+           // let confirmAction = confirm("Are you sure to delete this product?");
+            performPostRequest(e);
+        }
+
+        var addFinancialYearRequest = {
+            id:"3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            name: "f1",
+            start: "2021-09-02T06:28:30.163Z",
+            end: "2021-09-02T06:28:30.163Z",
+            companyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        };
+        function performPostRequest(e) {           
+            let userId = document.getElementById('userId');
+            let fyrId = document.getElementById('fyrId').value;
+            let fName = document.getElementById('Input_Name').value;
+            let startDate = document.getElementById('StartDate').value;
+            let endDate = document.getElementById('EndDate').value;
+            addFinancialYearRequest.id = fyrId;
+            addFinancialYearRequest.name = fName;
+            addFinancialYearRequest.start = startDate;
+            var date = new Date(endDate);
+            addFinancialYearRequest.end = endDate;
+           
+            date.toJSON();
+            alert(date);
+            let userAccessToken = userId.value;
+            console.log(this.addFinancialYearRequest);
+
+            axios.put(`${apiUrl}/api/FinancialYear/UpdateFinancialYear`, this.addFinancialYearRequest, {
+                headers: {
+                    Authorization: "Bearer " + userAccessToken
+                }
+            })
+                 .then(function (response) {
+                     console.log(response);
+                     if (response.data.success) {
+                         toastr.success('Financial Year Created Successfully')
+                         window.location.href = '/MyBooks/FinancialYear/index'
+                     } else {
+                         toastr.error(response.data.description)
+                     }
+                    
+                })
+                .catch(function (response) {
+                    console.log(error);
+                    toastr.error('Some Error Occur!!')
+                });
+            e.preventDefault();
+        }
+
+        $('.toastrDefaultSuccess').click(function () {
+            toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+        });
+        $('.toastrDefaultInfo').click(function () {
+            toastr.info('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+        });
+        $('.toastrDefaultError').click(function () {
+            toastr.error('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+        });
+        $('.toastrDefaultWarning').click(function () {
+            toastr.warning('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+        });
+    </script>
+}
