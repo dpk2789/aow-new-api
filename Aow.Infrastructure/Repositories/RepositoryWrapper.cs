@@ -20,6 +20,7 @@ namespace Aow.Infrastructure.Repositories
         private IUserCompanyRepository _userCompanyRepository;
         private IUserRepository _userRepository;
         private IProductCategoryRepository _productCategoryRepository;
+        private IProductRepository _productRepository;
         private IProductAttributeRepository _productAttributeRepository;
         private IProductAttributeOptionRepository productAttributeOptionRepository;
         public IUserRepository UserRepo
@@ -80,7 +81,17 @@ namespace Aow.Infrastructure.Repositories
                 return _productCategoryRepository;
             }
         }
-
+        public IProductRepository ProductRepo
+        {
+            get
+            {
+                if (_productRepository == null)
+                {
+                    _productRepository = new ProductRepository(_repoContext);
+                }
+                return _productRepository;
+            }
+        }
         public IProductAttributeRepository ProductAttributeRepo
         {
             get

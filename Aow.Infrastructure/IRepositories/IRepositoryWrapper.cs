@@ -10,6 +10,7 @@ namespace Aow.Infrastructure.IRepositories
         IUserCompanyRepository UserCompanyRepo { get; }
         IUserRepository UserRepo { get; }
         IProductCategoryRepository ProductCategoryRepo { get; }
+        IProductRepository ProductRepo { get; }
         IProductAttributeRepository ProductAttributeRepo { get; }
         IProductAttributeOptionRepository ProductAttributeOptionRepo { get; }
         Task<int> SaveNew();

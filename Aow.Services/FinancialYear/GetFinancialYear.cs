@@ -24,7 +24,6 @@ namespace Aow.Services.FinancialYear
             public bool Success { get; set; }
         }
 
-
         public GetFinancialYearResponse Do(Guid id)
         {
             var financialYear = _repoWrapper.FinancialYearRepo.GetFinancialYear(id);

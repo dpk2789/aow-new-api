@@ -2,51 +2,51 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Aow.Services.ProductCategory
+namespace Aow.Services.Products
 {
     [Service]
-    public class UpdateProductCategory
+   public class AddProduct
     {
         private IRepositoryWrapper _repoWrapper;
-        public UpdateProductCategory(IRepositoryWrapper repoWrapper)
+        public AddProduct(IRepositoryWrapper repoWrapper)
         {
             _repoWrapper = repoWrapper;
         }
-        public class UpdateProductCategoryRequest
+        public class AddProductRequest
         {
-            public Guid Id { get; set; }
             public string Name { get; set; }
             public string Start { get; set; }
             public string End { get; set; }
             public string CompanyId { get; set; }
         }
-        public class UpdateProductCategoryResponse
+        public class AddProductResponse
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
             public bool Success { get; set; }
         }
-
-        public async Task<UpdateProductCategoryResponse> Do(UpdateProductCategoryRequest request)
+        public async Task<AddProductResponse> Do(AddProductRequest request)
         {
             try
             {
-                var financialYear = _repoWrapper.FinancialYearRepo.GetFinancialYear(request.Id);
-                if (financialYear == null)
+                Guid ProductId = Guid.NewGuid();
+                Guid cmpId = Guid.Parse(request.CompanyId);
+                var financialYear = new Aow.Infrastructure.Domain.FinancialYear
                 {
-                    return null;
-                }
-                financialYear.Name = request.Name;
-                financialYear.Start = Convert.ToDateTime(request.Start);
-                DateTime dt = Convert.ToDateTime(request.End);              
-                financialYear.End = dt;
-                _repoWrapper.FinancialYearRepo.Update(financialYear);
+                    Id = ProductId,
+                    Name = request.Name,
+                    Start = Convert.ToDateTime(request.Start),
+                    End = Convert.ToDateTime(request.End),
+                    CompanyId = cmpId,
+                    IsActive = true
+                };
 
+                _repoWrapper.FinancialYearRepo.Create(financialYear);
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {
-                    return new UpdateProductCategoryResponse
+                    return new AddProductResponse
                     {
                         Name = request.Name,
                         Success = false
@@ -54,7 +54,7 @@ namespace Aow.Services.ProductCategory
                 }
                 else
                 {
-                    return new UpdateProductCategoryResponse
+                    return new AddProductResponse
                     {
                         Id = financialYear.Id,
                         Name = request.Name,
@@ -64,7 +64,7 @@ namespace Aow.Services.ProductCategory
             }
             catch (Exception ex)
             {
-                return new UpdateProductCategoryResponse
+                return new AddProductResponse
                 {
                     Name = request.Name,
                     Success = false,
