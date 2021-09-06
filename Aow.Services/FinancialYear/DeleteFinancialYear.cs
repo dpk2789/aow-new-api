@@ -19,29 +19,41 @@ namespace Aow.Services.FinancialYear
         }
         public async Task<DeleteFinancialYearResponse> Do(Guid id)
         {
-            var financialYear = _repoWrapper.FinancialYearRepo.GetFinancialYear(id);
-            if (financialYear == null)
+            try
             {
-                return null;
+                var financialYear = _repoWrapper.FinancialYearRepo.GetFinancialYear(id);
+                if (financialYear == null)
+                {
+                    return null;
+                }
+                _repoWrapper.FinancialYearRepo.Delete(financialYear);
+                int i = await _repoWrapper.SaveNew();
+                if (i <= 0)
+                {
+                    return new DeleteFinancialYearResponse
+                    {
+                        Message = "Error Deleting",
+                        Success = false
+                    };
+                }
+                else
+                {
+                    return new DeleteFinancialYearResponse
+                    {
+                        Message = "FinancialYear Deleted",
+                        Success = true
+                    };
+                }
             }
-            _repoWrapper.FinancialYearRepo.Delete(financialYear);
-            int i = await _repoWrapper.SaveNew();
-            if (i <= 0)
+            catch (Exception ex)
             {
                 return new DeleteFinancialYearResponse
-                {
-                    Message = "Error Deleting",
-                    Success = false
+                {                   
+                    Success = false,
+                    Message = ex.Message
                 };
             }
-            else
-            {
-                return new DeleteFinancialYearResponse
-                {
-                    Message = "FinancialYear Deleted",
-                    Success = true
-                };
-            }
+          
         }
     }
 }

@@ -10,17 +10,18 @@ namespace WebApp.API.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        [HttpGet("api/ProductCategories/GetProductCategories")]
-        public IActionResult GetProductCategories([FromQuery] PagingParameters pagingParameters, Guid categoryId, [FromServices] GetProducts getFinancialYears)
+        [HttpGet("api/Products/GetProducts")]
+        public IActionResult GetProducts([FromQuery] PagingParameters pagingParameters, Guid categoryId, [FromServices] GetProducts getFinancialYears)
         {
             return Ok(getFinancialYears.Do(pagingParameters));
         }
 
-        [HttpGet("api/Products/GetProducts")]
-        public IActionResult GetProduct([FromQuery] PagingParameters pagingParameters, [FromServices] GetProducts getProduct)
+        [HttpGet("api/Products/GetProduct")]
+        public IActionResult GetProduct([FromQuery] Guid id, [FromServices] GetProduct getProduct)
         {
-            return Ok(getProduct.Do(pagingParameters));
-        }
+            var result = getProduct.Do(id);
+            return Ok(result);
+        }       
 
         [HttpGet("api/Products/GetProductById")]
         public IActionResult GetProductById(Guid Id, [FromServices] GetProduct getProduct)
@@ -34,8 +35,8 @@ namespace WebApp.API.Controllers
         }
 
 
-        [HttpPost("api/ProductCategories/AddFinancialYear")]
-        public async Task<IActionResult> AddProduct([FromBody] AddProductCategory.AddProductCategoryRequest request, [FromServices] AddProductCategory addFinancialYear)
+        [HttpPost("api/Products/AddProduct")]
+        public async Task<IActionResult> AddProduct([FromBody] AddProduct.AddProductRequest request, [FromServices] AddProduct addFinancialYear)
         {
             var response = await addFinancialYear.Do(request);
 
@@ -46,8 +47,8 @@ namespace WebApp.API.Controllers
             return Ok(response);
         }
 
-        [HttpPut("api/ProductCategories/UpdateFinancialYear")]
-        public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductCategory.UpdateProductCategoryRequest request, [FromServices] UpdateProductCategory updateFinancialYear)
+        [HttpPut("api/Products/UpdateProduct")]
+        public async Task<IActionResult> UpdateProduct([FromBody] UpdateProduct.UpdateProductRequest request, [FromServices] UpdateProduct updateFinancialYear)
         {
             var response = await updateFinancialYear.Do(request);
 
@@ -58,8 +59,8 @@ namespace WebApp.API.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("api/ProductCategories/DeleteProductCategory")]
-        public async Task<IActionResult> DeleteProduct(Guid id, [FromServices] DeleteProductCategory deleteFinancialYear)
+        [HttpDelete("api/Products/DeleteProduct")]
+        public async Task<IActionResult> DeleteProduct(Guid id, [FromServices] DeleteProduct deleteFinancialYear)
         {
             var result = await deleteFinancialYear.Do(id);
             if (!result.Success)

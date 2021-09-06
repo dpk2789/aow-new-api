@@ -1,4 +1,5 @@
-﻿using Aow.Infrastructure.Repositories;
+﻿using Aow.Infrastructure.IRepositories;
+using Aow.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 
@@ -7,11 +8,10 @@ namespace Aow.Services.Products
     [Service]
     public class GetProduct
     {
-        private IProductRepository _productManager;
-
-        public GetProduct(IProductRepository productManager)
+        private IRepositoryWrapper _repoWrapper;
+        public GetProduct(IRepositoryWrapper repoWrapper)
         {
-            _productManager = productManager;
+            _repoWrapper = repoWrapper;
         }
         public class GetProductViewModel
         {
@@ -35,7 +35,7 @@ namespace Aow.Services.Products
 
         public GetProductViewModel Do(Guid Id)
         {
-            var product = _productManager.GetProduct(Id);
+            var product = _repoWrapper.ProductRepo.GetProduct(Id);
             if (product == null)
             {
                 return null;
