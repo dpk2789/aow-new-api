@@ -2,54 +2,52 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Aow.Services.FinancialYear
+namespace Aow.Services.ProductCategory
 {
     [Service]
-    public class UpdateFinancialYear
+    public class AddProductCategory
     {
         private IRepositoryWrapper _repoWrapper;
-        public UpdateFinancialYear(IRepositoryWrapper repoWrapper)
+        public AddProductCategory(IRepositoryWrapper repoWrapper)
         {
             _repoWrapper = repoWrapper;
         }
-        public class UpdateFinancialYearRequest
+        public class AddProductCategoryRequest
         {
-            public Guid Id { get; set; }
             public string Name { get; set; }
             public string Start { get; set; }
             public string End { get; set; }
             public string CompanyId { get; set; }
         }
-        public class UpdateFinancialYearResponse
+        public class AddProductCategoryResponse
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
             public bool Success { get; set; }
         }
-        public async Task<UpdateFinancialYearResponse> Do(UpdateFinancialYearRequest request)
+
+        public async Task<AddProductCategoryResponse> Do(AddProductCategoryRequest request)
         {
             try
             {
-                var financialYear = _repoWrapper.FinancialYearRepo.GetFinancialYear(request.Id);
-                if (financialYear == null)
+                Guid ProductId = Guid.NewGuid();
+                Guid cmpId = Guid.Parse(request.CompanyId);
+                var financialYear = new Aow.Infrastructure.Domain.FinancialYear
                 {
-                    return null;
-                }
-                financialYear.Name = request.Name;
-                financialYear.Start = Convert.ToDateTime(request.Start);
-                DateTime dt = Convert.ToDateTime(request.End);
-                //DateTime dt2;
-                //var success = DateTimeOffset.TryParse(request.End, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var result);
-                //dt2 = result.UtcDateTime;
-                //var date2 = result.ToLocalTime();
-                financialYear.End = dt;
-                _repoWrapper.FinancialYearRepo.Update(financialYear);
-             
+                    Id = ProductId,
+                    Name = request.Name,
+                    Start = Convert.ToDateTime(request.Start),
+                    End = Convert.ToDateTime(request.End),
+                    CompanyId = cmpId,
+                    IsActive = true
+                };
+
+                _repoWrapper.FinancialYearRepo.Create(financialYear);
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {
-                    return new UpdateFinancialYearResponse
+                    return new AddProductCategoryResponse
                     {
                         Name = request.Name,
                         Success = false
@@ -57,7 +55,7 @@ namespace Aow.Services.FinancialYear
                 }
                 else
                 {
-                    return new UpdateFinancialYearResponse
+                    return new AddProductCategoryResponse
                     {
                         Id = financialYear.Id,
                         Name = request.Name,
@@ -67,7 +65,7 @@ namespace Aow.Services.FinancialYear
             }
             catch (Exception ex)
             {
-                return new UpdateFinancialYearResponse
+                return new AddProductCategoryResponse
                 {
                     Name = request.Name,
                     Success = false,

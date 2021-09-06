@@ -2,17 +2,16 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Aow.Services.FinancialYear
+namespace Aow.Services.ProductCategory
 {
-    [Service]
-    public class UpdateFinancialYear
+    public class UpdateProductCategory
     {
         private IRepositoryWrapper _repoWrapper;
-        public UpdateFinancialYear(IRepositoryWrapper repoWrapper)
+        public UpdateProductCategory(IRepositoryWrapper repoWrapper)
         {
             _repoWrapper = repoWrapper;
         }
-        public class UpdateFinancialYearRequest
+        public class UpdateProductCategoryRequest
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
@@ -20,14 +19,15 @@ namespace Aow.Services.FinancialYear
             public string End { get; set; }
             public string CompanyId { get; set; }
         }
-        public class UpdateFinancialYearResponse
+        public class UpdateProductCategoryResponse
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
             public bool Success { get; set; }
         }
-        public async Task<UpdateFinancialYearResponse> Do(UpdateFinancialYearRequest request)
+
+        public async Task<UpdateProductCategoryResponse> Do(UpdateProductCategoryRequest request)
         {
             try
             {
@@ -38,18 +38,14 @@ namespace Aow.Services.FinancialYear
                 }
                 financialYear.Name = request.Name;
                 financialYear.Start = Convert.ToDateTime(request.Start);
-                DateTime dt = Convert.ToDateTime(request.End);
-                //DateTime dt2;
-                //var success = DateTimeOffset.TryParse(request.End, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var result);
-                //dt2 = result.UtcDateTime;
-                //var date2 = result.ToLocalTime();
+                DateTime dt = Convert.ToDateTime(request.End);              
                 financialYear.End = dt;
                 _repoWrapper.FinancialYearRepo.Update(financialYear);
-             
+
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {
-                    return new UpdateFinancialYearResponse
+                    return new UpdateProductCategoryResponse
                     {
                         Name = request.Name,
                         Success = false
@@ -57,7 +53,7 @@ namespace Aow.Services.FinancialYear
                 }
                 else
                 {
-                    return new UpdateFinancialYearResponse
+                    return new UpdateProductCategoryResponse
                     {
                         Id = financialYear.Id,
                         Name = request.Name,
@@ -67,7 +63,7 @@ namespace Aow.Services.FinancialYear
             }
             catch (Exception ex)
             {
-                return new UpdateFinancialYearResponse
+                return new UpdateProductCategoryResponse
                 {
                     Name = request.Name,
                     Success = false,

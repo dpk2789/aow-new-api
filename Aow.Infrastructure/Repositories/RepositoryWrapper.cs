@@ -19,7 +19,9 @@ namespace Aow.Infrastructure.Repositories
         private IFinancialYearRepository _account;
         private IUserCompanyRepository _userCompanyRepository;
         private IUserRepository _userRepository;
-
+        private IProductCategoryRepository _productCategoryRepository;
+        private IProductAttributeRepository _productAttributeRepository;
+        private IProductAttributeOptionRepository productAttributeOptionRepository;
         public IUserRepository UserRepo
         {
             get
@@ -64,6 +66,41 @@ namespace Aow.Infrastructure.Repositories
                     _userCompanyRepository = new UserCompanyRepository(_repoContext);
                 }
                 return _userCompanyRepository;
+            }
+        }
+
+        public IProductCategoryRepository ProductCategoryRepo
+        {
+            get
+            {
+                if (_productCategoryRepository == null)
+                {
+                    _productCategoryRepository = new ProductCategoryRepository(_repoContext);
+                }
+                return _productCategoryRepository;
+            }
+        }
+
+        public IProductAttributeRepository ProductAttributeRepo
+        {
+            get
+            {
+                if (_productAttributeRepository == null)
+                {
+                    _productAttributeRepository = new ProductAttributeRepository(_repoContext);
+                }
+                return _productAttributeRepository;
+            }
+        }
+        public IProductAttributeOptionRepository ProductAttributeOptionRepo
+        {
+            get
+            {
+                if (productAttributeOptionRepository == null)
+                {
+                    productAttributeOptionRepository = new ProductAttributeOptionRepository(_repoContext);
+                }
+                return productAttributeOptionRepository;
             }
         }
 

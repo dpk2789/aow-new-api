@@ -9,6 +9,9 @@ namespace Aow.Infrastructure.IRepositories
         IFinancialYearRepository FinancialYearRepo { get; }
         IUserCompanyRepository UserCompanyRepo { get; }
         IUserRepository UserRepo { get; }
+        IProductCategoryRepository ProductCategoryRepo { get; }
+        IProductAttributeRepository ProductAttributeRepo { get; }
+        IProductAttributeOptionRepository ProductAttributeOptionRepo { get; }
         Task<int> SaveNew();
         int Save();
     }

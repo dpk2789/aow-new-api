@@ -13,7 +13,6 @@ namespace Aow.Infrastructure.Repositories
         IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression);
         void Create(T entity);
         void Update(T entity);
-        void Delete(T entity);
-        Task<int> Save();
+        void Delete(T entity);       
     }
 }

@@ -40,9 +40,6 @@ namespace Aow.Infrastructure.Repositories
         {
             this.RepositoryContext.Set<T>().Remove(entity);
         }
-        public Task<int> Save()
-        {
-            return this.RepositoryContext.SaveChangesAsync();
-        }
+      
     }
 }
