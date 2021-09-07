@@ -20,12 +20,12 @@ namespace Aow.Services.ProductCategory
 
         public async Task<DeleteFinancialYearResponse> Do(Guid id)
         {
-            var financialYear = _repoWrapper.FinancialYearRepo.GetFinancialYear(id);
-            if (financialYear == null)
+            var category = _repoWrapper.ProductCategoryRepo.GetProductCategory(id);
+            if (category == null)
             {
                 return null;
             }
-            _repoWrapper.FinancialYearRepo.Delete(financialYear);
+            _repoWrapper.ProductCategoryRepo.Delete(category);
             int i = await _repoWrapper.SaveNew();
             if (i <= 0)
             {
@@ -39,7 +39,7 @@ namespace Aow.Services.ProductCategory
             {
                 return new DeleteFinancialYearResponse
                 {
-                    Message = "FinancialYear Deleted",
+                    Message = "Product Category Deleted",
                     Success = true
                 };
             }

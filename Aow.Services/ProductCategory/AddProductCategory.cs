@@ -14,9 +14,7 @@ namespace Aow.Services.ProductCategory
         }
         public class AddProductCategoryRequest
         {
-            public string Name { get; set; }
-            public string Start { get; set; }
-            public string End { get; set; }
+            public string Name { get; set; }          
             public string CompanyId { get; set; }
         }
         public class AddProductCategoryResponse
@@ -33,17 +31,14 @@ namespace Aow.Services.ProductCategory
             {
                 Guid ProductId = Guid.NewGuid();
                 Guid cmpId = Guid.Parse(request.CompanyId);
-                var financialYear = new Aow.Infrastructure.Domain.FinancialYear
+                var financialYear = new AowCore.Domain.ProductCategory
                 {
                     Id = ProductId,
-                    Name = request.Name,
-                    Start = Convert.ToDateTime(request.Start),
-                    End = Convert.ToDateTime(request.End),
-                    CompanyId = cmpId,
-                    IsActive = true
+                    Name = request.Name,                  
+                    CompanyId = cmpId,                   
                 };
 
-                _repoWrapper.FinancialYearRepo.Create(financialYear);
+                _repoWrapper.ProductCategoryRepo.Create(financialYear);
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {
@@ -59,7 +54,8 @@ namespace Aow.Services.ProductCategory
                     {
                         Id = financialYear.Id,
                         Name = request.Name,
-                        Success = true
+                        Success = true,
+                        Description = "Product Category SuccessFully Added"
                     };
                 }
             }

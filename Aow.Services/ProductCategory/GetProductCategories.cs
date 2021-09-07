@@ -30,14 +30,11 @@ namespace Aow.Services.ProductCategory
             {
                 return null;
             };
-            var list = _repoWrapper.FinancialYearRepo.GetFinancialYears(pagingParameters, companyId).GetAwaiter().GetResult();
+            var list = _repoWrapper.ProductCategoryRepo.GetProductCategories(pagingParameters, companyId).GetAwaiter().GetResult();
             var newList = list.Select(x => new GetProductCategoriesResponse
             {
                 Id = x.Id,
-                Name = x.Name,
-                Start = x.Start,
-                End = x.End,
-                IsLocked = x.IsLocked
+                Name = x.Name,                
             });
 
             return newList;

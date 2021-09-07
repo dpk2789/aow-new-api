@@ -11,14 +11,15 @@ namespace WebApp.API.Controllers
 
     public class ProductCategoriesController : ControllerBase
     {
-        [HttpGet("api/ProductCategories/ProductCategories")]
-        public IActionResult GetFinancialYears([FromQuery] PagingParameters pagingParameters, Guid cmpId, [FromServices] GetProductCategories getFinancialYears)
+        [HttpGet("api/ProductCategories/GetProductCategories")]
+        public IActionResult GetProductCategories([FromQuery] PagingParameters pagingParameters, Guid cmpId, [FromServices] GetProductCategories getProductCategories)
         {
-            return Ok(getFinancialYears.Do(pagingParameters, cmpId));
+            var result = getProductCategories.Do(pagingParameters, cmpId);
+            return Ok(result);
         }
 
         [HttpGet("api/ProductCategories/GetProductCategory")]
-        public IActionResult GetFinancialYear([FromQuery] Guid id, [FromServices] GetProductCategory getProduct)
+        public IActionResult GetProductCategory([FromQuery] Guid id, [FromServices] GetProductCategory getProduct)
         {
             var result = getProduct.Do(id);
             return Ok(result);

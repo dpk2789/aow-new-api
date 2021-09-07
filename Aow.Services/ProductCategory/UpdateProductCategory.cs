@@ -16,8 +16,6 @@ namespace Aow.Services.ProductCategory
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
-            public string Start { get; set; }
-            public string End { get; set; }
             public string CompanyId { get; set; }
         }
         public class UpdateProductCategoryResponse
@@ -32,16 +30,13 @@ namespace Aow.Services.ProductCategory
         {
             try
             {
-                var financialYear = _repoWrapper.FinancialYearRepo.GetFinancialYear(request.Id);
-                if (financialYear == null)
+                var category = _repoWrapper.ProductCategoryRepo.GetProductCategory(request.Id);
+                if (category == null)
                 {
                     return null;
                 }
-                financialYear.Name = request.Name;
-                financialYear.Start = Convert.ToDateTime(request.Start);
-                DateTime dt = Convert.ToDateTime(request.End);              
-                financialYear.End = dt;
-                _repoWrapper.FinancialYearRepo.Update(financialYear);
+                category.Name = request.Name;
+                _repoWrapper.ProductCategoryRepo.Update(category);
 
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
@@ -49,16 +44,18 @@ namespace Aow.Services.ProductCategory
                     return new UpdateProductCategoryResponse
                     {
                         Name = request.Name,
-                        Success = false
+                        Success = false,
+                        Description = "Some Error Occur"
                     };
                 }
                 else
                 {
                     return new UpdateProductCategoryResponse
                     {
-                        Id = financialYear.Id,
+                        Id = category.Id,
                         Name = request.Name,
-                        Success = true
+                        Success = true,
+                        Description = "Successfully Updated Product Category!!"
                     };
                 }
             }

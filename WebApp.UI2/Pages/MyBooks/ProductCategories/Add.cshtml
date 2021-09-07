@@ -1,6 +1,5 @@
 ﻿@page
-@model WebApp.UI2.Pages.MyBooks.FinancialYear.EditModel
-
+@model WebApp.UI2.Pages.MyBooks.ProductCategories.AddModel
 @{
     var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
 }
@@ -10,12 +9,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Financial Year Form</h1>
+                    <h1>Product Category Form</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="/MyBooks/FinancialYear/index">Financial Years</a></li>
-                        <li class="breadcrumb-item active">Edit Financial Year</li>
+                        <li class="breadcrumb-item"><a href="/MyBooks/ProductCategories/index">Product Categories</a></li>
+                        <li class="breadcrumb-item active">Add Product Category</li>
                     </ol>
                 </div>
             </div>
@@ -28,7 +27,7 @@
             <!-- SELECT2 EXAMPLE -->
             <div class="card card-info">
                 <div class="card-header">
-                    <h3 class="card-title">Edit FinancialYear</h3>
+                    <h3 class="card-title">Add Product Category</h3>
 
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -44,7 +43,7 @@
                     <div class="row">
                         <div class="col-12">
                             <form method="post" enctype="multipart/form-data">
-                                <input type="hidden" asp-for="Input.Id" id="fyrId" />
+
                                 <div asp-validation-summary="All" class="text-danger"></div>
                                 <div class="mb-3 row">
                                     <label asp-for="Input.Name" class="col-sm-2 col-form-label"></label>
@@ -53,22 +52,7 @@
                                     </div>
                                     <span asp-validation-for="Input.Name" class="text-danger"></span>
                                 </div>
-                                <div class="mb-3 row">
-                                    <label asp-for="Input.Start" class="col-sm-2 col-form-label"></label>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control datetimepicker-input" id="StartDate" asp-for="Input.Start"
-                                               data-toggle="datetimepicker" data-target="#StartDate" autocomplete="off" />
-                                    </div>
-                                    <span asp-validation-for="Input.Start" class="text-danger"></span>
-                                </div>
-                                <div class="mb-3 row">
-                                    <label asp-for="Input.End" class="col-sm-2 col-form-label"></label>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control datetimepicker-input" id="EndDate" asp-for="Input.End"
-                                               data-toggle="datetimepicker" data-target="#EndDate" autocomplete="off" />
-                                    </div>
-                                    <span asp-validation-for="Input.End" class="text-danger"></span>
-                                </div>
+
                             </form>
                         </div>
 
@@ -79,7 +63,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                    <button onclick="EditFinancialYear(event)" class="btn btn-info float-right" style="margin-left:20px">Save</button>
+                    <button onclick="AddProductCategory(event)" class="btn btn-info float-right" style="margin-left:20px">Save</button>
                     <button type="submit" class="btn btn-default float-right">Cancel</button>
                 </div>
             </div>
@@ -93,20 +77,18 @@
 
 </div>
 <input type="hidden" value="@userId" id="userId" />
-
+<input type="hidden" value="@Model.Input.CompanyId" id="cmpId" />
 @section scripts{
     @*<script src="~/js/product.js"></script>*@
     <script>
         //Date picker
         $('#StartDate').datetimepicker({
-           // format: 'L',
-           // format: 'YYYY/MM/DD'
-          //  format: 'DD/MM/YYYY HH:mm',
-
+           /* format: 'L',*/
+            format: 'YYYY/MM/DD'
         });
         $('#EndDate').datetimepicker({
-          //  format: 'L',
-          //  format: 'YYYY/MM/DD'
+            /* format: 'L',*/
+            format: 'YYYY/MM/DD'
         });
         var apiUrl = '@Model.ApiUrl';
         axios.interceptors.request.use(function (config) {
@@ -133,36 +115,26 @@
         });
 
 
-        function EditFinancialYear(e) {
+        function AddProductCategory(e) {
            // let confirmAction = confirm("Are you sure to delete this product?");
             performPostRequest(e);
         }
 
         var addFinancialYearRequest = {
-            id:"3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            name: "f1",
-            start: "2021-09-02T06:28:30.163Z",
-            end: "2021-09-02T06:28:30.163Z",
+            name: "f1",           
             companyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         };
         function performPostRequest(e) {
             let userId = document.getElementById('userId');
-            let fyrId = document.getElementById('fyrId').value;
             let fName = document.getElementById('Input_Name').value;
-            let startDate = document.getElementById('StartDate').value;
-            let endDate = document.getElementById('EndDate').value;
-            addFinancialYearRequest.id = fyrId;
+            let cmpId = document.getElementById('cmpId').value;         
             addFinancialYearRequest.name = fName;
-            addFinancialYearRequest.start = startDate;
-            var date = new Date(endDate);
-            addFinancialYearRequest.end = date.toJSON();
-
-
-           // alert(date.toJSON());
+            addFinancialYearRequest.companyId = cmpId;
+          
             let userAccessToken = userId.value;
             console.log(this.addFinancialYearRequest);
 
-            axios.put(`${apiUrl}/api/FinancialYear/UpdateFinancialYear`, this.addFinancialYearRequest, {
+            axios.post(`${apiUrl}/api/ProductCategories/AddProductCategory`, this.addFinancialYearRequest, {
                 headers: {
                     Authorization: "Bearer " + userAccessToken
                 }
@@ -170,19 +142,17 @@
                  .then(function (response) {
                      console.log(response);
                      if (response.data.success) {
-                         toastr.success('Financial Year Created Successfully')
-                         window.location.href = '/MyBooks/FinancialYear/index'
+                         toastr.success(response.data.description)
+                         window.location.href = '/MyBooks/ProductCategories/index'
                      } else {
                          toastr.error(response.data.description)
                      }
-
                 })
-                .catch(function (error) {
+                .catch(function (response) {
                     console.log(error);
                     toastr.error('Some Error Occur!!')
                 });
             e.preventDefault();
-        }
-       
+        }      
     </script>
 }

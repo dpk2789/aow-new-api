@@ -10,15 +10,7 @@
             public const string Register = Rootlocal + "/api/user/register";
             public const string ConfirmEmail = Rootlocal + "/api/user/ConfirmEmail";
         }
-        public static class Product
-        {
-            public const string GetProducts = Rootlocal + "/api/Products/GetProducts";
-            public const string GetProduct = Rootlocal + "/api/Products/GetProduct";
-            public const string GetProductByName = Rootlocal + "/api/Products/GetProductByName";
-            public const string Create = Rootlocal + "/api/Products/CreateProduct";
-            public const string Update = Rootlocal + "/api/Products/UpdateProduct";
-            public const string Delete = Rootlocal + "/Products/{postId}";
-        }
+      
         public static class Company
         {
             public const string GetCompanies = Rootlocal + "/api/Companies/GetCompanies";
@@ -36,6 +28,23 @@
             public const string Create = Rootlocal + "/api/FinancialYear/AddFinancialYear";
             public const string Update = Rootlocal + "/api/FinancialYear/UpdateFinancialYear";
             public const string Delete = Rootlocal + "/FinancialYear/{postId}";
+        }
+        public static class ProductCategories
+        {
+            public const string GetProductCategories = Rootlocal + "/api/ProductCategories/GetProductCategories";
+            public const string GetProductCategory = Rootlocal + "/api/ProductCategories/GetProductCategory";          
+            public const string Create = Rootlocal + "/api/ProductCategories/AddProductCategory";
+            public const string Update = Rootlocal + "/api/ProductCategories/UpdateProductCategory";
+            public const string Delete = Rootlocal + "api/ProductCategories/DeleteProductCategory/{postId}";
+        }
+        public static class Product
+        {
+            public const string GetProducts = Rootlocal + "/api/Products/GetProducts";
+            public const string GetProduct = Rootlocal + "/api/Products/GetProduct";
+            public const string GetProductByName = Rootlocal + "/api/Products/GetProductByName";
+            public const string Create = Rootlocal + "/api/Products/CreateProduct";
+            public const string Update = Rootlocal + "/api/Products/UpdateProduct";
+            public const string Delete = Rootlocal + "/Products/{postId}";
         }
         public static class Cart
         {

@@ -1,0 +1,26 @@
+﻿@model IEnumerable<WebApp.UI2.Pages.MyBooks.ProductCategories.IndexModel.ProductCategoriesViewModel>
+
+<table id="example1" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => category.Name)
+                </td>
+
+                <td>
+                    <a asp-route-id="@category.Id" asp-page="/MyBooks/ProductCategories/Update" class="fa fa-edit">Edit</a> |
+                    <button onclick="confirmAction(event)" data-category-id="@category.Id" type="button" class="btn-danger small">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
