@@ -14,9 +14,7 @@ namespace Aow.Services.Products
         }
         public class AddProductRequest
         {
-            public string Name { get; set; }
-            public string Start { get; set; }
-            public string End { get; set; }
+            public string Name { get; set; }          
             public string CompanyId { get; set; }
         }
         public class AddProductResponse
@@ -32,17 +30,13 @@ namespace Aow.Services.Products
             {
                 Guid ProductId = Guid.NewGuid();
                 Guid cmpId = Guid.Parse(request.CompanyId);
-                var financialYear = new Aow.Infrastructure.Domain.FinancialYear
+                var product = new Aow.Infrastructure.Domain.Product
                 {
                     Id = ProductId,
-                    Name = request.Name,
-                    Start = Convert.ToDateTime(request.Start),
-                    End = Convert.ToDateTime(request.End),
-                    CompanyId = cmpId,
-                    IsActive = true
+                    Name = request.Name                
                 };
 
-                _repoWrapper.FinancialYearRepo.Create(financialYear);
+                _repoWrapper.ProductRepo.Create(product);
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {
@@ -56,7 +50,7 @@ namespace Aow.Services.Products
                 {
                     return new AddProductResponse
                     {
-                        Id = financialYear.Id,
+                        Id = product.Id,
                         Name = request.Name,
                         Success = true
                     };

@@ -31,7 +31,7 @@ namespace Aow.Services.ProductCategory
             {
                 Guid ProductId = Guid.NewGuid();
                 Guid cmpId = Guid.Parse(request.CompanyId);
-                var financialYear = new AowCore.Domain.ProductCategory
+                var financialYear = new Aow.Infrastructure.Domain.ProductCategory
                 {
                     Id = ProductId,
                     Name = request.Name,                  

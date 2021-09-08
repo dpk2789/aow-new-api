@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AowCore.Domain
+namespace Aow.Infrastructure.Domain
 {
     public class ProductGroup : Entity<Guid>
     {

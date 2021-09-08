@@ -39,7 +39,8 @@ namespace Aow.Services.Products
             var list = _productRepository.GetProducts(pagingParameters).GetAwaiter().GetResult();
             var newList = list.Select(x => new ProductViewModelResponse
             {
-                Id = x.Id
+                Id = x.Id,
+                Name= x.Name
             });
 
             return newList;

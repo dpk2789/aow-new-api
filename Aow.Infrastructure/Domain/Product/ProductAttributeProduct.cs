@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Aow.Infrastructure.Domain;
+using System;
 
 namespace AowCore.Domain
 {

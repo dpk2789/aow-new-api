@@ -1,4 +1,5 @@
 ﻿using Aow.Infrastructure.Common;
+using Aow.Infrastructure.Domain;
 using System;
 
 namespace AowCore.Domain

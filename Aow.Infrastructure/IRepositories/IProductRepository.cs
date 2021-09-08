@@ -1,5 +1,5 @@
-﻿using Aow.Infrastructure.Paging;
-using AowCore.Domain;
+﻿using Aow.Infrastructure.Domain;
+using Aow.Infrastructure.Paging;
 using System;
 using System.Threading.Tasks;
 

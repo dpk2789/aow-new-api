@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AowCore.Domain
+namespace Aow.Infrastructure.Domain
 {
     public class ProductVariantProductAttributeOption
     {

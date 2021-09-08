@@ -1,4 +1,4 @@
-﻿using AowCore.Domain;
+﻿using Aow.Infrastructure.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

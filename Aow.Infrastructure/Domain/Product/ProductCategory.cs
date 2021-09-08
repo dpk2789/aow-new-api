@@ -1,11 +1,10 @@
 ﻿using Aow.Infrastructure.Common;
-using Aow.Infrastructure.Domain;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TreeUtility;
 
-namespace AowCore.Domain
+namespace Aow.Infrastructure.Domain
 {
     public class ProductCategory : Entity<Guid>, ITreeNode<ProductCategory>
     {

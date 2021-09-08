@@ -1,8 +1,9 @@
 ﻿
 using Aow.Infrastructure.Common;
+using AowCore.Domain;
 using System;
 
-namespace AowCore.Domain
+namespace Aow.Infrastructure.Domain
 {
     public class Product : AuditableEntity<Guid>
     {      
