@@ -46,6 +46,17 @@
 
                                 <div asp-validation-summary="All" class="text-danger"></div>
                                 <div class="mb-3 row">
+                                    <label class="col-sm-2 col-form-label">Select Category</label>
+                                    <div class="col-sm-6">
+                                        @Html.DropDownList("CategoryId", Model.Input.ProductCategorySelectList, "-Select Category-", new { id = "CategoryId", @class = "form-control" })
+                                        @*<select asp-for="Input.CategoryId">
+                                                <option>1</option>
+                                                <option>1</option>
+                                            </select>*@
+                                    </div>
+                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3 row">
                                     <label asp-for="Input.Name" class="col-sm-2 col-form-label"></label>
                                     <div class="col-sm-6">
                                         <input asp-for="Input.Name" class="form-control" />
@@ -81,9 +92,8 @@
 @section scripts{
     @*<script src="~/js/product.js"></script>*@
     <script>
-      
-        var apiUrl = '@Model.ApiUrl';    
 
+        var apiUrl = '@Model.ApiUrl';
 
         function AddProduct(e) {
            // let confirmAction = confirm("Are you sure to delete this product?");
@@ -92,17 +102,17 @@
 
         var addProductRequest = {
             name: "f1",
-            companyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            categoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         };
         function performPostRequest(e) {
             let userId = document.getElementById('userId');
             let fName = document.getElementById('Input_Name').value;
-            let cmpId = document.getElementById('cmpId').value;
+            let categoryId = document.getElementById('CategoryId').value;
             addProductRequest.name = fName;
-            addProductRequest.companyId = cmpId;
+            addProductRequest.categoryId = categoryId;
 
             let userAccessToken = userId.value;
-            console.log(this.addFinancialYearRequest);
+            console.log(this.addProductRequest);
 
             axios.post(`${apiUrl}/api/Products/AddProduct`, this.addProductRequest, {
                 headers: {

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Aow.Services.Products
 {
     [Service]
-   public class AddProduct
+    public class AddProduct
     {
         private IRepositoryWrapper _repoWrapper;
         public AddProduct(IRepositoryWrapper repoWrapper)
@@ -14,8 +14,8 @@ namespace Aow.Services.Products
         }
         public class AddProductRequest
         {
-            public string Name { get; set; }          
-            public string CompanyId { get; set; }
+            public string Name { get; set; }
+            public string CategoryId { get; set; }
         }
         public class AddProductResponse
         {
@@ -29,11 +29,12 @@ namespace Aow.Services.Products
             try
             {
                 Guid ProductId = Guid.NewGuid();
-                Guid cmpId = Guid.Parse(request.CompanyId);
+                Guid categoryId = Guid.Parse(request.CategoryId);
                 var product = new Aow.Infrastructure.Domain.Product
                 {
                     Id = ProductId,
-                    Name = request.Name                
+                    Name = request.Name,
+                    ProductCategoryId = categoryId
                 };
 
                 _repoWrapper.ProductRepo.Create(product);
