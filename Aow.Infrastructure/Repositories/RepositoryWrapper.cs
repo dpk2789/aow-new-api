@@ -23,6 +23,8 @@ namespace Aow.Infrastructure.Repositories
         private IProductRepository _productRepository;
         private IProductAttributeRepository _productAttributeRepository;
         private IProductAttributeOptionRepository productAttributeOptionRepository;
+        private ILedgerCategoryRepository _ledgerCategoryRepository;
+        private ILedgerRepository _ledgerRepository;
         public IUserRepository UserRepo
         {
             get
@@ -112,6 +114,29 @@ namespace Aow.Infrastructure.Repositories
                     productAttributeOptionRepository = new ProductAttributeOptionRepository(_repoContext);
                 }
                 return productAttributeOptionRepository;
+            }
+        }
+
+        public ILedgerCategoryRepository LedgerCategoryRepositoryRepo
+        {
+            get
+            {
+                if (_ledgerCategoryRepository == null)
+                {
+                    _ledgerCategoryRepository = new LedgerCategoryRepository(_repoContext);
+                }
+                return _ledgerCategoryRepository;
+            }
+        }
+        public ILedgerRepository LedgerRepositoryRepo
+        {
+            get
+            {
+                if (_ledgerRepository == null)
+                {
+                    _ledgerRepository = new LedgerRepository(_repoContext);
+                }
+                return _ledgerRepository;
             }
         }
 
