@@ -14,7 +14,7 @@ namespace WebApp.UI2.Controllers
     {
         private readonly ICookieHelper _cookieHelper;
         public PartialsController(ICookieHelper cookieHelper)
-        {            
+        {
             _cookieHelper = cookieHelper;
         }
         [HttpGet]
@@ -29,7 +29,7 @@ namespace WebApp.UI2.Controllers
             using var client = new HttpClient();
             var getProductsUri = new Uri(ApiUrls.FinancialYear.GetFinancialYears + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
 
-            var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;          
+            var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
 
             var getUserInfo = await client.GetAsync(getProductsUri);
@@ -57,8 +57,11 @@ namespace WebApp.UI2.Controllers
             var getUserInfo = await client.GetAsync(getProductsUri);
 
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            var data = JsonConvert.DeserializeObject<IEnumerable<WebApp.UI2.Pages.MyBooks.FinancialYear.IndexModel.FinancialYearViewModel>>(resultuerinfo);
-            return PartialView("_FyrListPartial", data);
+            var data = JsonConvert.DeserializeObject<IEnumerable<WebApp.UI2.Pages.MyBooks.ProductCategories.IndexModel.ProductCategoriesViewModel>>(resultuerinfo);
+            string modelString = string.Empty;
+            modelString = await this.RenderViewAsync("_ProductCategoryPartial", data, true);
+            return Json(new { success = true, modelString });
+            //  return PartialView("_ProductCategoryPartial", data);
         }
     }
 }

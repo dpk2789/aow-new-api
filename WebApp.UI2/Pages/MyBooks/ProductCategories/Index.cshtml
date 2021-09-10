@@ -64,9 +64,12 @@
         var getProducts = function () {
             axios.get('/Partials/GetProductCategoriesPartialView')
                 .then(res => {
-                    var html = res.data;
-                    var el = document.getElementById('product-main');
-                    el.outerHTML = html;
+                    console.log(res);
+                    $("#product-main").html(res.data.modelString);
+                   
+                   // var html = res.data;
+                    //var el = document.getElementById('product-main');
+                    //el.outerHTML = html;
                 })
         }
 
@@ -83,9 +86,12 @@
             }).then(res => {
                 console.log(res);
                 if (res.data.success) {
-                    alert(res.data.message)
+                   // alert(res.data.message)
+                    toastr.success(res.data.message)
                 }
-                getProducts();
+                window.location.reload();
+                //getProducts();
+                //$("#productCategoryTable").DataTable();
             })
                 .catch(err => {
                     alert(err.error);
@@ -93,10 +99,7 @@
 
         }
         $(function () {
-            $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            $("#productCategoryTable").DataTable();
             //$('#example2').DataTable({
             //    "paging": true,
             //    "lengthChange": false,
