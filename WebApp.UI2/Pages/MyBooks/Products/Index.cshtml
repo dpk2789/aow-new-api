@@ -34,32 +34,9 @@
                         <input type="hidden" value="@userId" id="userId" />
                         <!-- /.card-header -->
                         <div class="card-body" id="product-main">
-                            @if (Model.ProductCategories != null)
+                            @if (Model.Products != null)
                             {
-                                <table id="example1" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var category in Model.ProductCategories)
-                                        {
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => category.Name)
-                                                </td>
-
-                                                <td>
-                                                    <a asp-route-id="@category.Id" asp-page="/MyBooks/Products/Update" class="fa fa-edit">Edit</a> |
-                                                    <button onclick="confirmAction(event)" data-category-id="@category.Id" type="button" class="btn-danger small">Delete</button>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-
-                                </table>
+                                <partial name="_ProductsListPartial" model="@Model.Products" />
                             }
 
                         </div>
@@ -85,11 +62,12 @@
         };
 
         var getProducts = function () {
-            axios.get('/Partials/GetProductCategoriesPartialView')
+            axios.get('/Partials/GetProductsPartialView')
                 .then(res => {
                     var html = res.data;
                     var el = document.getElementById('product-main');
                     el.outerHTML = html;
+                    console.log(res);
                 })
         }
 
@@ -99,14 +77,15 @@
             let userAccessToken = el.value;
             console.log(fyrId);
 
-            axios.delete(apiUrl + "/api/ProductCategories/DeleteProductCategory?id=" + fyrId, {
+            axios.delete(apiUrl + "/api/Products/DeleteProduct?id=" + fyrId, {
                 headers: {
                     Authorization: "Bearer " + userAccessToken
                 }
             }).then(res => {
                 console.log(res);
                 if (res.data.success) {
-                    alert(res.data.message)
+                   // alert(res.data.message)
+                    toastr.success(res.data.message)
                 }
                 getProducts();
             })

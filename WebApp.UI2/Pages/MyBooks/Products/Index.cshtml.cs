@@ -21,13 +21,13 @@ namespace WebApp.UI2.Pages.MyBooks.Products
             _cookieHelper = cookieHelper;
         }
 
-        public class ProductCategoriesViewModel
+        public class ProductViewModel
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
         }
         [BindProperty]
-        public IEnumerable<ProductCategoriesViewModel> ProductCategories { get; set; }
+        public IEnumerable<ProductViewModel> Products { get; set; }
         public async Task<IActionResult> OnGet()
         {
             var cmpid = _cookieHelper.Get("cmpCookee");
@@ -48,8 +48,8 @@ namespace WebApp.UI2.Pages.MyBooks.Products
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             if (resultuerinfo != null)
             {
-                var data = JsonConvert.DeserializeObject<IEnumerable<ProductCategoriesViewModel>>(resultuerinfo);
-                ProductCategories = data;
+                var data = JsonConvert.DeserializeObject<IEnumerable<ProductViewModel>>(resultuerinfo);
+                Products = data;
             }
             return Page();
         }

@@ -22,12 +22,12 @@ namespace Aow.Services.Products
         {
             try
             {
-                var financialYear = _repoWrapper.FinancialYearRepo.GetFinancialYear(id);
-                if (financialYear == null)
+                var product = _repoWrapper.ProductRepo.GetProduct(id);
+                if (product == null)
                 {
                     return null;
                 }
-                _repoWrapper.FinancialYearRepo.Delete(financialYear);
+                _repoWrapper.ProductRepo.Delete(product);
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {
@@ -41,7 +41,7 @@ namespace Aow.Services.Products
                 {
                     return new DeleteProductResponse
                     {
-                        Message = "FinancialYear Deleted",
+                        Message = "Product Deleted",
                         Success = true
                     };
                 }
