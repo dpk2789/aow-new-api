@@ -19,6 +19,7 @@ namespace Aow.Services.Products
             public string Name { get; set; }
             public string Description { get; set; }
             public decimal Value { get; set; }
+            public Guid ProductCategoryId { get; set; }
             public IEnumerable<ProductImageResponse> ProductImages { get; set; }
         }
         public class ProductImageResponse
@@ -42,6 +43,8 @@ namespace Aow.Services.Products
             }
             GetProductViewModel getProductViewModel = new GetProductViewModel();
             getProductViewModel.Id = product.Id;
+            getProductViewModel.ProductCategoryId = product.ProductCategoryId;
+            getProductViewModel.Name = product.Name;
             return getProductViewModel;
         }
     }
