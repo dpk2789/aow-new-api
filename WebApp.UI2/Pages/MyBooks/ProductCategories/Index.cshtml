@@ -51,6 +51,18 @@
 @section scripts{
     <script>
         var apiUrl = '@Model.ApiUrl';
+
+        $(function () {
+            DataTableInit();
+        });
+
+        function DataTableInit() {
+            $("#productCategoryTable").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#productCategoryTable_wrapper .col-md-6:eq(0)');
+        }
+
         function confirmAction(e) {
             let confirmAction = confirm("Are you sure to delete this product?");
             if (confirmAction) {
@@ -65,8 +77,8 @@
             axios.get('/Partials/GetProductCategoriesPartialView')
                 .then(res => {
                     console.log(res);
-                    $("#product-main").html(res.data.modelString);
-                   
+                    $("#resultTable").html(res.data.modelString);
+                    DataTableInit();
                    // var html = res.data;
                     //var el = document.getElementById('product-main');
                     //el.outerHTML = html;
@@ -98,17 +110,6 @@
                 })
 
         }
-        $(function () {
-            $("#productCategoryTable").DataTable();
-            //$('#example2').DataTable({
-            //    "paging": true,
-            //    "lengthChange": false,
-            //    "searching": false,
-            //    "ordering": true,
-            //    "info": true,
-            //    "autoWidth": false,
-            //    "responsive": false,
-            //});
-        });
+
     </script>
 }

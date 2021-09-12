@@ -3,6 +3,7 @@ using System;
 
 namespace Aow.Services.Ledger
 {
+    [Service]
     public class GetLedger
     {
         private IRepositoryWrapper _repoWrapper;

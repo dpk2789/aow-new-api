@@ -82,11 +82,36 @@ namespace WebApp.UI2.Controllers
             var getUserInfo = await client.GetAsync(getProductsUri);
 
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            var data = JsonConvert.DeserializeObject<IEnumerable<WebApp.UI2.Pages.MyBooks.ProductCategories.IndexModel.ProductCategoriesViewModel>>(resultuerinfo);
+            var data = JsonConvert.DeserializeObject<IEnumerable<WebApp.UI2.Pages.MyBooks.Products.IndexModel.ProductViewModel>>(resultuerinfo);
             //string modelString = string.Empty;
             //modelString = await this.RenderViewAsync("_ProductCategoryPartial", data, true);
             //return Json(new { success = true, modelString });
             return PartialView("_ProductsListPartial", data);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetLedgerCategoriesPartialView()
+        {
+            var cmpid = _cookieHelper.Get("cmpCookee");
+
+            if (string.IsNullOrEmpty(cmpid) && string.IsNullOrEmpty(cmpid))
+            {
+                return RedirectToPage("/");
+            }
+            using var client = new HttpClient();
+            var getProductsUri = new Uri(ApiUrls.LedgerCategories.GetLedgerCategories + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
+
+            var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+
+            var getUserInfo = await client.GetAsync(getProductsUri);
+
+            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var data = JsonConvert.DeserializeObject<IEnumerable<WebApp.UI2.Pages.MyBooks.LedgerCategories.IndexModel.LedgerCategoriesViewModel>>(resultuerinfo);
+            //string modelString = string.Empty;
+            //modelString = await this.RenderViewAsync("_ProductCategoryPartial", data, true);
+            //return Json(new { success = true, modelString });
+            return PartialView("_LedgerCategoryListPartial", data);
         }
     }
 }

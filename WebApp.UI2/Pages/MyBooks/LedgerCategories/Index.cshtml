@@ -10,12 +10,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Product Categories </h1>
+                    <h1 class="m-0">Ledger Categories </h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Product Categories</li>
+                        <li class="breadcrumb-item active">Ledger Categories</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -29,36 +29,15 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><a class="btn btn-success" asp-page="/MyBooks/ProductCategories/Add">Add New Product Category</a></h3>
+                            <h3 class="card-title"><a class="btn btn-success" asp-page="/MyBooks/LedgerCategories/Add">Add New Ledger Category</a></h3>
                         </div>
                         <input type="hidden" value="@userId" id="userId" />
                         <!-- /.card-header -->
-                        <div class="card-body" id="product-main">
+                        <div class="card-body">
+
                             @if (Model.LedgerCategories != null)
                             {
-                                <table id="productCategoryTable" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var category in Model.LedgerCategories)
-                                        {
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => category.Name)
-                                                </td>
-
-                                                <td>
-                                                    <a asp-route-id="@category.Id" asp-page="/MyBooks/ProductCategories/Update" class="fa fa-edit">Edit</a> |
-                                                    <button onclick="confirmAction(event)" data-category-id="@category.Id" type="button" class="btn-danger small">Delete</button>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                                <partial name="_LedgerCategoryListPartial" model="@Model.LedgerCategories" />
                             }
 
                         </div>
@@ -69,3 +48,119 @@
         </div>
     </section>
 </div>
+
+@section scripts{
+    <script>
+        var apiUrl = '@Model.ApiUrl';
+        $(function () {
+            DataTableInit();
+            //$('#example2').DataTable({
+            //    "paging": true,
+            //    "lengthChange": false,
+            //    "searching": false,
+            //    "ordering": true,
+            //    "info": true,
+            //    "autoWidth": false,
+            //    "responsive": false,
+            //});
+        });
+
+        function DataTableInit() {
+            $("#ledgerCategoryTable").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#ledgerCategoryTable_wrapper .col-md-6:eq(0)');
+        }
+
+        function confirmAction(e) {
+            let confirmAction = confirm("Are you sure to delete this ledger category?");
+            if (confirmAction) {
+                removeProduct(e);
+            } else {
+               // alert("Action canceled");
+            }
+        };
+
+        var getProducts = function () {
+            axios.get('/Partials/GetLedgerCategoriesPartialView')
+                .then(res => {
+                    console.log(res);
+                    var html = res.data;
+                    var el = document.getElementById('resultTable');
+                    el.outerHTML = html;
+                    DataTableInit();
+                })
+        }
+
+        var removeProduct = function (e) {
+            let fyrId = e.target.dataset.categoryId;
+            let el = document.getElementById('userId');
+            let userAccessToken = el.value;
+            console.log(fyrId);
+
+            axios.delete(apiUrl + "/api/LedgerCategory/DeleteLedgerCategory?id=" + fyrId, {
+                headers: {
+                    Authorization: "Bearer " + userAccessToken
+                }
+            }).then(res => {
+                console.log(res);
+                if (res.data.success) {
+                   // alert(res.data.message)
+                    toastr.success(res.data.message)
+                }
+                getProducts();
+            })
+                .catch(err => {
+                    alert(err.error);
+                })
+        }
+        
+    </script>
+}
+
+
+
+@*var table = $('#example2').DataTable({
+                    // aaSorting: [[2, 'asc']],
+                    "processing": true,
+                    "aaSorting": [],
+                    //  bServerSide: true,
+                    "sDom": '<"top"<"actions">Bfrtip<"clear">><"clear">rt<"bottom">',
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'excel'
+                    ],
+                    responsive: true,
+                    "ajax": '/Books/Daily/GetDailyForDatatable',
+                    "columns": [
+                        ,
+                        { "data": "Head" },
+                        { "data": "Invoice" },
+                        {
+                            'data': 'Options',
+                            'render': function (data, type, row) {
+                                var headName = row.Head;
+                                var id = '"' + row.Id + '"';
+                                var hid = "
+    <input type='hidden' class='hdnDailyId' value='" + row.Id + "' />";
+                                var delet = "<a onclick='DeleteDaily(" + id + ")'><i class='glyphicon glyphicon-remove deleteUser' style='cursor:pointer;' title='Delete'></i>Delete</a>";
+
+                                if (headName === "Sales") {
+                                    return hid + dropdownforSales;
+                                }
+                                if (headName === "Purchase") {
+                                    return hid + dropdownforPurchase;
+                                }
+                                else {
+                                    return hid + dropdownforReveueNSalesRecipt;
+                                }
+
+                                //return hid + View + ' |' + newPrint + ' |' + edit + ' |' + delet;
+                            }
+                        },
+                    ],
+                    "iDisplayLength": 50,
+                    destroy: true,
+                    "searching": true,
+                    bSortable: true
+                });*@

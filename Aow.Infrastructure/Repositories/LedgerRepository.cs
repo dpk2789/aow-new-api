@@ -1,6 +1,6 @@
-﻿using Aow.Infrastructure.IRepositories;
+﻿using Aow.Infrastructure.Domain;
+using Aow.Infrastructure.IRepositories;
 using Aow.Infrastructure.Paging;
-using AowCore.Domain;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

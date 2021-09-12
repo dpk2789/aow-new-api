@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace Aow.Services.LedgerCategory
 {
+    [Service]
     public class UpdateLedgerCategory
     {
         private IRepositoryWrapper _repoWrapper;

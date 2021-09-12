@@ -13,6 +13,8 @@ namespace Aow.Infrastructure.IRepositories
         IProductRepository ProductRepo { get; }
         IProductAttributeRepository ProductAttributeRepo { get; }
         IProductAttributeOptionRepository ProductAttributeOptionRepo { get; }
+        ILedgerCategoryRepository LedgerCategoryRepositoryRepo { get; }
+        ILedgerRepository LedgerRepositoryRepo { get; }
         Task<int> SaveNew();
         int Save();
     }

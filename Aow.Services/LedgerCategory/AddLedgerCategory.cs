@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace Aow.Services.LedgerCategory
 {
+    [Service]
     public class AddLedgerCategory
     {
         private IRepositoryWrapper _repoWrapper;
@@ -30,14 +31,14 @@ namespace Aow.Services.LedgerCategory
             {
                 Guid ProductId = Guid.NewGuid();
                 Guid cmpId = Guid.Parse(request.CompanyId);
-                var financialYear = new Aow.Infrastructure.Domain.ProductCategory
+                var ledgerCategory = new Aow.Infrastructure.Domain.LedgerCategory
                 {
                     Id = ProductId,
                     Name = request.Name,
                     CompanyId = cmpId,
                 };
 
-                _repoWrapper.ProductCategoryRepo.Create(financialYear);
+                _repoWrapper.LedgerCategoryRepositoryRepo.Create(ledgerCategory);
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {
@@ -51,10 +52,10 @@ namespace Aow.Services.LedgerCategory
                 {
                     return new AddLedgerCategoryResponse
                     {
-                        Id = financialYear.Id,
+                        Id = ledgerCategory.Id,
                         Name = request.Name,
                         Success = true,
-                        Description = "Product Category SuccessFully Added"
+                        Description = "Ledger Category SuccessFully Added"
                     };
                 }
             }

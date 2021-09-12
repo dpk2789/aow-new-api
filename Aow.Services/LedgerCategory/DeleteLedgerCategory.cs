@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace Aow.Services.LedgerCategory
 {
+    [Service]
     public class DeleteLedgerCategory
     {
         private IRepositoryWrapper _repoWrapper;
@@ -19,12 +20,12 @@ namespace Aow.Services.LedgerCategory
 
         public async Task<DeleteLedgerCategoryResponse> Do(Guid id)
         {
-            var category = _repoWrapper.ProductCategoryRepo.GetProductCategory(id);
+            var category = _repoWrapper.LedgerCategoryRepositoryRepo.GetLedgerCategory(id);
             if (category == null)
             {
                 return null;
             }
-            _repoWrapper.ProductCategoryRepo.Delete(category);
+            _repoWrapper.LedgerCategoryRepositoryRepo.Delete(category);
             int i = await _repoWrapper.SaveNew();
             if (i <= 0)
             {
@@ -38,7 +39,7 @@ namespace Aow.Services.LedgerCategory
             {
                 return new DeleteLedgerCategoryResponse
                 {
-                    Message = "Product Category Deleted",
+                    Message = "Ledger Category Deleted",
                     Success = true
                 };
             }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TreeUtility;
 
-namespace AowCore.Domain
+namespace Aow.Infrastructure.Domain
 {
     public class Ledger : AuditableEntity<Guid>, ITreeNode<Ledger>
     {

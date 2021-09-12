@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace Aow.Services.Ledger
 {
+    [Service]
     public class DeleteLedger
     {
         private IRepositoryWrapper _repoWrapper;

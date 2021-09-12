@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 
 namespace Aow.Services.Ledger
 {
-   public class AddLedger
+    [Service]
+    public class AddLedger
     {
         private IRepositoryWrapper _repoWrapper;
         public AddLedger(IRepositoryWrapper repoWrapper)

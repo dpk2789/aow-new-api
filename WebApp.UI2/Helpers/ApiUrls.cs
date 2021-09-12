@@ -49,7 +49,7 @@
 
         public static class LedgerCategories
         {
-            public const string GetLedgerCategories = Rootlocal + "/api/LedgerCategories/GetProductCategories";
+            public const string GetLedgerCategories = Rootlocal + "/api/LedgerCategory/GetLedgerCategories";
             public const string GetLedgerCategory = Rootlocal + "/api/LedgerCategories/GetProductCategory";
             public const string Create = Rootlocal + "/api/LedgerCategories/AddProductCategory";
             public const string Update = Rootlocal + "/api/LedgerCategories/UpdateProductCategory";

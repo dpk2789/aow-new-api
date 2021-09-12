@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace Aow.Services.Ledger
 {
+    [Service]
     public class GetLedgers
     {
         private IRepositoryWrapper _repoWrapper;

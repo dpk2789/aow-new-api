@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace Aow.Services.LedgerCategory
 {
+    [Service]
     public  class GetLedgerCategories
     {
         private IRepositoryWrapper _repoWrapper;
@@ -26,7 +27,7 @@ namespace Aow.Services.LedgerCategory
             {
                 return null;
             };
-            var list = _repoWrapper.ProductCategoryRepo.GetProductCategories(pagingParameters, companyId).GetAwaiter().GetResult();
+            var list = _repoWrapper.LedgerCategoryRepositoryRepo.GetLedgerCategories(pagingParameters, companyId).GetAwaiter().GetResult();
             var newList = list.Select(x => new GetProductCategoriesResponse
             {
                 Id = x.Id,

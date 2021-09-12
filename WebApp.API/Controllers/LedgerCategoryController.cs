@@ -24,7 +24,7 @@ namespace WebApp.API.Controllers
         }
 
         [HttpPost("api/LedgerCategory/AddLedgerCategory")]
-        public async Task<IActionResult> AddFinancialYear([FromBody] AddLedgerCategory.AddLedgerCategoryRequest request, [FromServices] AddLedgerCategory addFinancialYear)
+        public async Task<IActionResult> AddLedgerCategory([FromBody] AddLedgerCategory.AddLedgerCategoryRequest request, [FromServices] AddLedgerCategory addFinancialYear)
         {
             var response = await addFinancialYear.Do(request);
 
@@ -36,7 +36,7 @@ namespace WebApp.API.Controllers
         }
 
         [HttpPut("api/LedgerCategory/UpdateLedgerCategory")]
-        public async Task<IActionResult> UpdateFinancialYear([FromBody] UpdateLedgerCategory.UpdateLedgerCategoryRequest request, [FromServices] UpdateLedgerCategory updateFinancialYear)
+        public async Task<IActionResult> UpdateLedgerCategory([FromBody] UpdateLedgerCategory.UpdateLedgerCategoryRequest request, [FromServices] UpdateLedgerCategory updateFinancialYear)
         {
             var response = await updateFinancialYear.Do(request);
 
