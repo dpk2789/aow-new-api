@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="/MyBooks/Product/index">Ledgers</a></li>
+                        <li class="breadcrumb-item"><a href="/MyBooks/Ledgers/index">Ledgers</a></li>
                         <li class="breadcrumb-item active">Update Ledger</li>
                     </ol>
                 </div>
@@ -44,7 +44,7 @@
                     <div class="row">
                         <div class="col-12">
                             <form method="post" enctype="multipart/form-data">
-                                <input type="hidden" asp-for="Input.Id" id="productId" />
+                                <input type="hidden" asp-for="Input.Id" id="ledgerId" />
                                 <input type="hidden" value="@userId" id="userId" />
                                 <div asp-validation-summary="All" class="text-danger"></div>
                                 <div class="mb-3 row">
@@ -101,16 +101,16 @@
         var updateLedgerRequest = {
             id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             name: "f1",
-            productCategoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            ledgerCategoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         };
         function performPostRequest(e) {
             let userId = document.getElementById('userId');
-            let productId = document.getElementById('productId').value;
-            let productName = document.getElementById('Input_Name').value;
+            let ledgerId = document.getElementById('ledgerId').value;
+            let ledgerName = document.getElementById('Input_Name').value;
             let categoryId = document.getElementById('CategoryId').value;
-            updateLedgerRequest.name = productName;
-            updateLedgerRequest.id = productId;
-            updateLedgerRequest.productCategoryId = categoryId;
+            updateLedgerRequest.name = ledgerName;
+            updateLedgerRequest.id = ledgerId;
+            updateLedgerRequest.ledgerCategoryId = categoryId;
             let userAccessToken = userId.value;
             console.log(this.updateLedgerRequest);
 

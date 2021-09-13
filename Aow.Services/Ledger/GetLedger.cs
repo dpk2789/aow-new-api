@@ -15,7 +15,7 @@ namespace Aow.Services.Ledger
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
-            public Guid CompanyId { get; set; }
+            public Guid LedgerCategoryId { get; set; }
         }
 
         public GetLedgerResponse Do(Guid id)
@@ -24,7 +24,7 @@ namespace Aow.Services.Ledger
             GetLedgerResponse getCompanyResponse = new GetLedgerResponse
             {
                 Id = ledger.Id,
-                CompanyId = ledger.Id,
+                LedgerCategoryId = ledger.LedgerCategoryId,
                 Name = ledger.Name,
             };
 

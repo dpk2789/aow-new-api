@@ -27,7 +27,7 @@ namespace WebApp.UI2.Pages.MyBooks.Ledgers
             public Guid Id { get; set; }
             public string Name { get; set; }
             public string CompanyName { get; set; }
-            public Guid ProductCategoryId { get; set; }
+            public Guid LedgerCategoryId { get; set; }
             public SelectList LedgerCategorySelectList { get; set; }
         }
         public class LedgerCategorySelectUpdateViewModel
@@ -86,7 +86,7 @@ namespace WebApp.UI2.Pages.MyBooks.Ledgers
             }
 
             var categories = await GetCategories();
-            Input.LedgerCategorySelectList = new SelectList(categories, "Id", "Name", Input.ProductCategoryId);
+            Input.LedgerCategorySelectList = new SelectList(categories, "Id", "Name", Input.LedgerCategoryId);
             return Page();
         }
     }

@@ -20,12 +20,12 @@ namespace Aow.Services.Ledger
 
         public async Task<DeleteLedgerResponse> Do(Guid id)
         {
-            var category = _repoWrapper.ProductCategoryRepo.GetProductCategory(id);
-            if (category == null)
+            var ledger = _repoWrapper.LedgerRepositoryRepo.GetLedger(id);
+            if (ledger == null)
             {
                 return null;
             }
-            _repoWrapper.ProductCategoryRepo.Delete(category);
+            _repoWrapper.LedgerRepositoryRepo.Delete(ledger);
             int i = await _repoWrapper.SaveNew();
             if (i <= 0)
             {
@@ -39,7 +39,7 @@ namespace Aow.Services.Ledger
             {
                 return new DeleteLedgerResponse
                 {
-                    Message = "Product Category Deleted",
+                    Message = "Ledger Deleted",
                     Success = true
                 };
             }
