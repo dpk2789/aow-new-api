@@ -35,6 +35,12 @@ namespace Aow.Infrastructure
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
         public DbSet<ProductAttributeOptions> ProductAttributeOptions { get; set; }
         public DbSet<ProductVariant> ProductVariants { get; set; }
+
+        public DbSet<JournalEntry> JournalEntries { get; set; }
+        public DbSet<Voucher> Vouchers { get; set; }
+        public DbSet<VoucherItem> VoucherItems { get; set; }        
+        public DbSet<VoucherSundryItem> VoucherSundryItems { get; set; }
+        public DbSet<TransporterDetail> TransporterDetails { get; set; }
         public DbSet<ProductVariantProductAttributeOption> ProductVariantProductAttributeOptions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
