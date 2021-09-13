@@ -8,7 +8,7 @@ namespace Aow.Infrastructure.IRepositories
 {
     public interface ILedgerRepository : IRepositoryBase<Ledger>
     {
-        Task<PagedList<Ledger>> GetLedgers(PagingParameters ownerParameters);
+        Task<PagedList<Ledger>> GetLedgers(PagingParameters ownerParameters, Guid companyId);
         Ledger GetLedger(Guid Id);
     }
 }

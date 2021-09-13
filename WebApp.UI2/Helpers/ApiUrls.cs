@@ -50,18 +50,18 @@
         public static class LedgerCategories
         {
             public const string GetLedgerCategories = Rootlocal + "/api/LedgerCategory/GetLedgerCategories";
-            public const string GetLedgerCategory = Rootlocal + "/api/LedgerCategories/GetProductCategory";
-            public const string Create = Rootlocal + "/api/LedgerCategories/AddProductCategory";
-            public const string Update = Rootlocal + "/api/LedgerCategories/UpdateProductCategory";
-            public const string Delete = Rootlocal + "api/LedgerCategories/DeleteProductCategory/{postId}";
+            public const string GetLedgerCategory = Rootlocal + "/api/LedgerCategory/GetLedgerCategory";
+            public const string Create = Rootlocal + "/api/LedgerCategory/AddProductCategory";
+            public const string Update = Rootlocal + "/api/LedgerCategory/UpdateProductCategory";
+            public const string Delete = Rootlocal + "api/LedgerCategory/DeleteProductCategory/{postId}";
         }
         public static class Ledger
         {
-            public const string GetLedgers = Rootlocal + "/api/Ledger/GetProducts";
-            public const string GetLedger = Rootlocal + "/api/Ledger/GetProduct";
+            public const string GetLedgers = Rootlocal + "/api/Ledger/GetLedgers";
+            public const string GetLedger = Rootlocal + "/api/Ledger/GetLedger";
             public const string GetProductByName = Rootlocal + "/api/Ledger/GetProductByName";
-            public const string Create = Rootlocal + "/api/Ledger/CreateProduct";
-            public const string Update = Rootlocal + "/api/Ledger/UpdateProduct";
+            public const string Create = Rootlocal + "/api/Ledger/AddLedger";
+            public const string Update = Rootlocal + "/api/Ledger/UpdateLedger";
             public const string Delete = Rootlocal + "/Ledger/{postId}";
         }
         public static class Cart

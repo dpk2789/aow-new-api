@@ -74,7 +74,7 @@ namespace WebApp.UI2.Controllers
                 return RedirectToPage("/");
             }
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.Product.GetProduct + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
+            var getProductsUri = new Uri(ApiUrls.Product.GetProducts + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
 
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
@@ -112,6 +112,28 @@ namespace WebApp.UI2.Controllers
             //modelString = await this.RenderViewAsync("_ProductCategoryPartial", data, true);
             //return Json(new { success = true, modelString });
             return PartialView("_LedgerCategoryListPartial", data);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetLedgerPartialView()
+        {
+            var cmpid = _cookieHelper.Get("cmpCookee");
+
+            if (string.IsNullOrEmpty(cmpid) && string.IsNullOrEmpty(cmpid))
+            {
+                return RedirectToPage("/");
+            }
+            using var client = new HttpClient();
+            var getProductsUri = new Uri(ApiUrls.Ledger.GetLedgers + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
+
+            var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+
+            var getUserInfo = await client.GetAsync(getProductsUri);
+
+            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var data = JsonConvert.DeserializeObject<IEnumerable<WebApp.UI2.Pages.MyBooks.Ledgers.IndexModel.LedgerViewModel>>(resultuerinfo);          
+            return PartialView("_LedgerListPartial", data);
         }
     }
 }

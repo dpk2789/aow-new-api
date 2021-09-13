@@ -20,12 +20,12 @@ namespace Aow.Services.LedgerCategory
 
         public GetLedgerCategoryResponse Do(Guid id)
         {
-            var financialYear = _repoWrapper.ProductCategoryRepo.GetProductCategory(id);
+            var category = _repoWrapper.LedgerCategoryRepositoryRepo.GetLedgerCategory(id);
             GetLedgerCategoryResponse getCompanyResponse = new GetLedgerCategoryResponse
             {
-                Id = financialYear.Id,
-                CompanyId = financialYear.Id,
-                Name = financialYear.Name,
+                Id = category.Id,
+                CompanyId = category.Id,
+                Name = category.Name,
             };
 
             return getCompanyResponse;

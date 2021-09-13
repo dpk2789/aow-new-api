@@ -15,7 +15,7 @@ namespace Aow.Services.Ledger
         public class AddLedgerRequest
         {
             public string Name { get; set; }
-            public string CompanyId { get; set; }
+            public Guid CategoryId { get; set; }
         }
         public class AddLedgerResponse
         {
@@ -29,16 +29,15 @@ namespace Aow.Services.Ledger
         {
             try
             {
-                Guid ProductId = Guid.NewGuid();
-                Guid cmpId = Guid.Parse(request.CompanyId);
-                var financialYear = new Aow.Infrastructure.Domain.ProductCategory
+                Guid ProductId = Guid.NewGuid();              
+                var ledger = new Aow.Infrastructure.Domain.Ledger
                 {
                     Id = ProductId,
                     Name = request.Name,
-                    CompanyId = cmpId,
+                    LedgerCategoryId = request.CategoryId,
                 };
 
-                _repoWrapper.ProductCategoryRepo.Create(financialYear);
+                _repoWrapper.LedgerRepositoryRepo.Create(ledger);
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {
@@ -52,7 +51,7 @@ namespace Aow.Services.Ledger
                 {
                     return new AddLedgerResponse
                     {
-                        Id = financialYear.Id,
+                        Id = ledger.Id,
                         Name = request.Name,
                         Success = true,
                         Description = "Product Category SuccessFully Added"

@@ -27,7 +27,7 @@ namespace Aow.Services.Ledger
             {
                 return null;
             };
-            var list = _repoWrapper.ProductCategoryRepo.GetProductCategories(pagingParameters, companyId).GetAwaiter().GetResult();
+            var list = _repoWrapper.LedgerRepositoryRepo.GetLedgers(pagingParameters, companyId).GetAwaiter().GetResult();
             var newList = list.Select(x => new GetLedgersResponse
             {
                 Id = x.Id,

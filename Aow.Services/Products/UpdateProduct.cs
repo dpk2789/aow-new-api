@@ -16,9 +16,7 @@ namespace Aow.Services.Products
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
-            public string Start { get; set; }
-            public string End { get; set; }
-            public string CompanyId { get; set; }
+            public Guid ProductCategoryId { get; set; }
         }
         public class UpdateProductResponse
         {
@@ -32,20 +30,14 @@ namespace Aow.Services.Products
         {
             try
             {
-                var financialYear = _repoWrapper.FinancialYearRepo.GetFinancialYear(request.Id);
-                if (financialYear == null)
+                var product = _repoWrapper.ProductRepo.GetProduct(request.Id);
+                if (product == null)
                 {
                     return null;
                 }
-                financialYear.Name = request.Name;
-                financialYear.Start = Convert.ToDateTime(request.Start);
-                DateTime dt = Convert.ToDateTime(request.End);
-                //DateTime dt2;
-                //var success = DateTimeOffset.TryParse(request.End, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var result);
-                //dt2 = result.UtcDateTime;
-                //var date2 = result.ToLocalTime();
-                financialYear.End = dt;
-                _repoWrapper.FinancialYearRepo.Update(financialYear);
+                product.Name = request.Name;
+                product.ProductCategoryId = request.ProductCategoryId;
+                _repoWrapper.ProductRepo.Update(product);
 
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
@@ -53,16 +45,18 @@ namespace Aow.Services.Products
                     return new UpdateProductResponse
                     {
                         Name = request.Name,
-                        Success = false
+                        Success = false,
+                        Description = "Some Error Occur"
                     };
                 }
                 else
                 {
                     return new UpdateProductResponse
                     {
-                        Id = financialYear.Id,
+                        Id = product.Id,
                         Name = request.Name,
-                        Success = true
+                        Success = true,
+                        Description = "Successfully Updated Product!!"
                     };
                 }
             }

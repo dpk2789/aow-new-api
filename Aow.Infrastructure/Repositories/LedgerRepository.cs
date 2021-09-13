@@ -19,9 +19,9 @@ namespace Aow.Infrastructure.Repositories
             return FindByCondition(x => x.Id == Id).FirstOrDefault();
         }
 
-        public Task<PagedList<Ledger>> GetLedgers(PagingParameters ownerParameters)
+        public Task<PagedList<Ledger>> GetLedgers(PagingParameters ownerParameters, Guid companyId)
         {
-            return Task.FromResult(PagedList<Ledger>.ToPagedList(FindAll().OrderBy(on => on.Name),
+            return Task.FromResult(PagedList<Ledger>.ToPagedList(FindAll().Where(x => x.LedgerCategory.CompanyId == companyId).OrderBy(on => on.Name),
                                     ownerParameters.PageNumber, ownerParameters.PageSize));
         }
     }

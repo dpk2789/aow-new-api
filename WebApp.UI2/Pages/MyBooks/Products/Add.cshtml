@@ -43,7 +43,8 @@
                     <div class="row">
                         <div class="col-12">
                             <form method="post" enctype="multipart/form-data">
-
+                                <input type="hidden" value="@userId" id="userId" />
+                                <input type="hidden" value="@Model.Input.CompanyId" id="cmpId" />
                                 <div asp-validation-summary="All" class="text-danger"></div>
                                 <div class="mb-3 row">
                                     <label class="col-sm-2 col-form-label">Select Category</label>
@@ -87,8 +88,7 @@
     </section>
 
 </div>
-<input type="hidden" value="@userId" id="userId" />
-<input type="hidden" value="@Model.Input.CompanyId" id="cmpId" />
+
 @section scripts{
     @*<script src="~/js/product.js"></script>*@
     <script>

@@ -15,7 +15,7 @@ namespace Aow.Services.LedgerCategory
         public class UpdateLedgerCategoryRequest
         {
             public Guid Id { get; set; }
-            public string Name { get; set; }
+            public string Name { get; set; }           
             public string CompanyId { get; set; }
         }
         public class UpdateLedgerCategoryResponse
@@ -30,13 +30,13 @@ namespace Aow.Services.LedgerCategory
         {
             try
             {
-                var category = _repoWrapper.ProductCategoryRepo.GetProductCategory(request.Id);
+                var category = _repoWrapper.LedgerCategoryRepositoryRepo.GetLedgerCategory(request.Id);
                 if (category == null)
                 {
                     return null;
                 }
                 category.Name = request.Name;
-                _repoWrapper.ProductCategoryRepo.Update(category);
+                _repoWrapper.LedgerCategoryRepositoryRepo.Update(category);
 
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
@@ -55,7 +55,7 @@ namespace Aow.Services.LedgerCategory
                         Id = category.Id,
                         Name = request.Name,
                         Success = true,
-                        Description = "Successfully Updated Product Category!!"
+                        Description = "Successfully Updated Ledger Category!!"
                     };
                 }
             }
