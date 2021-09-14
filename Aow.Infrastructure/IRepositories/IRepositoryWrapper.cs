@@ -15,6 +15,9 @@ namespace Aow.Infrastructure.IRepositories
         IProductAttributeOptionRepository ProductAttributeOptionRepo { get; }
         ILedgerCategoryRepository LedgerCategoryRepositoryRepo { get; }
         ILedgerRepository LedgerRepositoryRepo { get; }
+        IVoucherRepository VoucherRepo { get; }
+        IJournalEntryRepository JournalEntryRepo { get; }
+
         Task<int> SaveNew();
         int Save();
     }

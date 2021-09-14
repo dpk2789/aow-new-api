@@ -29,6 +29,5 @@ namespace Aow.Infrastructure.Domain
         //public Guid? FinancialYearId { get; set; }
         //public virtual FinancialYear FinancialYear { get; set; }
 
-
     }
 }
