@@ -30,15 +30,15 @@ namespace WebApp.UI2.Pages.MyBooks.Ledgers
             public SelectList ProductCategorySelectList { get; set; }
         }
 
-        public class LedgerCategorySelectViewModel
+        public class LedgerCategorySelectAddViewModel
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
             public string Type { get; set; }
         }
         [BindProperty]
-        public IEnumerable<LedgerCategorySelectViewModel> LedgerCategories { get; set; }
-        public async Task<IEnumerable<LedgerCategorySelectViewModel>> GetCategories()
+        public IEnumerable<LedgerCategorySelectAddViewModel> LedgerCategories { get; set; }
+        public async Task<IEnumerable<LedgerCategorySelectAddViewModel>> GetCategories()
         {
             var cmpid = _cookieHelper.Get("cmpCookee");
 
@@ -58,7 +58,7 @@ namespace WebApp.UI2.Pages.MyBooks.Ledgers
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             if (resultuerinfo != null)
             {
-                var data = JsonConvert.DeserializeObject<IEnumerable<LedgerCategorySelectViewModel>>(resultuerinfo);
+                var data = JsonConvert.DeserializeObject<IEnumerable<LedgerCategorySelectAddViewModel>>(resultuerinfo);
                 LedgerCategories = data;
             }
 

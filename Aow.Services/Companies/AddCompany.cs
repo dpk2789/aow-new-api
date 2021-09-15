@@ -119,22 +119,22 @@ namespace Aow.Services.Companies
 
             var ledgers = new List<Aow.Infrastructure.Domain.Ledger>
                 {
-                          new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Purchase Account",LedgerCategoryId=currentAssetId,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=userName} ,
-                           new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Freight & Dilevery",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=userName} ,
-                            new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Job Work",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=userName} ,
-                        new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Interest Paid",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=userName} ,
-                      new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Depreciation Expense",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=userName} ,
-                        new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Mobile & Internet Recharge",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=userName} ,
-                         new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Salary & Wages",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=userName} ,
-                          new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Office Expense",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=userName} ,
-                            new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Repair & Maintainance",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=userName} ,
-                              new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Bank Service Charges",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=userName} ,
-                            new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Advertising & Promotion",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=userName} ,
-                             new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Travel Expense",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=userName} ,
-                                new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Charity & Donations",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=userName} ,
-                                new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Profit & Loss",LedgerCategoryId=profitLossId,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=userName} ,
-                                   new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Cash",LedgerCategoryId=cashInHand,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=userName} ,
-                                    new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Stock In Hand",LedgerCategoryId=stockInHand,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=userName} ,
+                          new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Purchase Account",LedgerCategoryId=currentAssetId,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                           new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Freight & Dilevery",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                            new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Job Work",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                        new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Interest Paid",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                      new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Depreciation Expense",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                        new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Mobile & Internet Recharge",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                         new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Salary & Wages",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                          new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Office Expense",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                            new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Repair & Maintainance",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                              new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Bank Service Charges",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                            new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Advertising & Promotion",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                             new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Travel Expense",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                                new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Charity & Donations",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                                new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Profit & Loss",LedgerCategoryId=profitLossId,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                                   new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Cash",LedgerCategoryId=cashInHand,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                                    new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Stock In Hand",LedgerCategoryId=stockInHand,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
 
                 };
 

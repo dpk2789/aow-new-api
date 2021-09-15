@@ -8,13 +8,13 @@
     <table class="table">
         <tr>
             <th>Id</th>
-            <th>Product</th>
+            <th>Companies</th>
             <th></th>
         </tr>
         <tbody>
             @if (Model.Companies != null)
             {
-                foreach (var company in Model.Companies)
+                foreach (var company in Model.Companies.OrderBy(x => x.Name))
                 {
                     <tr>
                         <td>

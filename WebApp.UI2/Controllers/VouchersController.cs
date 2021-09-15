@@ -1,57 +1,54 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
 using WebApp.UI2.Helpers;
+using WebApp.UI2.Models;
 
-namespace WebApp.UI2.Pages.MyBooks.Ledgers
+namespace WebApp.UI2.Controllers
 {
-    public class IndexModel : PageModel
+    public class VouchersController : Controller
     {
-        public string ApiUrl { get; }
         private readonly ICookieHelper _cookieHelper;
-        public IndexModel(ICookieHelper cookieHelper)
+        public VouchersController(ICookieHelper cookieHelper)
         {
-            ApiUrl = ApiUrls.Rootlocal;
             _cookieHelper = cookieHelper;
         }
 
-        public class LedgerViewModel
-        {
-            public Guid Id { get; set; }
-            public string Name { get; set; }
-        }
-        [BindProperty]
-        public IEnumerable<LedgerViewModel> Ledgers { get; set; }
-        public async Task<IActionResult> OnGet()
+        public async Task<JsonResult> GetLedgersForJournalEntry(string term, string HeadName, string crdr)
         {
             var cmpid = _cookieHelper.Get("cmpCookee");
-
+            List<LedgerCategorySelectViewModel> LedgerCategories = null;
             if (string.IsNullOrEmpty(cmpid) && string.IsNullOrEmpty(cmpid))
             {
-                return RedirectToPage("/");
+                return null;
             }
             using var client = new HttpClient();
             var getProductsUri = new Uri(ApiUrls.Ledger.GetLedgers + "?PageNumber=1&PageSize=100&cmpId=" + cmpid);
 
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
-
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
-
             var getUserInfo = await client.GetAsync(getProductsUri);
 
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+           
             if (resultuerinfo != null)
             {
-                var data = JsonConvert.DeserializeObject<IEnumerable<LedgerViewModel>>(resultuerinfo);
-                Ledgers = data;
+                var data = JsonConvert.DeserializeObject<IList<LedgerCategorySelectViewModel>>(resultuerinfo);
+                LedgerCategories = data.Where(c => c.Name.IndexOf(term, StringComparison.CurrentCultureIgnoreCase) != -1).ToList();
+               // LedgerCategories = data.Where(ii => ii.Name.IndexOf(term)>-1).ToList();
             }
-            return Page();
+            return Json(LedgerCategories.Select(m => new
+            {
+                id = m.Id,
+                value = m.Name,
+                //rootCategory = m.Parent.Name,
+                // label = String.Format("{1}", m.Name),
+            }));
         }
     }
 }
