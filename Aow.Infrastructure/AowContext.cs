@@ -48,7 +48,16 @@ namespace Aow.Infrastructure
             builder.Entity<ItemUnit>().Property(p => p.RelationalUnit).HasColumnType("decimal(18,4)");
             builder.Entity<Ledger>().Property(p => p.OpeningBalance).HasColumnType("decimal(18,4)");
             builder.Entity<ProductVariant>().Property(p => p.SalePrice).HasColumnType("decimal(18,4)");
-           // builder.ApplyConfiguration(new ProductCategoryConfiguration());
+            builder.Entity<JournalEntry>().Property(p => p.CreditAmount).HasColumnType("decimal(18,4)");
+            builder.Entity<JournalEntry>().Property(p => p.DebitAmount).HasColumnType("decimal(18,4)");
+            builder.Entity<Voucher>().Property(p => p.Total).HasColumnType("decimal(18,4)");
+            builder.Entity<VoucherItem>().Property(p => p.DiscountRatePerUnit).HasColumnType("decimal(18,4)");
+            builder.Entity<VoucherItem>().Property(p => p.ItemAmount).HasColumnType("decimal(18,4)");
+            builder.Entity<VoucherItem>().Property(p => p.MRPPerUnit).HasColumnType("decimal(18,4)");
+            builder.Entity<VoucherItem>().Property(p => p.Price).HasColumnType("decimal(18,4)");
+            builder.Entity<VoucherItem>().Property(p => p.Quantity).HasColumnType("decimal(18,4)");
+            builder.Entity<VoucherSundryItem>().Property(p => p.ItemAmount).HasColumnType("decimal(18,4)");
+            // builder.ApplyConfiguration(new ProductCategoryConfiguration());
             base.OnModelCreating(builder);
         }
 

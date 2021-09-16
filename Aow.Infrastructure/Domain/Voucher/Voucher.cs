@@ -7,7 +7,7 @@ namespace Aow.Infrastructure.Domain
 {
     public class Voucher : AuditableEntity<Guid>
     {
-        public decimal VoucherNumber { get; set; }
+        public string VoucherNumber { get; set; }
         public int VoucherTypeId { get; set; }
         public string VoucherName { get; set; }
         public DateTime Date { get; set; }

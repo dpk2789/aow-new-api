@@ -16,11 +16,12 @@ namespace Aow.Services.JournalEntry
         }
         public class AddJournalEntryVoucherRequest
         {
-            public Guid FinancialYrId { get; set; }
+            //public Guid FinancialYrId { get; set; }
             public string Name { get; set; }
             public string data { get; set; }
             public string Invoice { get; set; }
             public string Date { get; set; }
+            public IList<AddJournalEntryRequest> JournalEntries { get; set; }
         }
         public class AddJournalEntryRequest
         {
@@ -44,14 +45,14 @@ namespace Aow.Services.JournalEntry
         {
             try
             {
-                Guid voucherId = new Guid();
+                Guid voucherId = Guid.NewGuid();
                 int SrNo = 1;
                 var voucher = new Aow.Infrastructure.Domain.Voucher
                 {
                     Id = voucherId,
                     VoucherName = request.Name
                 };
-                voucher.FinancialYearId = request.FinancialYrId;
+               // voucher.FinancialYearId = request.FinancialYrId;
                 var deserialiseList = JsonConvert.DeserializeObject<List<AddJournalEntryRequest>>(request.data);
                 _repoWrapper.VoucherRepo.Create(voucher);
                 foreach (var item in deserialiseList)
@@ -62,7 +63,7 @@ namespace Aow.Services.JournalEntry
                         Date = Convert.ToDateTime(request.Date),
                         VoucherName = request.Name,
                         SrNo = SrNo,
-                        VoucherNumber = Convert.ToDecimal(request.Invoice),
+                        VoucherNumber = request.Invoice,
                         //dailyAccounts.Is_Item = false;
                         VoucherId = voucherId,
                         LedgerId = item.LedgerId
@@ -97,10 +98,11 @@ namespace Aow.Services.JournalEntry
                         Id = voucher.Id,
                         Name = request.Name,
                         Success = true,
-                        Description = "Product Category SuccessFully Added"
+                        Description = "Journal Entry Added SuccessFully Added"
                     };
                 }
             }
+            
             catch (Exception ex)
             {
                 return new AddJournalEntryResponse

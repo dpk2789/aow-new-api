@@ -1,7 +1,7 @@
 ﻿
 using Aow.Infrastructure.Common;
 using System;
-using System.ComponentModel.DataAnnotations;
+
 
 
 namespace Aow.Infrastructure.Domain
@@ -9,9 +9,7 @@ namespace Aow.Infrastructure.Domain
     public class JournalEntry : AuditableEntity<Guid>
     {
         public string VoucherName { get; set; }
-      
-        [Required]
-        public decimal VoucherNumber { get; set; }
+        public string VoucherNumber { get; set; }
         public DateTime Date { get; set; }      
       
         public int? SrNo { get; set; }

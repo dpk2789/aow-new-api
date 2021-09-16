@@ -492,8 +492,8 @@
             AddJournalEntryVoucherRequest.invoice = voucherNumber;
             AddJournalEntryVoucherRequest.date = date;
             AddJournalEntryVoucherRequest.name = "Journal Entries";
-            console.log(this.addJournalEntryRequest);
-            axios.post(`${apiUrl}/api/JournalEntries/AddJournalEntries`, this.addJournalEntryRequest, {
+            console.log(this.AddJournalEntryVoucherRequest);
+            axios.post(`${apiUrl}/api/JournalEntries/AddJournalEntries`, this.AddJournalEntryVoucherRequest, {
                 headers: {
                     Authorization: "Bearer " + userAccessToken
                 }
@@ -502,7 +502,7 @@
                     console.log(response);
                     if (response.data.success) {
                         toastr.success(response.data.description)
-                        window.location.href = '/MyBooks/Ledgers/index'
+                        window.location.href = '/MyBooks/JournalEntries/index'
                     } else {
                         toastr.error(response.data.description)
                     }
