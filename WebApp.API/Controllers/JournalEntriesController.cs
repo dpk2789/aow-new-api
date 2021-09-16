@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApp.API.Controllers
 {
-   // [Route("api/[controller]")]
+    // [Route("api/[controller]")]
     [ApiController]
     public class JournalEntriesController : ControllerBase
     {
@@ -24,7 +24,7 @@ namespace WebApp.API.Controllers
         }
 
         [HttpPost("api/JournalEntries/AddJournalEntries")]
-        public async Task<IActionResult> AddJournalEntries([FromBody] AddJournalEntries.AddJournalEntryRequest request, [FromServices] AddJournalEntries addFinancialYear)
+        public async Task<IActionResult> AddJournalEntries([FromBody] AddJournalEntries.AddJournalEntryVoucherRequest request, [FromServices] AddJournalEntries addFinancialYear)
         {
             var response = await addFinancialYear.Do(request);
 

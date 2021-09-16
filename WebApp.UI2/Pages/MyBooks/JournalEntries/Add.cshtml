@@ -1,6 +1,9 @@
 ﻿@page
 @model WebApp.UI2.Pages.MyBooks.JournalEntries.AddModel
 
+@{
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
+}
 
 <style>
     .ui-autocomplete {
@@ -51,6 +54,7 @@
                             <form method="post" enctype="multipart/form-data" id="questionForm">
 
                                 <div asp-validation-summary="All" class="text-danger"></div>
+                                <input type="hidden" value="@userId" id="userId" />
                                 @Html.AntiForgeryToken()
 
                                 <div class="form-horizontal">
@@ -63,7 +67,8 @@
                                             </div>*@
                                         <div class="form-group col-md-6">
                                             <label for="inputPassword4">Date </label>
-                                            <div id=""><input type="text" class="form-control" name="Date" id="sandbox-container"></div>
+                                            <input type="text" class="form-control" name="Date" id="Date"
+                                                   data-toggle="datetimepicker" data-target="#Date" autocomplete="off">
                                             <span asp-validation-for="Input.Date" class="text-danger"></span>
                                         </div>
                                         <div class="form-group col-md-6">
@@ -141,7 +146,7 @@
                     <span>
                         <img id="loading" style="display: none;" src="~/gif/ajax-loader.gif" />
                     </span>
-                    <button onclick="AddCompany(event)" id="SaveClose" class="btn btn-info float-right" style="margin-left:20px">Save</button>
+                    <button onclick="AddJournalEntries(event)" id="SaveClose" class="btn btn-info float-right" style="margin-left:20px">Save</button>
                     <button id="SaveNext" class="btn btn-default float-right">Cancel</button>
                 </div>
             </div>
@@ -158,9 +163,12 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-   
-    <script>
 
+    <script>
+        $('#Date').datetimepicker({
+            /* format: 'L',*/
+            format: 'YYYY/MM/DD'
+        });
         function ClearAddCrDr() {
             //   $('#CrDrType').val('0');
             $('#hdnProductAccountId').val('');
@@ -195,7 +203,8 @@
             });
             if (headName === 'Cr') {
                 $("#txtAmount").prop("disabled", true);
-                $("#txtAmountCr").prop("disabled", false);
+                $("#txtStoreItem").prop("disabled", false);
+                $("#txtAmountCr").prop("disabled", false);              
                 $("#txtStoreItem").focus();
             }
             if (headName === 'Dr') {
@@ -228,6 +237,9 @@
                 if (headName === 'Dr') {
                     $('#txtAmount').focus()
                 }
+                $("#hdnProductId").val(ui.item.id);
+                $("#txtStoreItem").val(ui.item.value);
+               
             },
             change: function (event, ui) {
                 if (!ui.item) {
@@ -428,10 +440,27 @@
             //  ReCalculateTotal();
         })
 
-        $('.SaveOrder').on("click", function (e) {
+        var AddJournalEntryVoucherRequest = {
+            categoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            name: "string",
+            data: "string",
+            invoice: 0,
+            date: "2021-09-16T03:37:38.423Z"
+        }
+
+    function AddJournalEntries(e) {
+        // let confirmAction = confirm("Are you sure to delete this product?");
+        performPostRequest(e);
+    }
+
+        function performPostRequest(e) {
             e.preventDefault();
             //$(".ajax-loading-block-window").show();
-            var OrderDetl = [];
+            let userId = document.getElementById('userId');
+            let userAccessToken = userId.value;
+            let voucherNumber = document.getElementById('Input_VoucherNumber').value;
+            let date = document.getElementById('Date').value;
+            let OrderDetl = [];
 
             $('#tbodyorder tr').each(function () {
                 var CrDrType = $(this).find(".cdid").val();
@@ -450,43 +479,65 @@
             if (OrderDetl.length > 0) {
                 $('#OrderDetl').val(JSON.stringify(OrderDetl))
             }
-
+             var apiUrl = '@Model.ApiUrl';
             var form = $('#questionForm');
             var token = $('input[name="__RequestVerificationToken"]', form).val();
             var url = form.prop('action');
             $('#loading').html('<img src="/Content/ajax-loader.gif" /> loading...');
             $(".SaveOrder").attr("class", "btn btn-primary SaveOrder disabled");
-            var Invoice = $('#VoucherNumber').val();
-            var Date = $('#sandbox-container').val();
+           
             //var RefId = $('#RefId').val();
             //var voucherTypesId = $('#X').val();
-            $.ajax({
-                url: url,
-                type: "POST",
-                data: {
-                    __RequestVerificationToken: token, data: JSON.stringify(OrderDetl), Invoice: Invoice, Date: Date
-                },
-                dataType: "json",
-                success: function (data) {
-                    if (data.success == true) {
-                        $('#loading').html(data);
-                        $(".SaveOrder").attr("class", "btn btn-success SaveOrder");
-                        showNotification("Value Saved successfully", "success");
-                        window.location = "/MyBooks/JournalEntries";
-                    }
-                },
-                error: function (xhr, status) {
-                    alert(xhr.responseText);
-                    $(".ajax-loading-block-window").hide();
-                    $(".SaveOrder").attr("class", "btn btn-primary SaveOrder");
-                    showNotification(data.message, "failed");
+            AddJournalEntryVoucherRequest.data = JSON.stringify(OrderDetl);
+            AddJournalEntryVoucherRequest.invoice = voucherNumber;
+            AddJournalEntryVoucherRequest.date = date;
+            AddJournalEntryVoucherRequest.name = "Journal Entries";
+            console.log(this.addJournalEntryRequest);
+            axios.post(`${apiUrl}/api/JournalEntries/AddJournalEntries`, this.addJournalEntryRequest, {
+                headers: {
+                    Authorization: "Bearer " + userAccessToken
                 }
-            });
-            //}
-            //else {
-            //    //alert('error');
-            //    $(".ajax-loading-block-window").hide();
-            //}
-        })
+            })
+                .then(function (response) {
+                    console.log(response);
+                    if (response.data.success) {
+                        toastr.success(response.data.description)
+                        window.location.href = '/MyBooks/Ledgers/index'
+                    } else {
+                        toastr.error(response.data.description)
+                    }
+                })
+                .catch(function (response) {
+                    console.log(error);
+                    toastr.error('Some Error Occur!!')
+                });
+
+
+        }
     </script>
 }
+
+
+
+@*$.ajax({
+        url: `${apiUrl}/api/JournalEntries/AddJournalEntries`,
+        type: "POST",
+        data: {
+            addJournalEntryRequest
+        },
+        dataType: "json",
+        success: function (data) {
+            if (data.success == true) {
+                $('#loading').html(data);
+                $(".SaveOrder").attr("class", "btn btn-success SaveOrder");
+                showNotification("Value Saved successfully", "success");
+                window.location = "/MyBooks/JournalEntries";
+            }
+        },
+        error: function (xhr, status) {
+            alert(xhr.responseText);
+            $(".ajax-loading-block-window").hide();
+            $(".SaveOrder").attr("class", "btn btn-primary SaveOrder");
+            showNotification(data.message, "failed");
+        }
+    });*@
