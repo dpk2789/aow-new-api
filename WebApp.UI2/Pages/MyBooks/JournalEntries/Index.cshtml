@@ -33,8 +33,37 @@
                         </div>
                         <input type="hidden" value="@userId" id="userId" />
                         <!-- /.card-header -->
-                        <div class="card-body" id="product-main">
+                        <div id="resultTable">
+                            <table id="productList" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (Model != null)
+                                        {
+                                            foreach (var category in Model.JournalEntries)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => category.Name)
+                                                    </td>
 
+                                                    <td>
+                                                        <a asp-route-id="@category.Id" asp-page="/MyBooks/Products/Update" class="fa fa-edit">Edit</a> |
+                                                        <button onclick="confirmAction(event)" data-category-id="@category.Id" type="button" class="btn-danger small">Delete</button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+
+                                </tbody>
+
+                            </table>
                         </div>
                         <!-- /.card-body -->
                     </div>

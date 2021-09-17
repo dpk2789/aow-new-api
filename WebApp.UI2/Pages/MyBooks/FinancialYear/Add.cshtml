@@ -29,7 +29,8 @@
             <div class="card card-info">
                 <div class="card-header">
                     <h3 class="card-title">Add FinancialYear</h3>
-
+                    <input type="hidden" value="@userId" id="userId" />
+                    <input type="hidden" value="@Model.Input.CompanyId" id="cmpId" />
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
@@ -93,8 +94,7 @@
 
 </div>
 <div class="panel-body" id="getResult1"></div>
-<input type="hidden" value="@userId" id="userId" />
-<input type="hidden" value="@Model.Input.CompanyId" id="cmpId" />
+
 @section scripts{
     @*<script src="~/js/product.js"></script>*@
     <script>

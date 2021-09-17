@@ -64,6 +64,24 @@
             public const string Update = Rootlocal + "/api/Ledger/UpdateLedger";
             public const string Delete = Rootlocal + "/Ledger/{postId}";
         }
+        public static class JournalEntries
+        {
+            public const string GetJournalEntries = Rootlocal + "/api/JournalEntries/GetJournalEntries";
+            public const string GetJournalEntry = Rootlocal + "/api/JournalEntries/GetJournalEntry";
+            public const string GetProductByName = Rootlocal + "/api/JournalEntries/GetProductByName";
+            public const string Create = Rootlocal + "/api/JournalEntries/AddLedger";
+            public const string Update = Rootlocal + "/api/JournalEntries/UpdateLedger";
+            public const string Delete = Rootlocal + "/JournalEntries/{postId}";
+        }
+        public static class Vouchers
+        {
+            public const string GetLedgers = Rootlocal + "/api/Ledger/GetLedgers";
+            public const string GetLedger = Rootlocal + "/api/Ledger/GetLedger";
+            public const string GetProductByName = Rootlocal + "/api/Ledger/GetProductByName";
+            public const string Create = Rootlocal + "/api/Ledger/AddLedger";
+            public const string Update = Rootlocal + "/api/Ledger/UpdateLedger";
+            public const string Delete = Rootlocal + "/Ledger/{postId}";
+        }
         public static class Cart
         {
             public const string GetCartItems = Rootlocal + "/api/Cart/GetCartItems";

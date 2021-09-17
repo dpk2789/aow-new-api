@@ -43,7 +43,7 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
                 return RedirectToPage("/");
             }
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.Ledger.GetLedgers + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
+            var getProductsUri = new Uri(ApiUrls.JournalEntries.GetJournalEntries + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
 
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
 

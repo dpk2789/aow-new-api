@@ -2,9 +2,7 @@
 using Aow.Infrastructure.IRepositories;
 using Aow.Infrastructure.Paging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Aow.Infrastructure.Repositories
@@ -21,9 +19,9 @@ namespace Aow.Infrastructure.Repositories
             return FindByCondition(x => x.Id == Id).FirstOrDefault();
         }
 
-        public Task<PagedList<JournalEntry>> GetJournalEntries(PagingParameters ownerParameters, Guid companyId)
+        public Task<PagedList<JournalEntry>> GetJournalEntries(PagingParameters ownerParameters, Guid FinancialYearId)
         {
-            return Task.FromResult(PagedList<JournalEntry>.ToPagedList(FindAll().Where(x => x.VoucherId == companyId).OrderBy(on => on.VoucherName),
+            return Task.FromResult(PagedList<JournalEntry>.ToPagedList(FindAll().Where(x => x.Vouchers.FinancialYearId == FinancialYearId).OrderBy(on => on.VoucherName),
                                     ownerParameters.PageNumber, ownerParameters.PageSize));
         }
     }

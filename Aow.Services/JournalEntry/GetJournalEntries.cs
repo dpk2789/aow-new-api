@@ -27,11 +27,11 @@ namespace Aow.Services.JournalEntry
             {
                 return null;
             };
-            var list = _repoWrapper.LedgerRepositoryRepo.GetLedgers(pagingParameters, companyId).GetAwaiter().GetResult();
+            var list = _repoWrapper.JournalEntryRepo.GetJournalEntries(pagingParameters, companyId).GetAwaiter().GetResult();
             var newList = list.Select(x => new GetJournalEntriesResponse
             {
                 Id = x.Id,
-                Name = x.Name,
+                Name = x.VoucherName,
             });
 
             return newList;

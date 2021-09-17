@@ -1,0 +1,121 @@
+﻿@page
+@model WebApp.UI2.Pages.MyBooks.FinancialYear.SetFinancialYearModel
+@{
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
+}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Select Financial Year Form</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/MyBooks/FinancialYear/Index">Financial Years</a></li>
+                        <li class="breadcrumb-item active">Select Financial Year</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content-header -->
+
+    <section class="content">
+        <div class="container-fluid">
+            <!-- SELECT2 EXAMPLE -->
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title">Set Financial Year</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <form method="post" enctype="multipart/form-data" id="questionForm">
+
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <input type="hidden" value="@userId" id="userId" />
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-horizontal">
+
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-2 col-form-label">Select Financial Year</label>
+                                        <div class="col-sm-6">
+                                            @Html.DropDownList("FinancialYearId", Model.Input.FinancialYearSelectList, "-Select FinancialYear-", new { id = "FinancialYearId", @class = "form-control" })
+                                        </div>
+                                        <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                    <!-- /.row -->
+
+
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <span>
+                        <img id="loading" style="display: none;" src="~/gif/ajax-loader.gif" />
+                    </span>
+                    <button onclick="SetFYr(event)" id="SaveClose" class="btn btn-info float-right" style="margin-left:20px">Save</button>
+                    <button id="SaveNext" class="btn btn-default float-right">Cancel</button>
+                </div>
+            </div>
+            <!-- /.card -->
+
+        </div>
+        <!-- /.container-fluid -->
+
+
+    </section>
+
+</div>
+
+@section scripts{
+
+    <script>
+
+        function SetFYr(e) {
+            // let confirmAction = confirm("Are you sure to delete this product?");
+            performPostRequest(e);
+        }
+        function performPostRequest(e) {
+            let userId = document.getElementById('userId');
+            let fyrId = document.getElementById('FinancialYearId').value;
+           
+            let userAccessToken = userId.value;
+
+            axios.post(`/UserAccount/SetFinancialYear/?fyrId=` + fyrId, {
+                headers: {
+                    Authorization: "Bearer " + userAccessToken
+                }
+            })
+                .then(function (response) {
+                    console.log(response);
+                    toastr.success(response.data.msg)
+                    window.location.href = '/MyBooks/FinancialYear/index'
+                })
+                .catch(function (response) {
+                    console.log(response);
+                    toastr.error('Some Error Occur!!')
+                });
+            e.preventDefault();
+        }
+    </script>
+
+}
