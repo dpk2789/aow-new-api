@@ -2,15 +2,15 @@
 {
     public static class ApiUrls
     {
-        public const string Rootlocal = "https://localhost:44329";
-        //public const string Rootlocal = "http://api.robustpackagingeshop.com";
+        //  public const string Rootlocal = "https://localhost:44329";
+        public const string Rootlocal = "http://aownewapi.accountingonweb.com";
         public static class Identity
         {
             public const string Login = Rootlocal + "/api/user/login";
             public const string Register = Rootlocal + "/api/user/register";
             public const string ConfirmEmail = Rootlocal + "/api/user/ConfirmEmail";
         }
-      
+
         public static class Company
         {
             public const string GetCompanies = Rootlocal + "/api/Companies/GetCompanies";
@@ -32,7 +32,7 @@
         public static class ProductCategories
         {
             public const string GetProductCategories = Rootlocal + "/api/ProductCategories/GetProductCategories";
-            public const string GetProductCategory = Rootlocal + "/api/ProductCategories/GetProductCategory";          
+            public const string GetProductCategory = Rootlocal + "/api/ProductCategories/GetProductCategory";
             public const string Create = Rootlocal + "/api/ProductCategories/AddProductCategory";
             public const string Update = Rootlocal + "/api/ProductCategories/UpdateProductCategory";
             public const string Delete = Rootlocal + "api/ProductCategories/DeleteProductCategory/{postId}";
