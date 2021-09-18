@@ -52,7 +52,7 @@
                     <div class="row">
                         <div class="col-12">
                             <form method="post" enctype="multipart/form-data" id="questionForm">
-
+                                <input type="hidden" value="@Model.Input.FinancialYearId" id="financialYearId" />
                                 <div asp-validation-summary="All" class="text-danger"></div>
                                 <input type="hidden" value="@userId" id="userId" />
                                 @Html.AntiForgeryToken()
@@ -204,7 +204,7 @@
             if (headName === 'Cr') {
                 $("#txtAmount").prop("disabled", true);
                 $("#txtStoreItem").prop("disabled", false);
-                $("#txtAmountCr").prop("disabled", false);              
+                $("#txtAmountCr").prop("disabled", false);
                 $("#txtStoreItem").focus();
             }
             if (headName === 'Dr') {
@@ -239,7 +239,7 @@
                 }
                 $("#hdnProductId").val(ui.item.id);
                 $("#txtStoreItem").val(ui.item.value);
-               
+
             },
             change: function (event, ui) {
                 if (!ui.item) {
@@ -445,7 +445,8 @@
             name: "string",
             data: "string",
             invoice: 0,
-            date: "2021-09-16T03:37:38.423Z"
+            date: "2021-09-16T03:37:38.423Z",
+            financialYearId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         }
 
     function AddJournalEntries(e) {
@@ -457,6 +458,7 @@
             e.preventDefault();
             //$(".ajax-loading-block-window").show();
             let userId = document.getElementById('userId');
+            let financialYearId = document.getElementById('financialYearId').value;
             let userAccessToken = userId.value;
             let voucherNumber = document.getElementById('Input_VoucherNumber').value;
             let date = document.getElementById('Date').value;
@@ -485,13 +487,14 @@
             var url = form.prop('action');
             $('#loading').html('<img src="/Content/ajax-loader.gif" /> loading...');
             $(".SaveOrder").attr("class", "btn btn-primary SaveOrder disabled");
-           
+
             //var RefId = $('#RefId').val();
             //var voucherTypesId = $('#X').val();
             AddJournalEntryVoucherRequest.data = JSON.stringify(OrderDetl);
             AddJournalEntryVoucherRequest.invoice = voucherNumber;
             AddJournalEntryVoucherRequest.date = date;
             AddJournalEntryVoucherRequest.name = "Journal Entries";
+            AddJournalEntryVoucherRequest.financialYearId = financialYearId;
             console.log(this.AddJournalEntryVoucherRequest);
             axios.post(`${apiUrl}/api/JournalEntries/AddJournalEntries`, this.AddJournalEntryVoucherRequest, {
                 headers: {

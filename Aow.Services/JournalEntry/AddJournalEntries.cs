@@ -16,7 +16,7 @@ namespace Aow.Services.JournalEntry
         }
         public class AddJournalEntryVoucherRequest
         {
-            //public Guid FinancialYrId { get; set; }
+            public string FinancialYearId { get; set; }
             public string Name { get; set; }
             public string data { get; set; }
             public string Invoice { get; set; }
@@ -46,13 +46,14 @@ namespace Aow.Services.JournalEntry
             try
             {
                 Guid voucherId = Guid.NewGuid();
+                Guid fyrId = Guid.Parse(request.FinancialYearId);
                 int SrNo = 1;
                 var voucher = new Aow.Infrastructure.Domain.Voucher
                 {
                     Id = voucherId,
                     VoucherName = request.Name
                 };
-               // voucher.FinancialYearId = request.FinancialYrId;
+                voucher.FinancialYearId = fyrId;
                 var deserialiseList = JsonConvert.DeserializeObject<List<AddJournalEntryRequest>>(request.data);
                 _repoWrapper.VoucherRepo.Create(voucher);
                 foreach (var item in deserialiseList)
@@ -102,7 +103,7 @@ namespace Aow.Services.JournalEntry
                     };
                 }
             }
-            
+
             catch (Exception ex)
             {
                 return new AddJournalEntryResponse

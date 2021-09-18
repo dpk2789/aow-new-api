@@ -46,6 +46,7 @@
 
                                 <div asp-validation-summary="All" class="text-danger"></div>
                                 <input type="hidden" value="@userId" id="userId" />
+                                <input type="hidden" value="@Model.Input.ReturnUrl" id="returnUrl" />
                                 @Html.AntiForgeryToken()
 
                                 <div class="form-horizontal">
@@ -94,10 +95,13 @@
             // let confirmAction = confirm("Are you sure to delete this product?");
             performPostRequest(e);
         }
+
+
         function performPostRequest(e) {
+            e.preventDefault();
             let userId = document.getElementById('userId');
             let fyrId = document.getElementById('FinancialYearId').value;
-           
+            let returnUrl = document.getElementById('returnUrl').value;
             let userAccessToken = userId.value;
 
             axios.post(`/UserAccount/SetFinancialYear/?fyrId=` + fyrId, {
@@ -108,13 +112,18 @@
                 .then(function (response) {
                     console.log(response);
                     toastr.success(response.data.msg)
-                    window.location.href = '/MyBooks/FinancialYear/index'
+                    if (returnUrl !== "undefined") {
+                        window.location.href = returnUrl;
+                    }
+                    else {
+                        window.location.href = '/MyBooks/FinancialYear/index';
+                    }
                 })
                 .catch(function (response) {
                     console.log(response);
                     toastr.error('Some Error Occur!!')
                 });
-            e.preventDefault();
+
         }
     </script>
 

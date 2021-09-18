@@ -20,6 +20,7 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
         public class InputModel
         {
             public Guid Id { get; set; }
+            public string FinancialYearId { get; set; }
             public decimal VoucherNumber { get; set; }
             public int VoucherTypeId { get; set; }
             public string VoucherName { get; set; }
@@ -69,13 +70,13 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
         }
         public IActionResult OnGet(string voucherName)
         {
-            var cmpid = _cookieHelper.Get("cmpCookee");
-
-            if (string.IsNullOrEmpty(cmpid) && string.IsNullOrEmpty(cmpid))
+            var fyrId = _cookieHelper.Get("fYrCookee");
+            if (string.IsNullOrEmpty(fyrId) && string.IsNullOrEmpty(fyrId))
             {
                 return RedirectToPage("/");
             }
             InputModel inputModel = new InputModel();
+            inputModel.FinancialYearId = fyrId;
             Input = inputModel;
             return Page();
         }

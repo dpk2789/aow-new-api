@@ -26,7 +26,7 @@ namespace WebApp.UI2.Pages.MyBooks.FinancialYear
         {
             public string Name { get; set; }
             public string CompanyId { get; set; }
-            public string CategoryId { get; set; }
+            public string ReturnUrl { get; set; }
             public SelectList FinancialYearSelectList { get; set; }
         }
 
@@ -60,7 +60,7 @@ namespace WebApp.UI2.Pages.MyBooks.FinancialYear
 
             return FinancialYears;
         }
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGet(string returnUrl)
         {
             var cmpid = _cookieHelper.Get("cmpCookee");
 
@@ -68,8 +68,11 @@ namespace WebApp.UI2.Pages.MyBooks.FinancialYear
             {
                 return RedirectToPage("/");
             }
-            InputModel inputModel = new InputModel();
-            inputModel.CompanyId = cmpid;
+            InputModel inputModel = new InputModel
+            {
+                CompanyId = cmpid,
+                ReturnUrl = returnUrl
+            };
             Input = inputModel;
             var data = await GetFinancialYears();
             inputModel.FinancialYearSelectList = new SelectList(data, "Id", "Name");

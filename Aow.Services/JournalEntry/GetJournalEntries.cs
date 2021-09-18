@@ -20,14 +20,14 @@ namespace Aow.Services.JournalEntry
             public string Name { get; set; }
         }
 
-        public IEnumerable<GetJournalEntriesResponse> Do(PagingParameters pagingParameters, Guid companyId)
+        public IEnumerable<GetJournalEntriesResponse> Do(PagingParameters pagingParameters, Guid FinancialYearId)
         {
-            var user = _repoWrapper.CompanyRepo.GetCompany(companyId);
-            if (user == null)
+            var financialYear = _repoWrapper.FinancialYearRepo.GetFinancialYear(FinancialYearId);
+            if (financialYear == null)
             {
                 return null;
             };
-            var list = _repoWrapper.JournalEntryRepo.GetJournalEntries(pagingParameters, companyId).GetAwaiter().GetResult();
+            var list = _repoWrapper.JournalEntryRepo.GetJournalEntries(pagingParameters, financialYear.Id).GetAwaiter().GetResult();
             var newList = list.Select(x => new GetJournalEntriesResponse
             {
                 Id = x.Id,
