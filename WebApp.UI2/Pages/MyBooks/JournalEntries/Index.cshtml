@@ -75,7 +75,7 @@
             axios.get('/Partials/GetJournalEntriesPartialView')
                 .then(res => {
                     var html = res.data;
-                    var el = document.getElementById('journalEntriesList');
+                    var el = document.getElementById('resultTable');
                     el.outerHTML = html;
                     DataTableInit();
                     console.log(res);

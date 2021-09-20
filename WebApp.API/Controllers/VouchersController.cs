@@ -11,9 +11,9 @@ namespace WebApp.API.Controllers
     public class VouchersController : ControllerBase
     {
         [HttpGet("api/Vouchers/GetVouchers")]
-        public IActionResult GetVouchers([FromQuery] PagingParameters pagingParameters, Guid cmpId, Guid fyrId, [FromServices] GetVouchers getVouchers)
+        public IActionResult GetVouchers([FromQuery] PagingParameters pagingParameters, string voucherName, Guid fyrId, [FromServices] GetVouchers getVouchers)
         {
-            return Ok(getVouchers.Do(pagingParameters, cmpId, fyrId));
+            return Ok(getVouchers.Do(pagingParameters, voucherName, fyrId));
         }
 
         [HttpGet("api/Vouchers/GetVoucher")]

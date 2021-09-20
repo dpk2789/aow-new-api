@@ -8,7 +8,7 @@ namespace Aow.Infrastructure.IRepositories
 {
     public interface IVoucherRepository : IRepositoryBase<Voucher>
     {
-        Task<PagedList<Voucher>> GetVouchers(PagingParameters ownerParameters, Guid companyId);
+        Task<PagedList<Voucher>> GetVouchers(PagingParameters ownerParameters, string voucherName, Guid companyId);
         Voucher GetVoucher(Guid Id);
     }
 

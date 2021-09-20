@@ -44,15 +44,15 @@ namespace Aow.Services.Voucher
             public decimal? CreditAmount { get; set; }
             public decimal? DebitAmount { get; set; }
         }
-        public IEnumerable<GetVouchersResponse> Do(PagingParameters pagingParameters, Guid cmpidG, Guid FinancialYearId)
+        public IEnumerable<GetVouchersResponse> Do(PagingParameters pagingParameters, string voucherName, Guid FinancialYearId)
         {
             var financialYear = _repoWrapper.FinancialYearRepo.GetFinancialYear(FinancialYearId);
             if (financialYear == null)
             {
                 return null;
             };
-            var list = _repoWrapper.VoucherRepo.GetVouchers(pagingParameters, financialYear.Id).GetAwaiter().GetResult();
-            var ledgers = _repoWrapper.LedgerRepositoryRepo.GetLedgers(pagingParameters, cmpidG);
+            var list = _repoWrapper.VoucherRepo.GetVouchers(pagingParameters, voucherName, financialYear.Id).GetAwaiter().GetResult();
+            var ledgers = _repoWrapper.LedgerRepositoryRepo.GetLedgers(pagingParameters, financialYear.CompanyId);
             var result = ledgers.GetAwaiter().GetResult();
 
             var voucherList = new List<GetVouchersResponse>();
