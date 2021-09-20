@@ -77,6 +77,7 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
             }
             InputModel inputModel = new InputModel();
             inputModel.FinancialYearId = fyrId;
+            inputModel.VoucherName = voucherName;
             Input = inputModel;
             return Page();
         }

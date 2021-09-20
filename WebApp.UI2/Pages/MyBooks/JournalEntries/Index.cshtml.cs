@@ -30,9 +30,9 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
             public Guid Id { get; set; }
             public string VoucherNumber { get; set; }
             public DateTime? Date { get; set; }
-            public string VoucherName { get; set; }         
+            public string VoucherName { get; set; }
             public string RefId { get; set; }
-            public string Note { get; set; }        
+            public string Note { get; set; }
             public bool? Type { get; set; }
             public virtual IEnumerable<JournalEntryViewModel> JournalEntries { get; set; }
         }
@@ -42,7 +42,7 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
             public Guid? VoucherId { get; set; }
             public string AccountName { get; set; }
             public string VoucherName { get; set; }
-            public string VoucherInvoice { get; set; }          
+            public string VoucherInvoice { get; set; }
             public decimal? VoucherTotal { get; set; }
             public int? SrNo { get; set; }
             public bool? OnRecord { get; set; }
@@ -64,10 +64,8 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
             }
             using var client = new HttpClient();
             var getProductsUri = new Uri(ApiUrls.Vouchers.GetVouchers + "?PageNumber=1&PageSize=50&voucherName=" + voucherName + "&fyrId=" + fyrId);
-
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
-
             var getUserInfo = await client.GetAsync(getProductsUri);
 
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
@@ -77,6 +75,7 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
                 var data = JsonConvert.DeserializeObject<IEnumerable<VoucherViewModel>>(resultuerinfo);
                 VoucherViewModelList = data;
             }
+            ViewData["voucherName"] = voucherName;
             return Page();
         }
     }

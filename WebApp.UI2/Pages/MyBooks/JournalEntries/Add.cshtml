@@ -18,12 +18,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Journal Entries Form</h1>
+                    <h1>@Model.Input.VoucherName Form</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="/MyBooks/JournalEntries/index">Journal Entries</a></li>
-                        <li class="breadcrumb-item active">Add Journal Entry</li>
+                        <li class="breadcrumb-item"><a href="/MyBooks/JournalEntries/index">@string.Format(@Model.Input.VoucherName + "s")</a></li>
+                        <li class="breadcrumb-item active">Add @Model.Input.VoucherName</li>
                     </ol>
                 </div>
             </div>
@@ -36,7 +36,7 @@
             <!-- SELECT2 EXAMPLE -->
             <div class="card card-info">
                 <div class="card-header">
-                    <h3 class="card-title">Add Journal Entry</h3>
+                    <h3 class="card-title">Add @Model.Input.VoucherName</h3>
 
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -53,6 +53,7 @@
                         <div class="col-12">
                             <form method="post" enctype="multipart/form-data" id="questionForm">
                                 <input type="hidden" value="@Model.Input.FinancialYearId" id="financialYearId" />
+                                <input type="hidden" value="@Model.Input.VoucherName" id="voucherName" />
                                 <div asp-validation-summary="All" class="text-danger"></div>
                                 <input type="hidden" value="@userId" id="userId" />
                                 @Html.AntiForgeryToken()
@@ -250,7 +251,6 @@
 
             }
         });
-
 
         $('.btnadd').on("click", function (e) {
             let newcontent = "";
@@ -461,6 +461,7 @@
             let financialYearId = document.getElementById('financialYearId').value;
             let userAccessToken = userId.value;
             let voucherNumber = document.getElementById('Input_VoucherNumber').value;
+            let voucherName = document.getElementById('voucherName').value;
             let date = document.getElementById('Date').value;
             let OrderDetl = [];
 
@@ -493,7 +494,7 @@
             AddJournalEntryVoucherRequest.data = JSON.stringify(OrderDetl);
             AddJournalEntryVoucherRequest.invoice = voucherNumber;
             AddJournalEntryVoucherRequest.date = date;
-            AddJournalEntryVoucherRequest.name = "Journal Entries";
+            AddJournalEntryVoucherRequest.name = voucherName;
             AddJournalEntryVoucherRequest.financialYearId = financialYearId;
             console.log(this.AddJournalEntryVoucherRequest);
             axios.post(`${apiUrl}/api/Vouchers/AddVoucher`, this.AddJournalEntryVoucherRequest, {
@@ -505,7 +506,7 @@
                     console.log(response);
                     if (response.data.success) {
                         toastr.success(response.data.description)
-                        window.location.href = '/MyBooks/JournalEntries/index'
+                        window.location.href = '/MyBooks/JournalEntries/index?voucherName=' + voucherName
                     } else {
                         toastr.error(response.data.description)
                     }

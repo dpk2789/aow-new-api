@@ -56,7 +56,6 @@ namespace Aow.Services.Voucher
             var result = ledgers.GetAwaiter().GetResult();
 
             var voucherList = new List<GetVouchersResponse>();
-
             foreach (var voucher in list)
             {
                 var voucherViewModel = new GetVouchersResponse
