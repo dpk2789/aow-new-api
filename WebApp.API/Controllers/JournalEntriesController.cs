@@ -24,7 +24,7 @@ namespace WebApp.API.Controllers
         }
 
         [HttpPost("api/JournalEntries/AddJournalEntries")]
-        public async Task<IActionResult> AddJournalEntries([FromBody] AddVoucher.AddJournalEntryVoucherRequest request, [FromServices] AddVoucher addFinancialYear)
+        public async Task<IActionResult> AddJournalEntries([FromBody] AddJournalEntries.AddJournalEntryVoucherRequest request, [FromServices] AddJournalEntries addFinancialYear)
         {
             var response = await addFinancialYear.Do(request);
 

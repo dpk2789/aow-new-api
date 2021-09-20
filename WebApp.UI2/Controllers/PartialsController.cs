@@ -125,15 +125,30 @@ namespace WebApp.UI2.Controllers
             }
             using var client = new HttpClient();
             var getProductsUri = new Uri(ApiUrls.Ledger.GetLedgers + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
-
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
-
             var getUserInfo = await client.GetAsync(getProductsUri);
 
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             var data = JsonConvert.DeserializeObject<IEnumerable<WebApp.UI2.Pages.MyBooks.Ledgers.IndexModel.LedgerViewModel>>(resultuerinfo);          
             return PartialView("_LedgerListPartial", data);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetJournalEntriesPartialView()
+        {
+            var fyrId = _cookieHelper.Get("fYrCookee");
+            var cmpid = _cookieHelper.Get("cmpCookee");            
+            using var client = new HttpClient();
+            var getProductsUri = new Uri(ApiUrls.Vouchers.GetVouchers + "?PageNumber=1&PageSize=50&cmpId=" + cmpid + "&fyrId=" + fyrId);
+
+            var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+            var getUserInfo = await client.GetAsync(getProductsUri);
+
+            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var data = JsonConvert.DeserializeObject<IEnumerable<WebApp.UI2.Pages.MyBooks.JournalEntries.IndexModel.VoucherViewModel>>(resultuerinfo);
+            return PartialView("_JournalEntriesListPartial", data);
         }
     }
 }

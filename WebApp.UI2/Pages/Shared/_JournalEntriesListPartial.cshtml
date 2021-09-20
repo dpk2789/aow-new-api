@@ -1,0 +1,83 @@
+﻿@model IEnumerable<WebApp.UI2.Pages.MyBooks.JournalEntries.IndexModel.VoucherViewModel>
+
+
+<table id="journalEntriesList" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>
+                <label>Date</label>
+            </th>
+            <th>
+                <label>Voucher Number</label>
+            </th>
+            <th>
+                <label>Ledger</label>
+            </th>
+            <th>
+                <label>Credit</label>
+            </th>
+            <th>
+                <label>Debit</label>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var voucher in Model)
+            {
+                foreach (var item in voucher.JournalEntries.OrderBy(x=>x.SrNo))
+                {
+                    if (item.SrNo == 1)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => voucher.Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => voucher.VoucherNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AccountName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreditAmount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DebitAmount)
+                            </td>
+                            <td>
+                                <a asp-route-id="@voucher.Id" asp-page="/MyBooks/JournalEntries/Update" class="fa fa-edit">Edit</a> |
+                                <button onclick="confirmAction(event)" data-category-id="@voucher.Id" type="button" class="btn-danger small">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AccountName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreditAmount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DebitAmount)
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            }
+
+        }
+
+    </tbody>
+
+</table>

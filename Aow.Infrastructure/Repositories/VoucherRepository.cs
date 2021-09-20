@@ -1,6 +1,7 @@
 ﻿using Aow.Infrastructure.Domain;
 using Aow.Infrastructure.IRepositories;
 using Aow.Infrastructure.Paging;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,12 +17,12 @@ namespace Aow.Infrastructure.Repositories
 
         public Voucher GetVoucher(Guid Id)
         {
-            return FindByCondition(x => x.Id == Id).FirstOrDefault();
+            return FindByCondition(x => x.Id == Id).Include(x => x.JournalEntries).FirstOrDefault();
         }
 
         public Task<PagedList<Voucher>> GetVouchers(PagingParameters ownerParameters, Guid companyId)
         {
-            return Task.FromResult(PagedList<Voucher>.ToPagedList(FindAll().Where(x => x.FinancialYearId == companyId).OrderBy(on => on.VoucherName),
+            return Task.FromResult(PagedList<Voucher>.ToPagedList(FindAll().Where(x => x.FinancialYearId == companyId).Include(x => x.JournalEntries).OrderBy(on => on.VoucherName),
                                     ownerParameters.PageNumber, ownerParameters.PageSize));
         }
     }

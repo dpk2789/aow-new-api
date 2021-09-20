@@ -76,7 +76,7 @@
         public static class Vouchers
         {
             public const string GetVouchers = Rootlocal + "/api/Vouchers/GetVouchers";
-            public const string GetLedger = Rootlocal + "/api/Ledger/GetLedger";
+            public const string GetVoucher = Rootlocal + "/api/Vouchers/GetVoucher";
             public const string GetProductByName = Rootlocal + "/api/Ledger/GetProductByName";
             public const string Create = Rootlocal + "/api/Ledger/AddLedger";
             public const string Update = Rootlocal + "/api/Ledger/UpdateLedger";

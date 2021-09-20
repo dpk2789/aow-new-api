@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -28,27 +29,42 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
         public class VoucherViewModel
         {
             public Guid Id { get; set; }
-            public string Name { get; set; }           
+            public string VoucherNumber { get; set; }
+            public DateTime? Date { get; set; }
+            public string VoucherName { get; set; }         
+            public string RefId { get; set; }
+            public string Note { get; set; }        
+            public bool? Type { get; set; }
             public virtual IEnumerable<JournalEntryViewModel> JournalEntries { get; set; }
         }
         public class JournalEntryViewModel
         {
             public Guid Id { get; set; }
-            public string Name { get; set; }
+            public Guid? VoucherId { get; set; }
+            public string AccountName { get; set; }
+            public string VoucherName { get; set; }
+            public string VoucherInvoice { get; set; }          
+            public decimal? VoucherTotal { get; set; }
+            public int? SrNo { get; set; }
+            public bool? OnRecord { get; set; }
+            public Guid? RefAccountId { get; set; }
+            public string AccountType { get; set; }
+            public string CrDrType { get; set; }
+            public decimal? CreditAmount { get; set; }
+            public decimal? DebitAmount { get; set; }
         }
-        // public static string AppBaseUrl => $"{_httpContextAccessor.HttpContext.Request.Scheme}://{Current.Request.Host}{Current.Request.PathBase}";
-        
-        // public IEnumerable<JournalEntryViewModel> JournalEntries { get; set; }
+
         public async Task<IActionResult> OnGet(string voucherName)
         {
             string currentUrl = _httpContextAccessor.HttpContext.Request.Scheme + "://" + _httpContextAccessor.HttpContext.Request.Host.Value + _httpContextAccessor.HttpContext.Request.Path.Value;
             var fyrId = _cookieHelper.Get("fYrCookee");
+            var cmpid = _cookieHelper.Get("cmpCookee");
             if (string.IsNullOrEmpty(fyrId) && string.IsNullOrEmpty(fyrId))
             {
                 return Redirect("/MyBooks/FinancialYear/SetFinancialYear?returnUrl=" + currentUrl);
             }
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.Vouchers.GetVouchers + "?PageNumber=1&PageSize=50&cmpId=" + fyrId);
+            var getProductsUri = new Uri(ApiUrls.Vouchers.GetVouchers + "?PageNumber=1&PageSize=50&cmpId=" + cmpid + "&fyrId=" + fyrId);
 
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
@@ -56,14 +72,12 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
             var getUserInfo = await client.GetAsync(getProductsUri);
 
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            VoucherViewModel voucherViewModel = new VoucherViewModel();
+
             if (!string.IsNullOrEmpty(resultuerinfo) && resultuerinfo != "[]")
             {
-                var data = JsonConvert.DeserializeObject<IEnumerable<JournalEntryViewModel>>(resultuerinfo);
-                voucherViewModel.JournalEntries = data;
+                var data = JsonConvert.DeserializeObject<IEnumerable<VoucherViewModel>>(resultuerinfo);
+                VoucherViewModelList = data;
             }
-
-            voucherViewModel.Name = voucherName;
             return Page();
         }
     }

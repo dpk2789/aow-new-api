@@ -496,7 +496,7 @@
             AddJournalEntryVoucherRequest.name = "Journal Entries";
             AddJournalEntryVoucherRequest.financialYearId = financialYearId;
             console.log(this.AddJournalEntryVoucherRequest);
-            axios.post(`${apiUrl}/api/JournalEntries/AddJournalEntries`, this.AddJournalEntryVoucherRequest, {
+            axios.post(`${apiUrl}/api/Vouchers/AddVoucher`, this.AddJournalEntryVoucherRequest, {
                 headers: {
                     Authorization: "Bearer " + userAccessToken
                 }

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Aow.Services.JournalEntry
+namespace Aow.Services.Voucher
 {
     [Service]
     public class AddVoucher
@@ -14,16 +14,16 @@ namespace Aow.Services.JournalEntry
         {
             _repoWrapper = repoWrapper;
         }
-        public class AddJournalEntryVoucherRequest
+        public class AddVoucherRequest
         {
             public string FinancialYearId { get; set; }
             public string Name { get; set; }
             public string data { get; set; }
             public string Invoice { get; set; }
             public string Date { get; set; }
-            public IList<AddJournalEntryRequest> JournalEntries { get; set; }
+            public IList<AddVoucherJournalEntryRequest> JournalEntries { get; set; }
         }
-        public class AddJournalEntryRequest
+        public class AddVoucherJournalEntryRequest
         {
             public string CrDrType { get; set; }
             public Guid LedgerId { get; set; }
@@ -33,7 +33,7 @@ namespace Aow.Services.JournalEntry
             public decimal? CreditAmount { get; set; }
             public decimal? DebitAmount { get; set; }
         }
-        public class AddJournalEntryResponse
+        public class AddVoucherJournalEntryResponse
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
@@ -41,7 +41,7 @@ namespace Aow.Services.JournalEntry
             public bool Success { get; set; }
         }
 
-        public async Task<AddJournalEntryResponse> Do(AddJournalEntryVoucherRequest request)
+        public async Task<AddVoucherJournalEntryResponse> Do(AddVoucherRequest request)
         {
             try
             {
@@ -53,8 +53,10 @@ namespace Aow.Services.JournalEntry
                     Id = voucherId,
                     VoucherName = request.Name
                 };
+                voucher.Date = Convert.ToDateTime(request.Date);
+                voucher.VoucherNumber = request.Invoice;
                 voucher.FinancialYearId = fyrId;
-                var deserialiseList = JsonConvert.DeserializeObject<List<AddJournalEntryRequest>>(request.data);
+                var deserialiseList = JsonConvert.DeserializeObject<List<AddVoucherJournalEntryRequest>>(request.data);
                 _repoWrapper.VoucherRepo.Create(voucher);
                 foreach (var item in deserialiseList)
                 {
@@ -86,7 +88,7 @@ namespace Aow.Services.JournalEntry
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {
-                    return new AddJournalEntryResponse
+                    return new AddVoucherJournalEntryResponse
                     {
                         Name = request.Name,
                         Success = false
@@ -94,7 +96,7 @@ namespace Aow.Services.JournalEntry
                 }
                 else
                 {
-                    return new AddJournalEntryResponse
+                    return new AddVoucherJournalEntryResponse
                     {
                         Id = voucher.Id,
                         Name = request.Name,
@@ -106,7 +108,7 @@ namespace Aow.Services.JournalEntry
 
             catch (Exception ex)
             {
-                return new AddJournalEntryResponse
+                return new AddVoucherJournalEntryResponse
                 {
                     Name = request.Name,
                     Success = false,
