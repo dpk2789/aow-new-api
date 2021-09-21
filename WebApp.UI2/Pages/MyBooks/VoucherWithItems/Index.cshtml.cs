@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using WebApp.UI2.Helpers;
 
-namespace WebApp.UI2.Pages.MyBooks.JournalEntries
+namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
 {
     public class IndexModel : PageModel
     {
@@ -24,8 +24,8 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
             _httpContextAccessor = httpContextAccessor;
         }
         [BindProperty]
-        public IEnumerable<VoucherViewModel> VoucherViewModelList { get; set; }
-        public class VoucherViewModel
+        public IEnumerable<ItemsViewModel> VoucherViewModelList { get; set; }
+        public class VoucherWithItemsViewModel
         {
             public Guid Id { get; set; }
             public string VoucherNumber { get; set; }
@@ -34,9 +34,9 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
             public string RefId { get; set; }
             public string Note { get; set; }
             public bool? Type { get; set; }
-            public virtual IEnumerable<JournalEntryViewModel> JournalEntries { get; set; }
+            public virtual IEnumerable<ItemsViewModel> JournalEntries { get; set; }
         }
-        public class JournalEntryViewModel
+        public class ItemsViewModel
         {
             public Guid Id { get; set; }
             public Guid? VoucherId { get; set; }
@@ -56,15 +56,16 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
         public async Task<IActionResult> OnGet(string voucherName)
         {
             string currentUrl = _httpContextAccessor.HttpContext.Request.Scheme + "://" +
-               _httpContextAccessor.HttpContext.Request.Host.Value + _httpContextAccessor.HttpContext.Request.Path.Value + "?voucherName=" + voucherName;
-            var fyrId = _cookieHelper.Get("fYrCookee");
-            var cmpid = _cookieHelper.Get("cmpCookee");
-            if (string.IsNullOrEmpty(fyrId) && string.IsNullOrEmpty(fyrId))
+                _httpContextAccessor.HttpContext.Request.Host.Value + _httpContextAccessor.HttpContext.Request.Path.Value + "?voucherName=" + voucherName;
+            string cmpid = _cookieHelper.Get("cmpCookee");
+            string fYrId = _cookieHelper.Get("fYrCookee");
+            if (string.IsNullOrEmpty(fYrId) && string.IsNullOrEmpty(fYrId))
             {
                 return Redirect("/MyBooks/FinancialYear/SetFinancialYear?returnUrl=" + currentUrl);
             }
+
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.Vouchers.GetVouchers + "?PageNumber=1&PageSize=50&voucherName=" + voucherName + "&fyrId=" + fyrId);
+            var getProductsUri = new Uri(ApiUrls.Vouchers.GetVouchers + "?PageNumber=1&PageSize=50&voucherName=" + voucherName + "&fyrId=" + fYrId);
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
             var getUserInfo = await client.GetAsync(getProductsUri);
@@ -73,10 +74,10 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
 
             if (!string.IsNullOrEmpty(resultuerinfo) && resultuerinfo != "[]")
             {
-                var data = JsonConvert.DeserializeObject<IEnumerable<VoucherViewModel>>(resultuerinfo);
+                var data = JsonConvert.DeserializeObject<IEnumerable<ItemsViewModel>>(resultuerinfo);
                 VoucherViewModelList = data;
             }
-            ViewData["voucherName"] = voucherName;
+            ViewData["VoucherName"] = voucherName;
             return Page();
         }
     }
