@@ -20,7 +20,7 @@ function JsonDate(jsonDate) {
     //return yojsonDate;
 }
 
-$("#LedgerName").autocomplete({
+$("#Input_LedgerName").autocomplete({
     minLength: 1,
     source: function (request, response) {
         var url = $(this.element).data("url");
@@ -50,7 +50,7 @@ $('.SaveOrder').on("click",
         let buttonValue = $(this).closest("input");
         let voucherId = $('.voucherId').val();
 
-        let date = $('#sandbox-container').val();
+        let date = $('#voucherDate').val();
 
         if (date == null || date == "") {
             alert("Please Enter Date");

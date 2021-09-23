@@ -11,9 +11,9 @@ namespace WebApp.API.Controllers
     public class ProductController : ControllerBase
     {
         [HttpGet("api/Products/GetProducts")]
-        public IActionResult GetProducts([FromQuery] PagingParameters pagingParameters, Guid categoryId, [FromServices] GetProducts getFinancialYears)
+        public IActionResult GetProducts([FromQuery] PagingParameters pagingParameters, Guid cmpId, [FromServices] GetProducts getFinancialYears)
         {
-            return Ok(getFinancialYears.Do(pagingParameters));
+            return Ok(getFinancialYears.Do(pagingParameters, cmpId));
         }
 
         [HttpGet("api/Products/GetProduct")]

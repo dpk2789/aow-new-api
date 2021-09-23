@@ -59,7 +59,7 @@
                                                    {
                                                        @class = "ui-autocomplete-input form-control",
                                                        @placeholder = "Enter Party Name",
-                                                       data_url = @Url.Action("GetLedgersForJournalEntry", "VouchersWithItems")
+                                                       data_url = @Url.Action("GetLedgersForJournalEntry", "Vouchers")
                                                    }
                                                })
                                             @Html.HiddenFor(c => c.Input.LedgerId)
@@ -72,7 +72,8 @@
 
                                         <div class="col-md-3">
                                             <div class='input-group datetimepicker6'>
-                                                <input type="text" class="form-control" name="Date" id="sandbox-container" placeholder="Date">
+                                                <input type="text" class="form-control" name="Date" id="voucherDate" placeholder="Date" 
+                                                       data-toggle="datetimepicker" data-target="#voucherDate" autocomplete="off">
                                                 @Html.ValidationMessageFor(model => model.Input.Date, "", new { @class = "text-danger" })
                                             </div>
                                             @*@Html.EditorFor(model => model.Date, "EditorDateJqueryDateTimePicker")*@
@@ -96,7 +97,7 @@
                                             <td>
                                             </td>
                                             <td>
-                                                <input type="text" id="txtStoreItem" class="ui-autocomplete-input form-control" data-url="@Url.Action("GetProductsForAutocomplete", "Products")" placeholder="Enter Product" />
+                                                <input type="text" id="txtStoreItem" class="ui-autocomplete-input form-control" data-url="@Url.Action("GetItemsForInvoice", "Vouchers")" placeholder="Enter Product" />
                                                 <input type="hidden" id="hdnStoreItemId" class="form-control" />
                                                 <input type="hidden" id="hdnProductId" class="form-control" />
                                                 <input type="hidden" id="hdnProductAccountId" class="form-control" />
@@ -179,7 +180,6 @@
 
                                 </div>
 
-
                             }
 
                         </div>
@@ -207,6 +207,12 @@
 </div>
 
 @section Scripts {
+    <script>
+        $('#voucherDate').datetimepicker({
+            /* format: 'L',*/
+            format: 'YYYY/MM/DD'
+        });
+    </script>
     <script src="~/mysite/createAddUpdateDeleteItem.js"></script>
     <script src="~/mysite/addupdatedeteteSundry.js"></script>
     <script src="~/mysite/saveandCommonFunctions.js"></script>

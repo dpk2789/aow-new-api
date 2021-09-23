@@ -47,6 +47,8 @@ namespace Aow.Infrastructure
         {
             builder.Entity<ItemUnit>().Property(p => p.RelationalUnit).HasColumnType("decimal(18,4)");
             builder.Entity<Ledger>().Property(p => p.OpeningBalance).HasColumnType("decimal(18,4)");
+            builder.Entity<Product>().Property(p => p.SalePrice).HasColumnType("decimal(18,4)");
+            builder.Entity<Product>().Property(p => p.Value).HasColumnType("decimal(18,4)");
             builder.Entity<ProductVariant>().Property(p => p.SalePrice).HasColumnType("decimal(18,4)");
             builder.Entity<JournalEntry>().Property(p => p.CreditAmount).HasColumnType("decimal(18,4)");
             builder.Entity<JournalEntry>().Property(p => p.DebitAmount).HasColumnType("decimal(18,4)");

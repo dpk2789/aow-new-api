@@ -256,7 +256,7 @@ $('.btnadd').on("click", function (e) {
     $('#tbodyitems').empty().append(newcontent);
     //document.getElementById("ProductsTotal").value = numberWithCommas(parseFloat(itemstotal).toFixed(2));
     document.getElementById("hdnProductsTotal").value = parseFloat(itemstotal).toFixed(2);
-    document.getElementById("Total").value = parseFloat(itemstotal).toFixed(2);
+    document.getElementById("Input_Total").value = parseFloat(itemstotal).toFixed(2);
 
     //  $(".showimg").hide();
     ClearItemAdd();
@@ -545,9 +545,7 @@ $("#txtStoreItem").autocomplete({
     },
     appendTo: $(".modal-body ui-autocomplete-input"),
     select: function (event, ui) {
-        $("#hdnProductId").val(ui.item.productId);
-        $("#hdnStoreItemId").val(ui.item.StoreProductId);
-        $("#txtStoreItem").val(ui.item.name);
+        $("#hdnProductId").val(ui.item.id);
         $("#txtDescription").val(ui.item.autoGenerateName);
         $('#txtDescription').focus()
         if (ui.item.Itemtype === "Taxation") {

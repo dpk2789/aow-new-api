@@ -54,7 +54,7 @@ namespace WebApp.UI2.Controllers
         public async Task<JsonResult> GetItemsForInvoice(string term, string HeadName, string crdr)
         {
             var cmpid = _cookieHelper.Get("cmpCookee");
-            List<LedgerCategorySelectViewModel> LedgerCategories = null;
+            List<ProductViewModel> ProductViewModelList = null;
             if (string.IsNullOrEmpty(cmpid) && string.IsNullOrEmpty(cmpid))
             {
                 return null;
@@ -70,16 +70,20 @@ namespace WebApp.UI2.Controllers
 
             if (resultuerinfo != null)
             {
-                var data = JsonConvert.DeserializeObject<IList<LedgerCategorySelectViewModel>>(resultuerinfo);
-                LedgerCategories = data.Where(c => c.Name.IndexOf(term, StringComparison.CurrentCultureIgnoreCase) != -1).ToList();
+                var data = JsonConvert.DeserializeObject<IList<ProductViewModel>>(resultuerinfo);
+                ProductViewModelList = data.Where(c => c.Name.IndexOf(term, StringComparison.CurrentCultureIgnoreCase) != -1).ToList();
                 // LedgerCategories = data.Where(ii => ii.Name.IndexOf(term)>-1).ToList();
             }
-            return Json(LedgerCategories.Select(m => new
+            return Json(ProductViewModelList.Select(m => new
             {
                 id = m.Id,
                 value = m.Name,
-                //rootCategory = m.Parent.Name,
-                // label = String.Format("{1}", m.Name),
+                label = String.Format("{0}/{1}/{2}", m.Code, m.Name, m.SalePrice),
+                mRPPerUnit = m.SalePrice,              
+                name = m.Name,
+                productCategoryId = m.ProductCategoryId,
+                productId = m.ProductId,
+                itemtype = m.ItemType != null ? m.ItemType.Replace(" ", string.Empty) : null,
             }));
         }
     }

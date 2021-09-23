@@ -7,7 +7,7 @@ namespace Aow.Infrastructure.Repositories
 {
     public interface IProductRepository : IRepositoryBase<Product>
     {
-        Task<PagedList<Product>> GetProducts(PagingParameters ownerParameters);
+        Task<PagedList<Product>> GetProducts(PagingParameters ownerParameters, Guid companyId);
         PagedList<Product> GetProductsWithStock(PagingParameters ownerParameters);
         Product GetProduct(Guid Id);
     }
