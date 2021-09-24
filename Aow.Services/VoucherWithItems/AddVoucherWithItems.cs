@@ -31,13 +31,19 @@ namespace Aow.Services.VoucherWithItems
         }
         public class AddVoucherItemsRequest
         {
-            public string CrDrType { get; set; }
+            public Guid Id { get; set; }
+            public int? SrNo { get; set; }
+            public string Name { get; set; }
+            public string ItemType { get; set; }
+            public string ItemTaxCode { get; set; }
+            public string Percent { get; set; }
+            public string Description { get; set; }
+            public decimal? ItemAmount { get; set; }
+            public decimal? MRPPerUnit { get; set; }
+            public decimal? Quantity { get; set; }
+            public decimal Price { get; set; }
             public Guid LedgerId { get; set; }
-            public string InvoiceAccountName { get; set; }
-            public string AccountName { get; set; }
-            public string RootCategory { get; set; }
-            public decimal? CreditAmount { get; set; }
-            public decimal? DebitAmount { get; set; }
+            public Guid ProductId { get; set; }
         }
         public class AddVoucherWithItemsResponse
         {
@@ -54,7 +60,9 @@ namespace Aow.Services.VoucherWithItems
                 Guid fyrId = Guid.Parse(request.FinancialYearId);
                 var fyr = _repoWrapper.FinancialYearRepo.GetFinancialYear(fyrId);
                 var date = Convert.ToDateTime(request.Date);
-
+                int srno = 1;
+                int srnoItem = 1;
+                decimal itemTotal = 0;
                 if (fyr.IsLocked == false && fyr.Start <= date && fyr.End >= date)
                 {
                     Guid voucherId = Guid.NewGuid();
@@ -72,29 +80,37 @@ namespace Aow.Services.VoucherWithItems
                     _repoWrapper.VoucherRepo.Create(voucher);
                     foreach (var item in deserialiseList)
                     {
-                        var journalEntry = new Aow.Infrastructure.Domain.JournalEntry
+                        Aow.Infrastructure.Domain.VoucherItem voucherItem = new Aow.Infrastructure.Domain.VoucherItem();
+                        voucherItem.Id = Guid.NewGuid();
+                        voucherItem.SrNo = srnoItem;
+                        voucherItem.Description = item.Description;
+                        voucherItem.MRPPerUnit = item.MRPPerUnit;
+                        voucherItem.Price = item.MRPPerUnit.Value;
+                        voucherItem.Quantity = item.Quantity;
+                        voucherItem.ProductId = item.ProductId;
+                        voucherItem.ItemAmount = item.ItemAmount;
+                        itemTotal = itemTotal + item.ItemAmount.Value;
+                        voucherItem.VoucherId = voucherId;
+                        _repoWrapper.VoucherItemRepo.Create(voucherItem);
+                        srnoItem++;
+
+                        var ledger =  _repoWrapper.LedgerRepositoryRepo.GetLedger(fyr.Id);
+
+                        Aow.Infrastructure.Domain.JournalEntry jEntryCredit = new Aow.Infrastructure.Domain.JournalEntry
                         {
                             Id = Guid.NewGuid(),
-                            Date = Convert.ToDateTime(request.Date),
-                            VoucherName = request.voucherName,
-                            SrNo = SrNo,
-                            VoucherNumber = request.Invoice,
-                            //dailyAccounts.Is_Item = false;
                             VoucherId = voucherId,
-                            LedgerId = item.LedgerId
+                            VoucherName = request.voucherName,
+                            Date = date,
+                            SrNo = srno + 1,
+                            LedgerId = ledger.Id,
+                            CrDrType = "Cr",
+                            VoucherNumber = request.Invoice,
+                            CreditAmount = itemTotal
                         };
-                        if (item.CrDrType == "Cr")
-                        {
-                            journalEntry.CrDrType = "Cr";
-                            journalEntry.CreditAmount = item.CreditAmount.Value;
-                        }
-                        else
-                        {
-                            journalEntry.CrDrType = "Dr";
-                            journalEntry.DebitAmount = item.DebitAmount.Value;
-                        }
+                       
 
-                        _repoWrapper.JournalEntryRepo.Create(journalEntry);
+                        _repoWrapper.JournalEntryRepo.Create(jEntryCredit);
                         SrNo++;
                     }
                     int i = await _repoWrapper.SaveNew();

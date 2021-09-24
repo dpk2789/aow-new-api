@@ -27,6 +27,7 @@ namespace Aow.Infrastructure.Repositories
         private ILedgerRepository _ledgerRepository;
         private IJournalEntryRepository journalEntryRepository;
         private IVoucherRepository voucherRepository;
+        private IVoucherItemRepository voucherItemRepository;
         public IUserRepository UserRepo
         {
             get
@@ -47,6 +48,17 @@ namespace Aow.Infrastructure.Repositories
                     voucherRepository = new VoucherRepository(_repoContext);
                 }
                 return voucherRepository;
+            }
+        }
+        public IVoucherItemRepository VoucherItemRepo
+        {
+            get
+            {
+                if (voucherItemRepository == null)
+                {
+                    voucherItemRepository = new VoucherItemRepository(_repoContext);
+                }
+                return voucherItemRepository;
             }
         }
         public IJournalEntryRepository JournalEntryRepo

@@ -16,6 +16,7 @@ namespace Aow.Infrastructure.IRepositories
         ILedgerCategoryRepository LedgerCategoryRepositoryRepo { get; }
         ILedgerRepository LedgerRepositoryRepo { get; }
         IVoucherRepository VoucherRepo { get; }
+        IVoucherItemRepository VoucherItemRepo { get; }
         IJournalEntryRepository JournalEntryRepo { get; }
 
         Task<int> SaveNew();
