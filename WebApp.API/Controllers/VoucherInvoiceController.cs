@@ -9,7 +9,7 @@ namespace WebApp.API.Controllers
     public class VoucherInvoiceController : ControllerBase
     {
         [HttpPost("api/VoucherInvoice/AddVoucherInvoice")]
-        public async Task<ActionResult> Add([FromBody] AddVoucherWithItems.AddVoucherWithItemsRequest request, [FromServices] AddVoucherWithItems addFinancialYear)
+        public async Task<ActionResult> Add([FromBody] AddVoucherWithItems.AddVoucherInvoiceRequest request, [FromServices] AddVoucherWithItems addFinancialYear)
         {
             if (ModelState.IsValid)
             {

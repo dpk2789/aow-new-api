@@ -14,7 +14,7 @@ namespace Aow.Services.VoucherWithItems
         {
             _repoWrapper = repoWrapper;
         }
-        public class AddVoucherWithItemsRequest
+        public class AddVoucherInvoiceRequest
         {
             public string FinancialYearId { get; set; }
             public string voucherName { get; set; }
@@ -27,9 +27,9 @@ namespace Aow.Services.VoucherWithItems
             public string Note { get; set; }
             public string buttonValue { get; set; }
             public string Date { get; set; }
-            public IList<AddVoucherItemsRequest> VoucherItems { get; set; }
+            public IList<AddVoucherInvoiceItemsRequest> VoucherItems { get; set; }
         }
-        public class AddVoucherItemsRequest
+        public class AddVoucherInvoiceItemsRequest
         {
             public Guid Id { get; set; }
             public int? SrNo { get; set; }
@@ -53,7 +53,7 @@ namespace Aow.Services.VoucherWithItems
             public bool Success { get; set; }
         }
 
-        public async Task<AddVoucherWithItemsResponse> Do(AddVoucherWithItemsRequest request)
+        public async Task<AddVoucherWithItemsResponse> Do(AddVoucherInvoiceRequest request)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace Aow.Services.VoucherWithItems
                     voucher.Date = Convert.ToDateTime(request.Date);
                     voucher.VoucherNumber = request.Invoice;
                     voucher.FinancialYearId = fyrId;
-                    var deserialiseList = JsonConvert.DeserializeObject<List<AddVoucherItemsRequest>>(request.data);
+                    var deserialiseList = JsonConvert.DeserializeObject<List<AddVoucherInvoiceItemsRequest>>(request.data);
                     _repoWrapper.VoucherRepo.Create(voucher);
                     foreach (var item in deserialiseList)
                     {
