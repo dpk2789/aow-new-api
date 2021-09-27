@@ -63,83 +63,71 @@ namespace Aow.Services.VoucherWithItems
                 int srno = 1;
                 int srnoItem = 1;
                 decimal itemTotal = 0;
-                if (fyr.IsLocked == false && fyr.Start <= date && fyr.End >= date)
+                //if (fyr.IsLocked == false && fyr.Start <= date && fyr.End >= date)
+                //{
+                Guid voucherId = Guid.NewGuid();
+
+                int SrNo = 1;
+                var voucher = new Aow.Infrastructure.Domain.Voucher
                 {
-                    Guid voucherId = Guid.NewGuid();
-                  
-                    int SrNo = 1;
-                    var voucher = new Aow.Infrastructure.Domain.Voucher
+                    Id = voucherId,
+                    VoucherName = request.voucherName
+                };
+                voucher.Date = Convert.ToDateTime(request.Date);
+                voucher.VoucherNumber = request.Invoice;
+                voucher.FinancialYearId = fyrId;
+                var deserialiseList = JsonConvert.DeserializeObject<List<AddVoucherInvoiceItemsRequest>>(request.data);
+                _repoWrapper.VoucherRepo.Create(voucher);
+                foreach (var item in deserialiseList)
+                {
+                    Aow.Infrastructure.Domain.VoucherItem voucherItem = new Aow.Infrastructure.Domain.VoucherItem();
+                    voucherItem.Id = Guid.NewGuid();
+                    voucherItem.SrNo = srnoItem;
+                    voucherItem.Description = item.Description;
+                    voucherItem.MRPPerUnit = item.MRPPerUnit;
+                    voucherItem.Price = item.MRPPerUnit.Value;
+                    voucherItem.Quantity = item.Quantity;
+                    voucherItem.ProductId = item.ProductId;
+                    voucherItem.ItemAmount = item.ItemAmount;
+                    itemTotal = itemTotal + item.ItemAmount.Value;
+                    voucherItem.VoucherId = voucherId;
+                    _repoWrapper.VoucherItemRepo.Create(voucherItem);
+                    srnoItem++;
+
+                    var ledger = _repoWrapper.LedgerRepositoryRepo.GetLedgerByName(fyr.CompanyId, "Sales Account");
+
+                    Aow.Infrastructure.Domain.JournalEntry jEntryCredit = new Aow.Infrastructure.Domain.JournalEntry
                     {
-                        Id = voucherId,
-                        VoucherName = request.voucherName
+                        Id = Guid.NewGuid(),
+                        VoucherId = voucherId,
+                        VoucherName = request.voucherName,
+                        Date = date,
+                        SrNo = srno + 1,
+                        LedgerId = ledger.Id,
+                        CrDrType = "Cr",
+                        VoucherNumber = request.Invoice,
+                        CreditAmount = itemTotal
                     };
-                    voucher.Date = Convert.ToDateTime(request.Date);
-                    voucher.VoucherNumber = request.Invoice;
-                    voucher.FinancialYearId = fyrId;
-                    var deserialiseList = JsonConvert.DeserializeObject<List<AddVoucherInvoiceItemsRequest>>(request.data);
-                    _repoWrapper.VoucherRepo.Create(voucher);
-                    foreach (var item in deserialiseList)
-                    {
-                        Aow.Infrastructure.Domain.VoucherItem voucherItem = new Aow.Infrastructure.Domain.VoucherItem();
-                        voucherItem.Id = Guid.NewGuid();
-                        voucherItem.SrNo = srnoItem;
-                        voucherItem.Description = item.Description;
-                        voucherItem.MRPPerUnit = item.MRPPerUnit;
-                        voucherItem.Price = item.MRPPerUnit.Value;
-                        voucherItem.Quantity = item.Quantity;
-                        voucherItem.ProductId = item.ProductId;
-                        voucherItem.ItemAmount = item.ItemAmount;
-                        itemTotal = itemTotal + item.ItemAmount.Value;
-                        voucherItem.VoucherId = voucherId;
-                        _repoWrapper.VoucherItemRepo.Create(voucherItem);
-                        srnoItem++;
-
-                        var ledger =  _repoWrapper.LedgerRepositoryRepo.GetLedger(fyr.Id);
-
-                        Aow.Infrastructure.Domain.JournalEntry jEntryCredit = new Aow.Infrastructure.Domain.JournalEntry
-                        {
-                            Id = Guid.NewGuid(),
-                            VoucherId = voucherId,
-                            VoucherName = request.voucherName,
-                            Date = date,
-                            SrNo = srno + 1,
-                            LedgerId = ledger.Id,
-                            CrDrType = "Cr",
-                            VoucherNumber = request.Invoice,
-                            CreditAmount = itemTotal
-                        };
-                       
-
-                        _repoWrapper.JournalEntryRepo.Create(jEntryCredit);
-                        SrNo++;
-                    }
-                    int i = await _repoWrapper.SaveNew();
-                    if (i <= 0)
-                    {
-                        return new AddVoucherWithItemsResponse
-                        {
-                            Name = request.voucherName,
-                            Success = false
-                        };
-                    }
-                    else
-                    {
-                        return new AddVoucherWithItemsResponse
-                        {
-                            Id = voucher.Id,
-                            Name = request.voucherName,
-                            Success = true,
-                            Description = "Journal Entry Added SuccessFully Added"
-                        };
-                    }                
-                   
-
+                    _repoWrapper.JournalEntryRepo.Create(jEntryCredit);
+                    SrNo++;
                 }
+                int i = await _repoWrapper.SaveNew();
+                if (i > 0)
+                {
+                    return new AddVoucherWithItemsResponse
+                    {
+                        Id = voucher.Id,
+                        Name = request.voucherName,
+                        Success = true,
+                        Description = "Journal Entry Added SuccessFully Added"
+                    };
+                }
+                //}
                 return new AddVoucherWithItemsResponse
-                {                   
+                {
                     Name = request.voucherName,
-                    Success = true,
-                    Description = "Journal Entry Added SuccessFully Added"
+                    Success = false,
+                    Description = "Journal Entry Not Added"
                 };
 
             }

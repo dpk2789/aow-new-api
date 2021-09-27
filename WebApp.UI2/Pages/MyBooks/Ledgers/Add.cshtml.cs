@@ -47,7 +47,7 @@ namespace WebApp.UI2.Pages.MyBooks.Ledgers
                 return null;
             }
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.LedgerCategories.GetLedgerCategories + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
+            var getProductsUri = new Uri(ApiUrls.LedgerCategories.GetLedgerCategories + "?PageNumber=1&PageSize=50&cmpId=" + cmpid);
 
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
 

@@ -17,6 +17,29 @@ namespace WebApp.UI2.Controllers
         {
             _cookieHelper = cookieHelper;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCompaniesPartialView()
+        {
+            var cmpid = _cookieHelper.Get("cmpCookee");
+
+            if (string.IsNullOrEmpty(cmpid) && string.IsNullOrEmpty(cmpid))
+            {
+                return RedirectToPage("/");
+            }
+            using var client = new HttpClient();
+            var getProductsUri = new Uri(ApiUrls.Company.GetCompanies + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
+
+            var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+
+            var getUserInfo = await client.GetAsync(getProductsUri);
+
+            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var data = JsonConvert.DeserializeObject<IEnumerable<WebApp.UI2.Pages.MyBooks.FinancialYear.IndexModel.FinancialYearViewModel>>(resultuerinfo);
+            return PartialView("_CompanyListPartial", data);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetFinancialYearsPartialView()
         {

@@ -1,0 +1,34 @@
+﻿@model IEnumerable<WebApp.UI2.Pages.Companies.IndexModel.CompanyViewModel>
+
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>Companies</th>
+        <th></th>
+    </tr>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var company in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => company.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => company.Name)
+                    </td>
+
+                    <td>
+                        <a asp-route-id="@company.Id" asp-page="/Companies/Edit" class="fa fa-edit">Edit</a> |
+                        <a asp-page="/MyBooks/Dashboard" asp-route-companyId="@company.Id">My Books</a> |
+                        <button onclick="confirmAction(event)" data-product-id="@company.Id" type="button" class="btn-danger small">Delete</button>
+                    </td>
+                </tr>
+            }
+        }
+
+
+
+    </tbody>
+</table>

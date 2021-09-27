@@ -19,6 +19,11 @@ namespace Aow.Infrastructure.Repositories
             return FindByCondition(x => x.Id == Id).FirstOrDefault();
         }
 
+        public Ledger GetLedgerByName(Guid cmpId, string ledgerName)
+        {
+            return FindByCondition(x => x.LedgerCategory.CompanyId == cmpId && x.Name == ledgerName).FirstOrDefault();
+        }
+
         public Task<PagedList<Ledger>> GetLedgers(PagingParameters ownerParameters, Guid companyId)
         {
             return Task.FromResult(PagedList<Ledger>.ToPagedList(FindAll().Where(x => x.LedgerCategory.CompanyId == companyId).OrderBy(on => on.Name),

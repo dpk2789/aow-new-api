@@ -1,42 +1,16 @@
 ﻿@page
 @model IndexModel
 @{
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
 }
 <h1>Companies</h1>
 <a class="btn btn-success" asp-page="/Companies/Add">Add New Company</a>
+<input type="hidden" value="@userId" id="userId" />
 <div id="product-main">
-    <table class="table">
-        <tr>
-            <th>Id</th>
-            <th>Companies</th>
-            <th></th>
-        </tr>
-        <tbody>
-            @if (Model.Companies != null)
-            {
-                foreach (var company in Model.Companies.OrderBy(x => x.Name))
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => company.Id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => company.Name)
-                        </td>
-
-                        <td>
-                            <a asp-route-id="@company.Id" asp-page="/Companies/Edit" class="fa fa-edit">Edit</a> |
-                            <a asp-page="/MyBooks/Dashboard" asp-route-companyId="@company.Id">My Books</a> |
-                            <button onclick="confirmAction(event)" data-product-id="@company.Id" type="button" class="btn-danger small">Delete</button>
-                        </td>
-                    </tr>
-                }
-            }
-
-
-
-        </tbody>
-    </table>
+    @if (Model.Companies != null)
+    {
+        <partial name="_CompanyListPartial" model="@Model.Companies.OrderBy(x=>x.Name)" />
+    }
 </div>
 
 <style>
@@ -64,38 +38,20 @@
         font-size: 1.5rem;
     }
 </style>
-<script>
+
+@section scripts{
+
+    <script>
      var apiUrl = '@Model.ApiUrl';
-        axios.interceptors.request.use(function (config) {
 
-            // spinning start to show
-            // UPDATE: Add this code to show global loading indicator
-            document.body.classList.add('loading-indicator');
-
-
-            return config
-        }, function (error) {
-            return Promise.reject(error);
-        });
-
-        axios.interceptors.response.use(function (response) {
-
-            // spinning hide
-            // UPDATE: Add this code to hide global loading indicator
-            document.body.classList.remove('loading-indicator');
-
-            return response;
-        }, function (error) {
-            return Promise.reject(error);
-        });
 
     function confirmAction(e) {
-        let confirmAction = confirm("Are you sure to delete this product?");
+        let confirmAction = confirm("Are you sure to delete this company?");
         if (confirmAction) {
             //  alert("Action successfully executed");
-            removeProduct(e);
+            removeCompany(e);
         } else {
-            alert("Action canceled");
+            //alert("Action canceled");
         }
     }
 
@@ -109,14 +65,14 @@
             })
     }
 
-    var removeProduct = function (e) {
+        var removeCompany = function (e) {
         let productId = e.target.dataset.productId;
         let el = document.getElementById('userId');
         let userAccessToken = el.value;
         console.log(userAccessToken);
 
 
-        axios.delete(apiUrl + "/api/Company/DeleteCompany?id=" + productId, {
+            axios.delete(apiUrl + "/api/Company/DeleteCompany?id=" + productId, {
             headers: {
                 Authorization: "Bearer " + userAccessToken
             }
@@ -133,4 +89,5 @@
             })
 
     }
-</script>
+    </script>
+}

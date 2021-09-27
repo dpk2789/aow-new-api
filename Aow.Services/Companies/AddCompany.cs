@@ -81,7 +81,7 @@ namespace Aow.Services.Companies
 
 
                         new Aow.Infrastructure.Domain.LedgerCategory { Id = Guid.NewGuid(), Name = "Revenue",ParentCategoryId= incomeId,CompanyId=companyId,Type="Master"},
-                        new Aow.Infrastructure.Domain.LedgerCategory {Id=Guid.NewGuid(),   Name = "Sales Account",ParentCategoryId=incomeId,CompanyId=companyId,Type="Master"} ,
+                       // new Aow.Infrastructure.Domain.LedgerCategory {Id=Guid.NewGuid(),   Name = "Sales Account",ParentCategoryId=incomeId,CompanyId=companyId,Type="Master"} ,
                         new Aow.Infrastructure.Domain.LedgerCategory {Id=Guid.NewGuid(),   Name = "Debitors",ParentCategoryId=incomeId,CompanyId=companyId,Type="Master"} ,
                         new Aow.Infrastructure.Domain.LedgerCategory { Id = Guid.NewGuid(), Name = "Other Income",ParentCategoryId= incomeId,CompanyId=companyId,Type="Master"},
                         new Aow.Infrastructure.Domain.LedgerCategory {Id=Guid.NewGuid(),   Name = "Account Recievable",ParentCategoryId=incomeId,CompanyId=companyId,Type="Master"} ,
@@ -119,6 +119,7 @@ namespace Aow.Services.Companies
 
             var ledgers = new List<Aow.Infrastructure.Domain.Ledger>
                 {
+                  new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Sales Account",LedgerCategoryId=currentAssetId,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
                           new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Purchase Account",LedgerCategoryId=currentAssetId,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
                            new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Freight & Dilevery",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
                             new Aow.Infrastructure.Domain.Ledger {Id=Guid.NewGuid(),   Name = "Job Work",LedgerCategoryId=inDirectExpense,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
