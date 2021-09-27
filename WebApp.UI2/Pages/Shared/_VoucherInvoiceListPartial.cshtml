@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApp.UI2.Pages.MyBooks.JournalEntries.IndexModel.VoucherViewModel>
+﻿@model IEnumerable<WebApp.UI2.Pages.MyBooks.VoucherWithItems.IndexModel.VoucherWithItemsViewModel>
 
 <table id="journalEntriesList" class="table table-bordered table-striped">
     <thead>
@@ -25,7 +25,7 @@
         @{
             foreach (var voucher in Model)
             {
-                foreach (var item in voucher.JournalEntries.OrderBy(x=>x.SrNo))
+                foreach (var item in voucher.JournalEntries.OrderBy(x => x.SrNo))
                 {
                     if (item.SrNo == 1)
                     {

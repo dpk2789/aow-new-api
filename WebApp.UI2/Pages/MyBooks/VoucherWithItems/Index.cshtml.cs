@@ -24,7 +24,7 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
             _httpContextAccessor = httpContextAccessor;
         }
         [BindProperty]
-        public IEnumerable<ItemsViewModel> VoucherViewModelList { get; set; }
+        public IEnumerable<VoucherWithItemsViewModel> VoucherViewModelList { get; set; }
         public class VoucherWithItemsViewModel
         {
             public Guid Id { get; set; }
@@ -74,7 +74,7 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
 
             if (!string.IsNullOrEmpty(resultuerinfo) && resultuerinfo != "[]")
             {
-                var data = JsonConvert.DeserializeObject<IEnumerable<ItemsViewModel>>(resultuerinfo);
+                var data = JsonConvert.DeserializeObject<IEnumerable<VoucherWithItemsViewModel>>(resultuerinfo);
                 VoucherViewModelList = data;
             }
             ViewData["VoucherName"] = voucherName;

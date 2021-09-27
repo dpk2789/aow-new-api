@@ -23,7 +23,7 @@ namespace Aow.Infrastructure.Repositories
         public Task<PagedList<Voucher>> GetVouchers(PagingParameters ownerParameters, string voucherName, Guid FinancialYearId)
         {
             return Task.FromResult(PagedList<Voucher>.ToPagedList(FindAll().Where(x => x.FinancialYearId == FinancialYearId && x.VoucherName == voucherName).                
-                Include(x => x.JournalEntries).OrderBy(on => on.VoucherName),
+                Include(x => x.JournalEntries).Include(x=>x.VoucherItems).OrderBy(on => on.VoucherName),
                                     ownerParameters.PageNumber, ownerParameters.PageSize));
         }
     }
