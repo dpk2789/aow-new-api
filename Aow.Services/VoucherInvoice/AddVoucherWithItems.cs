@@ -1,4 +1,5 @@
 ﻿using Aow.Infrastructure.IRepositories;
+using Aow.Infrastructure.Repositories;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -71,11 +72,26 @@ namespace Aow.Services.VoucherWithItems
                 var voucher = new Aow.Infrastructure.Domain.Voucher
                 {
                     Id = voucherId,
-                    VoucherName = request.voucherName
+                    VoucherName = request.voucherName,
+                    Date = date,
+                    VoucherNumber = request.Invoice,
+                    FinancialYearId = fyrId
                 };
-                voucher.Date = Convert.ToDateTime(request.Date);
-                voucher.VoucherNumber = request.Invoice;
-                voucher.FinancialYearId = fyrId;
+
+                Aow.Infrastructure.Domain.JournalEntry jEntryDebit = new Aow.Infrastructure.Domain.JournalEntry
+                {
+                    Id = Guid.NewGuid(),
+                    VoucherId = voucherId,
+                    VoucherName = request.voucherName,
+                    VoucherNumber = request.Invoice,
+                    Date = date,
+                    SrNo = srno,
+                    LedgerId = Guid.Parse(request.AccountId),
+                    CrDrType = "Dr",
+                    DebitAmount = Convert.ToDecimal(request.Total)
+                };
+                _repoWrapper.JournalEntryRepo.Create(jEntryDebit);
+
                 var deserialiseList = JsonConvert.DeserializeObject<List<AddVoucherInvoiceItemsRequest>>(request.data);
                 _repoWrapper.VoucherRepo.Create(voucher);
                 foreach (var item in deserialiseList)

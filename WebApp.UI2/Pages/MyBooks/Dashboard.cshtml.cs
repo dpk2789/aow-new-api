@@ -14,6 +14,11 @@ namespace WebApp.UI2.Pages.MyBooks
         public void OnGet(Guid companyId)
         {
             _cookieHelper.Set("cmpCookee", companyId.ToString(), 60);
+            var fyrId = _cookieHelper.Get("fYrCookee");
+            if (!string.IsNullOrEmpty(fyrId))
+            {
+                _cookieHelper.Remove("fYrCookee");
+            }
         }
     }
 }
