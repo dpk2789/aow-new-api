@@ -31,7 +31,7 @@ namespace Aow.Services.ProductCategory
                 return null;
             };
             var list = _repoWrapper.ProductCategoryRepo.GetProductCategories(pagingParameters, companyId).GetAwaiter().GetResult();
-            var newList = list.Select(x => new GetProductCategoriesResponse
+            var newList = list.Where(x => x.Type != "Sundry Item").Select(x => new GetProductCategoriesResponse
             {
                 Id = x.Id,
                 Name = x.Name,                

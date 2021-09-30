@@ -18,6 +18,7 @@ namespace Aow.Services.Companies
         public class CreateRequest
         {
             public string UserName { get; set; }
+            public string TaxType { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
             public decimal Value { get; set; }
@@ -41,6 +42,7 @@ namespace Aow.Services.Companies
             {
                 Id = companyId,
                 Name = request.Name,
+                TaxType= request.TaxType
             };
             _repoWrapper.CompanyRepo.Create(company);
             var appUserCompany = new AppUserCompany
@@ -139,7 +141,52 @@ namespace Aow.Services.Companies
 
                 };
 
-            ledgers.ForEach(l => _repoWrapper.LedgerRepositoryRepo.Create(l));           
+            ledgers.ForEach(l => _repoWrapper.LedgerRepositoryRepo.Create(l));
+
+
+            Guid productTaxCategory = Guid.NewGuid();
+            var sundryItemsCategory = new List<Aow.Infrastructure.Domain.ProductCategory>
+                {
+                          new Aow.Infrastructure.Domain.ProductCategory {Id=Guid.NewGuid(),   Name = "Discount",CompanyId=companyId,Type="Sundry Item"} ,
+                          new Aow.Infrastructure.Domain.ProductCategory {Id=Guid.NewGuid(),   Name = "Round Off",CompanyId=companyId,Type="Sundry Item"},
+                          new Aow.Infrastructure.Domain.ProductCategory {Id=productTaxCategory,   Name = "Taxation",CompanyId=companyId,Type="Sundry Item"},
+                          new Aow.Infrastructure.Domain.ProductCategory {Id=Guid.NewGuid(),   Name = "Finished Goods",CompanyId=companyId,Type="Voucher Item"},
+                           new Aow.Infrastructure.Domain.ProductCategory {Id=Guid.NewGuid(),   Name = "Raw Materials",CompanyId=companyId,Type="Voucher Item"}
+                };
+            sundryItemsCategory.ForEach(l => _repoWrapper.ProductCategoryRepo.Create(l));
+
+            Guid iGst = Guid.NewGuid();
+            Guid sGst = Guid.NewGuid();
+            Guid cGst = Guid.NewGuid();
+            Guid uGst = Guid.NewGuid();
+
+            if (company.TaxType == "GST")
+            {
+                var gstledgers = new List<Aow.Infrastructure.Domain.Ledger>
+                {
+                          new Aow.Infrastructure.Domain.Ledger {Id=iGst,   Name = "IGST",LedgerCategoryId=dutiesNTaxies,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email },
+                           new Aow.Infrastructure.Domain.Ledger {Id=sGst,   Name = "SGST",LedgerCategoryId=dutiesNTaxies,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                            new Aow.Infrastructure.Domain.Ledger {Id=cGst,   Name = "CGST",LedgerCategoryId=dutiesNTaxies,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                            new Aow.Infrastructure.Domain.Ledger {Id=uGst,   Name = "UGST",LedgerCategoryId=dutiesNTaxies,CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                };
+                gstledgers.ForEach(l => _repoWrapper.LedgerRepositoryRepo.Create(l));
+                var sundryItems = new List<Product>
+                {
+                    new Product {Id=Guid.NewGuid(),   Name = "IGST 5 %",LedgerId=iGst,Percent="5",ProductCategoryId=productTaxCategory,ItemType="Sundry Item", CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email },
+                          new Product {Id=Guid.NewGuid(),   Name = "IGST 12 %",Percent="12",LedgerId=iGst,ProductCategoryId=productTaxCategory,ItemType="Sundry Item",CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email },
+                          new Product {Id=Guid.NewGuid(),   Name = "IGST 18 %",Percent="18",LedgerId=iGst,ProductCategoryId=productTaxCategory,ItemType="Sundry Item",CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email },
+                          new Product {Id=Guid.NewGuid(),   Name = "IGST 28 %",Percent="28",LedgerId=iGst,ProductCategoryId=productTaxCategory,ItemType="Sundry Item",CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email },
+                           new Product {Id=Guid.NewGuid(),   Name = "SGST 2.5 %",Percent="2.5",LedgerId=sGst,ProductCategoryId=productTaxCategory,ItemType="Sundry Item",CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                           new Product {Id=Guid.NewGuid(),   Name = "SGST 6 %",Percent="6",LedgerId=sGst,ProductCategoryId=productTaxCategory,ItemType="Sundry Item",CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                            new Product {Id=Guid.NewGuid(),   Name = "SGST 9 %",Percent="9",LedgerId=sGst,ProductCategoryId=productTaxCategory,ItemType="Sundry Item",CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                              new Product {Id=Guid.NewGuid(),   Name = "SGST 14 %",Percent="14",LedgerId=sGst,ProductCategoryId=productTaxCategory,ItemType="Sundry Item",CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                            new Product {Id=Guid.NewGuid(),   Name = "CGST 2.5 %",Percent="2.5",LedgerId=cGst,ProductCategoryId=productTaxCategory,ItemType="Sundry Item",CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                            new Product {Id=Guid.NewGuid(),   Name = "CGST 6 %",Percent="6",LedgerId=cGst,ProductCategoryId=productTaxCategory,ItemType="Sundry Item",CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                            new Product {Id=Guid.NewGuid(),   Name = "CGST 9 %",Percent="9",LedgerId=cGst,ProductCategoryId=productTaxCategory,ItemType="Sundry Item",CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                             new Product {Id=Guid.NewGuid(),   Name = "CGST 14 %",Percent="14",LedgerId=cGst,ProductCategoryId=productTaxCategory,ItemType="Sundry Item",CreatedDate=DateTime.Now,UpdatedDate=DateTime.Now,CreatedBy=user.Email} ,
+                };
+                sundryItems.ForEach(l => _repoWrapper.ProductRepo.Create(l));
+            }
 
             int i = await _repoWrapper.SaveNew();
 

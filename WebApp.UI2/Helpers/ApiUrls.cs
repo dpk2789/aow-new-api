@@ -47,6 +47,11 @@
             public const string Delete = Rootlocal + "/Products/{postId}";
         }
 
+        public static class SundryItem
+        {
+            public const string GetSundryItems = Rootlocal + "/api/SundryItem/GetSundryItems";           
+        }
+
         public static class LedgerCategories
         {
             public const string GetLedgerCategories = Rootlocal + "/api/LedgerCategory/GetLedgerCategories";

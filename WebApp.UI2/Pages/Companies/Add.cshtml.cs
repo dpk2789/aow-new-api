@@ -20,6 +20,7 @@ namespace WebApp.UI2.Pages.Companies
         {
             public string Name { get; set; }
             public string UserName { get; set; }
+            public string TaxType { get; set; }
         }
         public void OnGet()
         {
@@ -31,7 +32,7 @@ namespace WebApp.UI2.Pages.Companies
             var addProductsUri = new Uri(ApiUrls.Company.Create);
 
             Input.UserName = User.Identity.Name;
-            var json = JsonConvert.SerializeObject(new { Input.Name, Input.UserName });
+            var json = JsonConvert.SerializeObject(new { Input.Name, Input.UserName, Input.TaxType });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var userAccessToken = User.Claims.FirstOrDefault(x => x.Type == "AcessToken")?.Value;
