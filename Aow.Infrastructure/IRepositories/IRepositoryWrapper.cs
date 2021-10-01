@@ -18,7 +18,7 @@ namespace Aow.Infrastructure.IRepositories
         IVoucherRepository VoucherRepo { get; }
         IVoucherItemRepository VoucherItemRepo { get; }
         IJournalEntryRepository JournalEntryRepo { get; }
-
+        IVoucherSundryItemRepository VoucherSundryItemRepo { get; }
         Task<int> SaveNew();
         int Save();
     }

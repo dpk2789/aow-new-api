@@ -17,7 +17,7 @@ namespace WebApp.API.Controllers
 
                 if (!response.Success)
                 {
-                    return BadRequest("Failed to add to cart");
+                    return BadRequest(response);
                 }
                 return Ok(response);
             }

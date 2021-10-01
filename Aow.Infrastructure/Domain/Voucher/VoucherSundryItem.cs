@@ -14,7 +14,7 @@ namespace Aow.Infrastructure.Domain
         public Guid ProductId { get; set; }
         public virtual Product Product { get; set; }
         public Guid VoucherId { get; set; }
-        public virtual Voucher Vouchers { get; set; }
+        public virtual Voucher Voucher { get; set; }
 
     }
 }

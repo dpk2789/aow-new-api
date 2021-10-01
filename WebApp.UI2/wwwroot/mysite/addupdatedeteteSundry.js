@@ -12,7 +12,7 @@ $("#txtSundryItem").autocomplete({
     appendTo: $(".modal-body ui-autocomplete-input"),
     select: function (event, ui) {
         $("#txtSundryItem").val(ui.item.name);
-        $("#hdnSundryProductId").val(ui.item.productId);
+        $("#hdnSundryProductId").val(ui.item.id);
         let itemtotal = $("#hdnItemTotal").val();
         if (ui.item.itemtype === "sundryitem" || ui.item.itemtype === "SundryItem") {
             $("#txtPercent").val(ui.item.percent);
@@ -121,10 +121,10 @@ $('.btnaccountadd').on("click", function (e) {
     newcontent += "</tr >";
     $('#tbodysundryitems').empty().append(newcontent);
     document.getElementById("hdnSundryTotal").value = parseFloat(itemstotal).toFixed(2);
-    document.getElementById("Total").value = parseFloat(itemstotal) + parseFloat(hdnTotal);
+    document.getElementById("Input_Total").value = parseFloat(itemstotal) + parseFloat(hdnTotal);
     if (hdnSundryAccountCategoryName.replace(/\s/g, '') === "Discount") {
         hdnTotal = parseFloat(hdnTotal) - parseFloat(txtDebit);
-        document.getElementById("Total").value = hdnTotal;
+        document.getElementById("Input_Total").value = hdnTotal;
     }
 
     $(".showimg").hide();
@@ -278,6 +278,6 @@ function yoCalculateSundryTotal() {
     //document.getElementById("ProductsTotal").value = numberWithCommas(parseFloat(itemstotal).toFixed(2));
     document.getElementById("hdnSundryTotal").value = parseFloat(itemstotal).toFixed(2);
 
-    document.getElementById("Total").value = numberWithCommas(parseFloat(hdnProductsTotal) + parseFloat(itemstotal));
+    document.getElementById("Input_Total").value = numberWithCommas(parseFloat(hdnProductsTotal) + parseFloat(itemstotal));
     document.getElementById("hdnProductsTotal").value = parseFloat(hdnProductsTotal) + parseFloat(itemstotal);
 };

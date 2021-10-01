@@ -87,7 +87,7 @@ namespace WebApp.UI2.Controllers
             }));
         }
 
-        public async Task<JsonResult> GetSundryItemsForInvoice(string term, string HeadName, string crdr)
+        public async Task<JsonResult> GetProductsForSundryItems(string term, string HeadName, string crdr)
         {
             var cmpid = _cookieHelper.Get("cmpCookee");
             List<ProductViewModel> ProductViewModelList = null;
@@ -115,10 +115,9 @@ namespace WebApp.UI2.Controllers
                 id = m.Id,
                 value = m.Name,
                 label = String.Format("{0}/{1}/{2}", m.Code, m.Name, m.SalePrice),
-                mRPPerUnit = m.SalePrice,
+                percent = m.Percent,
                 name = m.Name,
-                productCategoryId = m.ProductCategoryId,
-                productId = m.ProductId,
+                productCategoryId = m.ProductCategoryId,               
                 itemtype = m.ItemType != null ? m.ItemType.Replace(" ", string.Empty) : null,
             }));
         }

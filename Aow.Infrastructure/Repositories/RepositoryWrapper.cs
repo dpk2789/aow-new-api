@@ -28,6 +28,7 @@ namespace Aow.Infrastructure.Repositories
         private IJournalEntryRepository journalEntryRepository;
         private IVoucherRepository voucherRepository;
         private IVoucherItemRepository voucherItemRepository;
+        private IVoucherSundryItemRepository _voucherSundryItemRepository;
         public IUserRepository UserRepo
         {
             get
@@ -48,6 +49,17 @@ namespace Aow.Infrastructure.Repositories
                     voucherRepository = new VoucherRepository(_repoContext);
                 }
                 return voucherRepository;
+            }
+        }
+        public IVoucherSundryItemRepository VoucherSundryItemRepo
+        {
+            get
+            {
+                if (_voucherSundryItemRepository == null)
+                {
+                    _voucherSundryItemRepository = new VoucherSundryItemRepository(_repoContext);
+                }
+                return _voucherSundryItemRepository;
             }
         }
         public IVoucherItemRepository VoucherItemRepo
