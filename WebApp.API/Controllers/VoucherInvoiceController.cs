@@ -1,5 +1,6 @@
-﻿using Aow.Services.VoucherWithItems;
+﻿using Aow.Services.VoucherInvoice;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace WebApp.API.Controllers
@@ -8,6 +9,13 @@ namespace WebApp.API.Controllers
     [ApiController]
     public class VoucherInvoiceController : ControllerBase
     {
+        [HttpGet("api/VoucherInvoice/GetVoucherInvoice")]
+        public IActionResult GetVoucherInvoice([FromQuery] Guid id, [FromServices] GetVoucherInvoice getVoucher)
+        {
+            var result = getVoucher.Do(id);
+            return Ok(result);
+        }
+
         [HttpPost("api/VoucherInvoice/AddVoucherInvoice")]
         public async Task<ActionResult> Add([FromBody] AddVoucherWithItems.AddVoucherInvoiceRequest request, [FromServices] AddVoucherWithItems addFinancialYear)
         {
@@ -23,5 +31,7 @@ namespace WebApp.API.Controllers
             }
             return BadRequest();
         }
+
+       
     }
 }

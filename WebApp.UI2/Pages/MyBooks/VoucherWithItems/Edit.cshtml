@@ -1,0 +1,219 @@
+﻿@page
+@model WebApp.UI2.Pages.MyBooks.VoucherWithItems.EditModel
+@{
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
+}
+
+<style>
+    .ui-autocomplete {
+        position: absolute;
+        cursor: default;
+        z-index: 4000 !important
+    }
+</style>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Journal Entries Edit Form</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/MyBooks/JournalEntries/index">Journal Entries</a></li>
+                        <li class="breadcrumb-item active">Edit Journal Entry</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content-header -->
+
+    <section class="content">
+        <div class="container-fluid">
+            <!-- SELECT2 EXAMPLE -->
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title">Edit Journal Entry</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <form method="post" enctype="multipart/form-data" id="questionForm">
+                                <input type="hidden" value="@Model.Input.FinancialYearId" id="financialYearId" />
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <input type="hidden" value="@userId" id="userId" />
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-horizontal">
+
+                                    <div class="form-row">
+                                        @*<div class="form-group col-md-6">
+                                            <label for="inputEmail4">Name</label>
+                                            @Html.EditorFor(model => model.VoucherName, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.VoucherName, "", new { @class = "text-danger" })
+                                            </div>*@
+                                        <div class="form-group col-md-6">
+                                            <label for="inputPassword4">Date </label>
+                                            <input type="text" class="form-control" name="Date" id="Date" asp-for="Input.Date"
+                                                   data-toggle="datetimepicker" data-target="#Date" autocomplete="off">
+                                            <span asp-validation-for="Input.Date" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label asp-for="Input.VoucherNumber" class="control-label"></label>
+                                            <input asp-for="Input.VoucherNumber" class="form-control" />
+                                            <span asp-validation-for="Input.VoucherNumber" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                    <table class="table table-hover table-bordered table-sm table-responsive table-striped w-auto" style="height:350px">
+
+                                        <tr>
+                                            <td>S.No</td>
+                                            <td>Item Name</td>
+                                            <td>Description</td>
+                                            <td>Amount</td>
+                                            <td style="width:60px">Quantity</td>
+                                            <td style="width:60px">Total</td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                            </td>
+                                            <td>
+                                                <input type="text" id="txtStoreItem" class="ui-autocomplete-input form-control" data-url="@Url.Action("GetProductsForAutocomplete", "Products")" placeholder="Enter Product" />
+                                                <input type="hidden" id="hdnStoreItemId" class="form-control" />
+                                                <input type="hidden" id="hdnProductId" class="form-control" />
+                                                <input type="hidden" id="hdnProductAccountId" class="form-control" />
+                                                <input type="hidden" id="hdnAccountCategoryName" class="form-control  hdnAccountCategoryName" />
+                                                <input type="hidden" id="hdnItemType" class="form-control  hdnItemType" />
+                                            </td>
+                                            <td>
+                                                <input type="text" id="txtDescription" class="form-control" placeholder="Description" />
+
+                                            </td>
+                                            <td>
+                                                <input type="text" id="txtMRP" class="form-control" maxlength="7" placeholder="MRP" />
+                                            </td>
+                                            <td>
+                                                <input type="text" id="txtQuantity" class="form-control" onchange="recalculateExtendedPrice()" placeholder="Quantity" />
+                                            </td>
+                                            <td>
+                                                <input type="text" id="txtAmount" class="form-control  txtAmount" placeholder="Amount" value="0" />
+                                                <input type="hidden" id="hdnAmount" class="form-control  hdnAmount" />
+                                            </td>
+                                            <td>
+                                                <input id="btnAdd" type="button" value="Add" class="btn btn-primary btn-sm btnadd" />
+                                                @*<a href="#" class="glyphicon glyphicon-pencil btnadd" id="btnadd" title="Add"></a>*@
+                                                <a href="#" class="fa fa-edit btnupdate" id="btnupdate" title="Edit" style="display:none;"></a>
+                                                <a href="#" class="fa fa-erase btnnew" id="btnnew" title="New" style="display:none;"></a>
+                                            </td>
+                                        </tr>
+                                        <tbody id="tbodyitems" class="tbodyitems bordered">
+                                            @{
+                                                if (Model.Input.VoucherItems != null)
+                                                {
+                                                    @foreach (var item in Model.Input.VoucherItems.OrderBy(x => x.SrNo))
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <p class='sNo'>@item.SrNo</p>
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Name)
+                                                            </td>
+                                                            <td>
+                                                                <p class='batchName'>@item.Description</p>
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.MRPPerUnit)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Quantity)
+                                                            </td>
+                                                            <td>
+                                                                <p class="extendedPrice">@item.ItemAmount</p>
+                                                            </td>
+                                                            <td>
+                                                                <input type='hidden' class='hdnappendProductId' value=@item.ProductId />
+                                                                <input type='hidden' class='hdnappendProductAccountId' value=@item.Id />
+                                                                <input type='hidden' class='hdnappendhdnItemType' value=@item.ItemType />
+                                                                <input type="hidden" id="hdnappendAmount" class="hdnappendAmount" value="@item.ItemAmount" />
+                                                                <input type='hidden' class='hdnappendMRP' value=@item.MRPPerUnit />
+                                                                <input type="hidden" id="hdnappendItemName" class="hdnappendProductName" value="@item.Name" />
+                                                                <input type="hidden" id="hdnappendQuantity" class="hdnappendQuantity" value="@item.Quantity" />
+                                                                <input type="hidden" id="hdnappendMRPPerUnit" class="hdnappendMRPPerUnit" value="@item.MRPPerUnit" />
+                                                                <button class="btn btn-sm btn-outline-warning fas fa-edit addVoucherVariant" value="@item.Id" style='cursor:pointer;'></button>
+                                                                @*<button class="btn btn-sm btn-outline-light fa fa-edit edit" value="@item.Id" style='cursor:pointer;'></button>*@
+                                                                <button class="btn btn-sm btn-outline-danger fas fa-trash-alt delete" value="@item.Id" style='cursor:pointer;'></button>
+                                                                @*<a class='fa fa-edit edit' style='cursor:pointer;' />
+                                                                    <a class='fa fa-trash delete' style='cursor:pointer; color:red' />*@
+                                                            </td>
+                                                        </tr>
+
+                                                    }
+                                                }
+                                            }
+
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><input type='hidden' id="hdnItemTotal" class='hdnItemTotal' value="@Model.Input.ItemsTotal" /></td>
+                                                <td>Total</td>
+                                                <td class='itemstotalclass'>@Model.Input.ItemsTotal </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <input type="hidden" class="hdnProductsTotal" id="hdnProductsTotal" value="@Model.Input.Total" />
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            @Html.TextAreaFor(model => model.Input.Note, new { id = "editor1", @class = "form-control", @placeholder = "Enter Note", style = "padding-left: 0px;" })
+                                            @*@Html.TextAreaFor(model => model.Note, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter Note" } })*@
+                                            @Html.ValidationMessageFor(model => model.Input.Note, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                    <!-- /.row -->
+
+
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <span>
+                        <img id="loading" style="display: none;" src="~/gif/ajax-loader.gif" />
+                    </span>
+                    <button onclick="AddJournalEntries(event)" id="SaveClose" class="btn btn-info float-right" style="margin-left:20px">Save</button>
+                    <button id="SaveNext" class="btn btn-default float-right">Cancel</button>
+                </div>
+            </div>
+            <!-- /.card -->
+
+        </div>
+        <!-- /.container-fluid -->
+
+
+    </section>
+
+</div>

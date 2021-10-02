@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Aow.Services.VoucherWithItems
+namespace Aow.Services.VoucherInvoice
 {
     [Service]
     public class AddVoucherWithItems

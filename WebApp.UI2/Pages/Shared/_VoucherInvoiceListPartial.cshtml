@@ -46,7 +46,7 @@
                                 @Html.DisplayFor(modelItem => item.DebitAmount)
                             </td>
                             <td>
-                                <a asp-route-id="@voucher.Id" asp-page="/MyBooks/JournalEntries/Update" class="fa fa-edit">Edit</a> |
+                                <a asp-route-id="@voucher.Id" asp-page="/MyBooks/VoucherWithItems/Edit" class="fa fa-edit">Edit</a> |
                                 <button onclick="confirmAction(event)" data-category-id="@voucher.Id" type="button" class="btn-danger small">Delete</button>
                             </td>
                         </tr>

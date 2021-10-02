@@ -87,6 +87,14 @@
             public const string Update = Rootlocal + "/api/Ledger/UpdateLedger";
             public const string Delete = Rootlocal + "/Ledger/{postId}";
         }
+        public static class VouchersInvoice
+        {
+            public const string GetVoucherInvoices = Rootlocal + "/api/VoucherInvoice/GetVoucherInvoice";
+            public const string GetVoucherInvoice = Rootlocal + "/api/VoucherInvoice/GetVoucherInvoice";          
+            public const string Create = Rootlocal + "/api/VoucherInvoice/AddVoucherInvoice";
+            public const string Update = Rootlocal + "/api/VoucherInvoice/UpdateLedger";
+            public const string Delete = Rootlocal + "/VoucherInvoice/{postId}";
+        }
         public static class Cart
         {
             public const string GetCartItems = Rootlocal + "/api/Cart/GetCartItems";
