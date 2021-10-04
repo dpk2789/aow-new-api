@@ -94,8 +94,13 @@ namespace WebApp.RazorPages.Areas.Identity.Pages.Account
                 string result = postTask.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var securitytoken = JsonConvert.DeserializeObject<Token>(result);
 
-
+                if (securitytoken.token == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Username or Password incorrect");
+                    return Page();
+                }
                 var jwtToken = new JwtSecurityToken(securitytoken.token);
+                
                 var role = jwtToken.Claims.FirstOrDefault(x => x.Type == "role");
 
                 //var test = ValidateToken(securitytoken.token);

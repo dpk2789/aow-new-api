@@ -23,18 +23,20 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
         [BindProperty] public InputModel Input { get; set; }
         public class InputModel
         {
-            public Guid Id { get; set; }
+            public Guid? Id { get; set; }
             public string FinancialYearId { get; set; }
             public string VoucherName { get; set; }
             public string VoucherNumber { get; set; }
-            public int VoucherTypeId { get; set; }        
+            public int? VoucherTypeId { get; set; }
+            public Guid? LedgerId { get; set; }
+            public string LedgerName { get; set; }
 
             //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd-MM-yyyy")]
             public DateTime? Date { get; set; }
             public string RefId { get; set; }
             public string Note { get; set; }
-            public decimal ItemsTotal { get; set; }
-            public decimal SundryTotal { get; set; }
+            public decimal? ItemsTotal { get; set; }
+            public decimal? SundryTotal { get; set; }
             public decimal? Total { get; set; }
             public bool? Type { get; set; }
             public virtual List<VoucherItemsViewModel> VoucherItems { get; set; }
@@ -43,13 +45,13 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
         {
             public Guid Id { get; set; }
             public int? SrNo { get; set; }
-            public string Name { get; set; }
+            public string ItemName { get; set; }
+            public string Description { get; set; }
             public string ItemType { get; set; }
             public decimal? DiscountRatePerUnit { get; set; }
             public decimal? MRPPerUnit { get; set; }
             public decimal? Quantity { get; set; }
-            public decimal? ItemAmount { get; set; }
-            public string Description { get; set; }
+            public decimal? ItemAmount { get; set; }         
             public decimal Price { get; set; }
             public Guid ProductId { get; set; }
         }

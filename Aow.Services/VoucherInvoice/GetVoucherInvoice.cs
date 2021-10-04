@@ -35,9 +35,10 @@ namespace Aow.Services.VoucherInvoice
             public decimal? MRPPerUnit { get; set; }
             public decimal? Quantity { get; set; }
             public decimal? ItemAmount { get; set; }
+            public string ItemName { get; set; }
             public string Description { get; set; }
             public decimal Price { get; set; }
-            public Guid ProductId { get; set; }           
+            public Guid ProductId { get; set; }
         }
 
         public GetVoucherInvoiceResponse Do(Guid id)
@@ -53,20 +54,23 @@ namespace Aow.Services.VoucherInvoice
                 VoucherName = voucher.VoucherName
             };
             var items = new List<GetVoucherInvoiceItemsResponse>();
-            foreach (var jentry in voucher.VoucherItems)
-            {              
-                var viewModel = new GetVoucherInvoiceItemsResponse();
-                viewModel.Id = jentry.Id;               
-                viewModel.SrNo = jentry.SrNo;
-                viewModel.Quantity = jentry.Quantity;
-                viewModel.ItemAmount = jentry.ItemAmount;
-                viewModel.SrNo = jentry.SrNo;
-                viewModel.ProductId = jentry.ProductId;
-                //   viewModel.RootCategory = ledger.Parent.Name;
-                items.Add(viewModel);
+            if (voucher.VoucherItems != null)
+            {
+                foreach (var jentry in voucher.VoucherItems)
+                {
+                    var viewModel = new GetVoucherInvoiceItemsResponse();
+                    viewModel.Id = jentry.Id;
+                    viewModel.SrNo = jentry.SrNo;
+                    viewModel.ItemName = jentry.Product.Name;
+                    viewModel.Quantity = jentry.Quantity;
+                    viewModel.ItemAmount = jentry.ItemAmount;
+                    viewModel.SrNo = jentry.SrNo;
+                    viewModel.ProductId = jentry.ProductId;
+                    //   viewModel.RootCategory = ledger.Parent.Name;
+                    items.Add(viewModel);
+                }
+                voucherViewModel.VoucherItems = items;
             }
-            voucherViewModel.VoucherItems = items;
-
             return voucherViewModel;
         }
 

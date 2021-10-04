@@ -17,13 +17,13 @@ namespace Aow.Infrastructure.Repositories
 
         public Voucher GetVoucher(Guid Id)
         {
-            return FindByCondition(x => x.Id == Id).Include(x => x.JournalEntries).FirstOrDefault();
+            return FindByCondition(x => x.Id == Id).Include(x => x.JournalEntries).Include(x => x.VoucherItems).ThenInclude(x => x.Product).FirstOrDefault();
         }
 
         public Task<PagedList<Voucher>> GetVouchers(PagingParameters ownerParameters, string voucherName, Guid FinancialYearId)
         {
-            return Task.FromResult(PagedList<Voucher>.ToPagedList(FindAll().Where(x => x.FinancialYearId == FinancialYearId && x.VoucherName == voucherName).                
-                Include(x => x.JournalEntries).Include(x=>x.VoucherItems).OrderBy(on => on.VoucherName),
+            return Task.FromResult(PagedList<Voucher>.ToPagedList(FindAll().Where(x => x.FinancialYearId == FinancialYearId && x.VoucherName == voucherName).
+                Include(x => x.JournalEntries).Include(x => x.VoucherItems).OrderBy(on => on.VoucherName),
                                     ownerParameters.PageNumber, ownerParameters.PageSize));
         }
     }
