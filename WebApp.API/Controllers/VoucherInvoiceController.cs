@@ -10,9 +10,9 @@ namespace WebApp.API.Controllers
     public class VoucherInvoiceController : ControllerBase
     {
         [HttpGet("api/VoucherInvoice/GetVoucherInvoice")]
-        public IActionResult GetVoucherInvoice([FromQuery] Guid id, [FromServices] GetVoucherInvoice getVoucher)
+        public async Task<IActionResult> GetVoucherInvoice([FromQuery] Guid id, [FromServices] GetVoucherInvoice getVoucher)
         {
-            var result = getVoucher.Do(id);
+            var result = await getVoucher.Do(id);
             return Ok(result);
         }
 
@@ -32,6 +32,6 @@ namespace WebApp.API.Controllers
             return BadRequest();
         }
 
-       
+
     }
 }

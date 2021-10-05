@@ -1,6 +1,7 @@
 ﻿using Aow.Infrastructure.IRepositories;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Aow.Services.Voucher
 {
@@ -43,15 +44,15 @@ namespace Aow.Services.Voucher
             public string RootCategory { get; set; }
             public decimal? CreditAmount { get; set; }
             public decimal? DebitAmount { get; set; }
-            public string RefId { get; set; }       
+            public string RefId { get; set; }
             public decimal? Quantity { get; set; }
-            public decimal? ItemAmount { get; set; }          
+            public decimal? ItemAmount { get; set; }
         }
 
-        public GetVoucherResponse Do(Guid id)
+        public async Task<GetVoucherResponse> Do(Guid id)
         {
-            var voucher = _repoWrapper.VoucherRepo.GetVoucher(id);
-       
+            var voucher = await _repoWrapper.VoucherRepo.GetVoucher(id);
+
             var voucherViewModel = new GetVoucherResponse
             {
                 Id = voucher.Id,
@@ -63,7 +64,7 @@ namespace Aow.Services.Voucher
             var items = new List<GetVoucherJournalEntriesResponse>();
             foreach (var jentry in voucher.JournalEntries)
             {
-                var ledger = _repoWrapper.LedgerRepositoryRepo.GetLedger(jentry.LedgerId);              
+                var ledger = _repoWrapper.LedgerRepositoryRepo.GetLedger(jentry.LedgerId);
                 var viewModel = new GetVoucherJournalEntriesResponse();
                 viewModel.Id = jentry.Id;
                 viewModel.CrDrType = jentry.CrDrType;
@@ -77,7 +78,7 @@ namespace Aow.Services.Voucher
                 //   viewModel.RootCategory = ledger.Parent.Name;
                 items.Add(viewModel);
             }
-            voucherViewModel.JournalEntries = items;           
+            voucherViewModel.JournalEntries = items;
 
             return voucherViewModel;
         }

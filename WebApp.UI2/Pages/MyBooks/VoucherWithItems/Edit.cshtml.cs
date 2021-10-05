@@ -40,6 +40,7 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
             public decimal? Total { get; set; }
             public bool? Type { get; set; }
             public virtual List<VoucherItemsViewModel> VoucherItems { get; set; }
+            public virtual List<VoucherSundryItemsViewModel> SundryItems { get; set; }
         }
         public class VoucherItemsViewModel
         {
@@ -53,6 +54,18 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
             public decimal? Quantity { get; set; }
             public decimal? ItemAmount { get; set; }         
             public decimal Price { get; set; }
+            public Guid ProductId { get; set; }
+        }
+        public class VoucherSundryItemsViewModel
+        {
+            public Guid Id { get; set; }
+            public int? SrNo { get; set; }
+            public string Name { get; set; }
+            public string Type { get; set; }
+            public string Percent { get; set; }
+            public string Description { get; set; }
+            public decimal? ItemAmount { get; set; }
+            public Guid LedgerId { get; set; }
             public Guid ProductId { get; set; }
         }
 

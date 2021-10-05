@@ -56,11 +56,9 @@
                                 <input type="hidden" value="@userId" id="userId" />
                                 @Html.AntiForgeryToken()
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                <div class="form-horizontal">
-
-                                  <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            @Html.EditorFor(model => model.Input.LedgerName, new
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        @Html.EditorFor(model => model.Input.LedgerName, new
                                         {
                                         htmlAttributes = new
                                         {
@@ -69,70 +67,72 @@
                                         data_url = @Url.Action("GetLedgersForJournalEntry", "Vouchers")
                                         }
                                         })
-                                            @Html.HiddenFor(c => c.Input.LedgerId)
-                                            @Html.ValidationMessageFor(model => model.Input.LedgerName, "", new { @class = "text-danger" })
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            @Html.EditorFor(model => model.Input.VoucherNumber, new { htmlAttributes = new { @class = "form-control", @placeholder = "Invoice" } })
-                                            @Html.ValidationMessageFor(model => model.Input.VoucherNumber, "", new { @class = "text-danger" })
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class='input-group datetimepicker6'>
-                                                <input type="text" class="form-control" name="Date" id="voucherDate" placeholder="Date"
-                                                   data-toggle="datetimepicker" data-target="#voucherDate" autocomplete="off">
-                                                @Html.ValidationMessageFor(model => model.Input.Date, "", new { @class = "text-danger" })
-                                            </div>
-                                            @*@Html.EditorFor(model => model.Date, "EditorDateJqueryDateTimePicker")*@
-                                        </div>
-
+                                        @Html.HiddenFor(c => c.Input.LedgerId)
+                                        @Html.ValidationMessageFor(model => model.Input.LedgerName, "", new { @class = "text-danger" })
                                     </div>
-                                    <hr />
+                                    <div class="form-group col-md-3">
+                                        @Html.EditorFor(model => model.Input.VoucherNumber, new { htmlAttributes = new { @class = "form-control", @placeholder = "Invoice" } })
+                                        @Html.ValidationMessageFor(model => model.Input.VoucherNumber, "", new { @class = "text-danger" })
+                                    </div>
 
-                                    <table class="table table-hover table-bordered table-responsive table-striped" style="height:400px">
+                                    <div class="col-md-3">
+                                        <div class='input-group datetimepicker6'>
+                                            <input type="text" class="form-control" name="Date" id="voucherDate" placeholder="Date"
+                                                   data-toggle="datetimepicker" data-target="#voucherDate" autocomplete="off">
+                                            @Html.ValidationMessageFor(model => model.Input.Date, "", new { @class = "text-danger" })
+                                        </div>
+                                        @*@Html.EditorFor(model => model.Date, "EditorDateJqueryDateTimePicker")*@
+                                    </div>
 
-                                        <tr>
-                                            <td>S.No</td>
-                                            <td>Item Name</td>
-                                            <td>Description</td>
-                                            <td>Amount</td>
-                                            <td style="width:60px">Quantity</td>
-                                            <td style="width:60px">Total</td>
-                                            <td></td>
-                                        </tr>
+                                </div>
+                                <hr />
+                                <div class="form-row" id="AddItems" style="height:400px">
+                                    <table class="table table-hover table-responsive table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <td class="col-md-1">S.No</td>
+                                                <td class="col-md-2">Item Name</td>
+                                                <td class="col-md-2">Description</td>
+                                                <td class="col-md-2">Amount</td>
+                                                <td class="col-md-2">Quantity</td>
+                                                <td class="col-md-2">Total</td>
+                                                <td></td>
+                                            </tr>
 
-                                        <tr>
-                                            <td>
-                                            </td>
-                                            <td>
-                                                <input type="text" id="txtStoreItem" class="ui-autocomplete-input form-control" data-url="@Url.Action("GetProductsForAutocomplete", "Products")" placeholder="Enter Product" />
-                                                <input type="hidden" id="hdnStoreItemId" class="form-control" />
-                                                <input type="hidden" id="hdnProductId" class="form-control" />
-                                                <input type="hidden" id="hdnProductAccountId" class="form-control" />
-                                                <input type="hidden" id="hdnAccountCategoryName" class="form-control  hdnAccountCategoryName" />
-                                                <input type="hidden" id="hdnItemType" class="form-control  hdnItemType" />
-                                            </td>
-                                            <td>
-                                                <input type="text" id="txtDescription" class="form-control" placeholder="Description" />
+                                            <tr>
+                                                <td>
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtStoreItem" class="ui-autocomplete-input form-control" data-url="@Url.Action("GetProductsForAutocomplete", "Products")" placeholder="Enter Product" />
+                                                    <input type="hidden" id="hdnStoreItemId" class="form-control" />
+                                                    <input type="hidden" id="hdnProductId" class="form-control" />
+                                                    <input type="hidden" id="hdnProductAccountId" class="form-control" />
+                                                    <input type="hidden" id="hdnAccountCategoryName" class="form-control  hdnAccountCategoryName" />
+                                                    <input type="hidden" id="hdnItemType" class="form-control  hdnItemType" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtDescription" class="form-control" placeholder="Description" />
 
-                                            </td>
-                                            <td>
-                                                <input type="text" id="txtMRP" class="form-control" maxlength="7" placeholder="MRP" />
-                                            </td>
-                                            <td>
-                                                <input type="text" id="txtQuantity" class="form-control" onchange="recalculateExtendedPrice()" placeholder="Quantity" />
-                                            </td>
-                                            <td>
-                                                <input type="text" id="txtAmount" class="form-control  txtAmount" placeholder="Amount" value="0" />
-                                                <input type="hidden" id="hdnAmount" class="form-control  hdnAmount" />
-                                            </td>
-                                            <td>
-                                                <input id="btnAdd" type="button" value="Add" class="btn btn-primary btn-sm btnadd" />
-                                                @*<a href="#" class="glyphicon glyphicon-pencil btnadd" id="btnadd" title="Add"></a>*@
-                                                <a href="#" class="fa fa-edit btnupdate" id="btnupdate" title="Edit" style="display:none;"></a>
-                                                <a href="#" class="fa fa-erase btnnew" id="btnnew" title="New" style="display:none;"></a>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtMRP" class="form-control" maxlength="7" placeholder="MRP" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtQuantity" class="form-control" onchange="recalculateExtendedPrice()" placeholder="Quantity" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtAmount" class="form-control  txtAmount" placeholder="Amount" value="0" />
+                                                    <input type="hidden" id="hdnAmount" class="form-control  hdnAmount" />
+                                                </td>
+                                                <td>
+                                                    <input id="btnAdd" type="button" value="Add" class="btn btn-primary btn-sm btnadd" />
+                                                    @*<a href="#" class="glyphicon glyphicon-pencil btnadd" id="btnadd" title="Add"></a>*@
+                                                    <a href="#" class="fa fa-edit btnupdate" id="btnupdate" title="Edit" style="display:none;"></a>
+                                                    <a href="#" class="fa fa-erase btnnew" id="btnnew" title="New" style="display:none;"></a>
+                                                </td>
+                                            </tr>
+                                        </thead>
+
                                         <tbody id="tbodyitems" class="tbodyitems bordered">
                                             @{
                                                 if (Model.Input.VoucherItems != null)
@@ -190,16 +190,88 @@
                                         </tbody>
                                     </table>
                                     <input type="hidden" class="hdnProductsTotal" id="hdnProductsTotal" value="@Model.Input.Total" />
+                                </div>
 
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            @Html.TextAreaFor(model => model.Input.Note, new { id = "editor1", @class = "form-control", @placeholder = "Enter Note", style = "padding-left: 0px;" })
-                                            @*@Html.TextAreaFor(model => model.Note, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter Note" } })*@
-                                            @Html.ValidationMessageFor(model => model.Input.Note, "", new { @class = "text-danger" })
 
-                                        </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        @Html.TextAreaFor(model => model.Input.Note, new { id = "editor1", @class = "form-control", @placeholder = "Enter Note", style = "padding-left: 0px;" })
+                                        @*@Html.TextAreaFor(model => model.Note, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter Note" } })*@
+                                        @Html.ValidationMessageFor(model => model.Input.Note, "", new { @class = "text-danger" })
+
                                     </div>
 
+                                    <div class="col-md-7">
+                                        <table class="table table-bordered table-hover table-condensed table-sm table-responsive table-striped w-auto" style="height:250px">
+                                            <tr>
+                                                <td>Account</td>
+                                                <td>%</td>
+                                                <td>Amount</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <input type="text" id="txtSundryItem" class="ui-autocomplete-input form-control" data-url="@Url.Action("GetSundryItemForAutocomplete", "Purchase")" placeholder="Tax/Freight/Discount Account" />
+                                                    <input type="hidden" id="hdnSundryAccountId" class="form-control" />
+                                                    <input type="hidden" id="hdnSundryProductId" class="form-control" />
+                                                    <input type="hidden" id="hdnSundryAccountCategoryName" class="form-control  hdnAccountCategoryName" />
+                                                    <input type="hidden" id="hdnSundryItemType" class="form-control  hdnItemType" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtPercent" class="form-control  txtPercent" maxlength="7" placeholder="Debit Amount" value="0" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtDebit" class="form-control  txtDebit" maxlength="7" placeholder="Amount" value="0" />
+                                                    <input type="hidden" id="hdnDebitAmount" class="form-control  hdnAmount" />
+                                                </td>
+                                                <td>
+                                                    <input id="btnaccountadd" type="button" value="Add" class="btn btn-primary btn-sm btnaccountadd" />
+                                                    @*<a class="glyphicon glyphicon-plus btnaccountadd" id="btnaccountadd" title="Add"></a>*@
+                                                    <a class="fa fa-edit btnaccountupdate" id="btnaccountupdate" title="Edit" style="display:none;"></a>
+                                                    <a class="fa fa-erase btnaccountnew" id="btnaccountnew" title="New" style="display:none;"></a>
+                                                </td>
+                                            </tr>
+                                            <tbody id="tbodysundryitems" class="tbodysundryitems bordered">
+                                                @{
+                                                    if (Model.Input.SundryItems != null)
+                                                    {
+                                                        @foreach (var item in Model.Input.SundryItems)
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.Name)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.Percent)
+                                                                </td>
+                                                                <td>
+                                                                    <p class="extendedPrice">@item.ItemAmount</p>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="hidden" id="hdnappendSundryItemId" class="hdnappendSundryItemId" value="@item.Id" />
+                                                                    <input type="hidden" id="hdnappendSundryName" class="hdnappendSundryName" value="@item.Name" />
+                                                                    <input type="hidden" id="hdnappendSundryPercent" class="hdnappendSundryPercent" value="@item.Percent" />
+                                                                    <input type='hidden' id="hdnappendSundryAmount" class='hdnappendSundryAmount' value="@item.ItemAmount" />
+                                                                    <input type='hidden' class='hdnappendSundryProductId' value=@item.ProductId />
+                                                                    <input type='hidden' class='hdnappendSundryAccountId' value=@item.LedgerId />
+                                                                    <input type='hidden' class='hdnappendSundryItemType' value=@item.Type />
+                                                                    <a class='fa fa-edit sundryedit' style='cursor:pointer;' />
+                                                                    <a class='fas fa-trash-alt sundrydelete' style='cursor:pointer;' />
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
+                                                <tr>
+                                                    <td></td>
+                                                    <td>Total</td>
+                                                    <td class='otheraccounttotalclass'>@Model.Input.SundryTotal </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                        <input type="hidden" class="hdnSundryTotal" id="hdnSundryTotal" value="@Model.Input.SundryTotal" />
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -227,3 +299,21 @@
     </section>
 
 </div>
+
+
+
+
+@section Scripts {
+<script>
+    $('#voucherDate').datetimepicker({
+        /* format: 'L',*/
+        format: 'YYYY/MM/DD'
+    });
+
+</script>
+<script src="~/mysite/createAddUpdateDeleteItem.js"></script>
+<script src="~/mysite/addupdatedeteteSundry.js"></script>
+<script src="~/mysite/saveandCommonFunctions.js"></script>
+
+
+}

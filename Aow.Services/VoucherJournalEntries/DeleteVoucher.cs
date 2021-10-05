@@ -20,7 +20,7 @@ namespace Aow.Services.Voucher
 
         public async Task<DeleteVoucherResponse> Do(Guid id)
         {
-            var voucher = _repoWrapper.VoucherRepo.GetVoucher(id);
+            var voucher = await _repoWrapper.VoucherRepo.GetVoucher(id);
             if (voucher == null)
             {
                 return null;

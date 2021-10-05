@@ -15,9 +15,12 @@ namespace Aow.Infrastructure.Repositories
         {
         }
 
-        public Voucher GetVoucher(Guid Id)
+        public async Task<Voucher> GetVoucher(Guid Id)
         {
-            return FindByCondition(x => x.Id == Id).Include(x => x.JournalEntries).Include(x => x.VoucherItems).ThenInclude(x => x.Product).FirstOrDefault();
+            var result = await FindByCondition(x => x.Id == Id).Include(x => x.JournalEntries).ThenInclude(x => x.Ledger).
+            Include(x => x.VoucherSundryItems).ThenInclude(x => x.Product).ThenInclude(x => x.Ledger).
+            Include(x => x.VoucherItems).ThenInclude(x => x.Product).FirstOrDefaultAsync();
+            return result;
         }
 
         public Task<PagedList<Voucher>> GetVouchers(PagingParameters ownerParameters, string voucherName, Guid FinancialYearId)
