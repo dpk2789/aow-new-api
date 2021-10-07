@@ -1,28 +1,127 @@
 ﻿@page
 @model WebApp.UI2.Pages.Payment.PayUMoneyModel.PayUModel
 
-@{  
-    ViewBag.Title = "Demo";  
-}  
-  
-<h2>PayUMoney Form MVC</h2>  
-@using (Html.BeginForm())  
-{  
-    <div style="margin-left:20px">    
-        @Html.Label("Amount")<br />
-        @Html.TextBox("txtamount")<br />
-        @Html.Label("First Name")<br />  
-        @Html.TextBox("txtfirstname")<br />  
-        @Html.ValidationMessageFor(model => model.FirstName, " ", new { @class = "text-danger" })  
-        @Html.Label("Email Id")<br />  
-        @Html.TextBox("txtemail")<br />  
-        @Html.ValidationMessageFor(model => model.Email, " ", new { @class = "text-danger" })  
-        @Html.Label("Product Information")<br />  
-        @Html.TextArea("txtprodinfo")<br />  
-        @Html.Label("Phone")<br />  
-        @Html.TextBox("txtphone")<br />   
-        <button type="submit">Submit</button>  
-    </div>  
-  
-  
-} 
+@{
+    ViewBag.Title = "Demo";
+}
+
+
+<div class="jumbotron">
+    <h2>PayUMoney Form MVC</h2>
+    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+    <p> <a onclick="launchBOLT()" id="btnRetry" class="btn btn-sm btn-warning btn-flat pull-right">Pay</a></p>
+</div>
+
+<div class="row">
+   
+    <input type="hidden" id="bookingId" clientidmode="Static" value="1" />
+    <input type="hidden" id="hash" />
+    <input type="hidden" id="Totalamount" value="5" />
+    <input type="hidden" value="abc" clientidmode="Static" id="firstname" />
+    <input type="hidden" id="Email" />
+    <input type="hidden" id="Responseurl" />
+    <input type="hidden" id="Failureurl" />
+    <input type="hidden" id="saltcode" clientidmode="Static" name="saltcode" value="LXOnGmUFcu" />
+    <input type="hidden" id="key" clientidmode="Static" name="key" value="98vPTkPH" />
+
+</div>
+<script id="bolt" src="https://sboxcheckout-static.citruspay.com/bolt/run/bolt.min.js" bolt-color="e34524"
+        bolt-logo="http://boltiswatching.com/wp-content/uploads/2015/09/Bolt-Logo-e14421724859591.png"></script>
+<script>
+    function launchBOLT() {
+        var promise = $.ajax({
+            url: '/PayU/Hash',
+            type: 'post',
+            data: JSON.stringify({
+                //txnid: $('#bookingId').val(),
+                //key: $('#key').val(),
+                //salt: $('#saltcode').val(),
+                amount: parseInt(5),
+                pinfo: 'abc',
+                fname: $('#firstname').val(),
+                email: $('#Email').val(),
+                mobile: '56457864898',
+                udf5: 'dss',
+
+            }),
+            contentType: "application/json",
+            dataType: 'json',
+            success: function (json) {
+
+
+
+            }
+        });
+        promise.done(function (json) {
+
+            $('#hash').val(json);
+
+
+            bolt.launch({
+                txnid: $('#bookingId').val(),
+                amount: parseInt(5),
+                productinfo: 'abc',
+                firstname: $('#firstname').val(),
+                email: $('#Email').val(),
+                phone: '56458664898',
+                udf5: 'dss',
+                hash: $('#hash').val(),
+                key: $('#key').val(),
+                surl: "https://localhost:44320/Payment/SuccessPayment",
+                furl:"https://localhost:44320/Payment/FailurePayment"
+            }, {
+                responseHandler: function (BOLT) {
+                    var salt = $('#saltcode').val();
+                    if (BOLT.response.txnStatus != 'CANCEL') {
+
+                        //Salt is passd here for demo purpose only. For practical use keep salt at server side only.
+                        var fr = '<form action=\"' + "@ViewBag.surl" + '\" method=\"post\">' +
+                            '<input type=\"hidden\" name=\"key\" value=\"' + BOLT.response.key + '\" />' +
+                            '<input type=\"hidden\" name=\"salt\" value=\"' + salt + '\" />' +
+                            '<input type=\"hidden\" name=\"txnid\" value=\"' + BOLT.response.txnid + '\" />' +
+                            '<input type=\"hidden\" name=\"amount\" value=\"' + BOLT.response.amount + '\" />' +
+                            '<input type=\"hidden\" name=\"productinfo\" value=\"' + BOLT.response.productinfo + '\" />' +
+                            '<input type=\"hidden\" name=\"firstname\" value=\"' + BOLT.response.firstname + '\" />' +
+                            '<input type=\"hidden\" name=\"email\" value=\"' + BOLT.response.email + '\" />' +
+                            '<input type=\"hidden\" name=\"udf5\" value=\"' + BOLT.response.udf5 + '\" />' +
+                            '<input type=\"hidden\" name=\"mihpayid\" value=\"' + BOLT.response.mihpayid + '\" />' +
+                            '<input type=\"hidden\" name=\"status\" value=\"' + BOLT.response.status + '\" />' +
+                            '<input type=\"hidden\" name=\"hash\" value=\"' + BOLT.response.hash + '\" />' +
+                            '<input type=\"hidden\" name=\"furl\" value=\"' + BOLT.response.furl + '\" />' +
+                            '</form>';
+                        var form = jQuery(fr);
+                        jQuery('body').append(form);
+                        form.submit();
+                        return false;
+                    } else if (BOLT.response.txnStatus != 'FAILED') {
+
+                        //Salt is passd here for demo purpose only. For practical use keep salt at server side only.
+                        var fr = '<form action=\"' + "@ViewBag.furl" + '\" method=\"post\">' +
+                            '<input type=\"hidden\" name=\"key\" value=\"' + $('#bookingId').val() + '\" />' +
+                            '<input type=\"hidden\" name=\"salt\" value=\"' + salt + '\" />' +
+                            '<input type=\"hidden\" name=\"txnid\" value=\"' + $('#bookingId').val() + '\" />' +
+                            '<input type=\"hidden\" name=\"amount\" value=\"' + BOLT.response.amount + '\" />' +
+                            '<input type=\"hidden\" name=\"productinfo\" value=\"' + BOLT.response.productinfo + '\" />' +
+                            '<input type=\"hidden\" name=\"firstname\" value=\"' + BOLT.response.firstname + '\" />' +
+                            '<input type=\"hidden\" name=\"email\" value=\"' + BOLT.response.email + '\" />' +
+                            '<input type=\"hidden\" name=\"udf5\" value=\"' + BOLT.response.udf5 + '\" />' +
+                            '<input type=\"hidden\" name=\"mihpayid\" value=\"' + BOLT.response.mihpayid + '\" />' +
+                            '<input type=\"hidden\" name=\"status\" value=\"' + BOLT.response.status + '\" />' +
+                            '<input type=\"hidden\" name=\"hash\" value=\"' + BOLT.response.hash + '\" />' +
+                            '<input type=\"hidden\" name=\"furl\" value=\"' + BOLT.response.furl + '\" />' +
+                            '</form>';
+                        var form = jQuery(fr);
+                        jQuery('body').append(form);
+                        form.submit();
+                        return false;
+                    }
+
+                },
+                catchException: function (BOLT) {
+                    console.log(BOLT);
+                    alert(BOLT.message);
+                }
+            });
+        });
+    }
+</script>
