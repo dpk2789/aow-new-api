@@ -9,6 +9,7 @@ namespace Aow.Infrastructure.IRepositories
         IFinancialYearRepository FinancialYearRepo { get; }
         IUserCompanyRepository UserCompanyRepo { get; }
         IUserRepository UserRepo { get; }
+        IUserPaymentRepository UserPaymentRepo { get; }
         IProductCategoryRepository ProductCategoryRepo { get; }
         IProductRepository ProductRepo { get; }
         IProductAttributeRepository ProductAttributeRepo { get; }

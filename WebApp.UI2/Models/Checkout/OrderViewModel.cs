@@ -1,4 +1,4 @@
-﻿namespace WebApp.UI.Models.Checkout
+﻿namespace WebApp.UI2.Models.Checkout
 {
     public class OrderViewModel
     {

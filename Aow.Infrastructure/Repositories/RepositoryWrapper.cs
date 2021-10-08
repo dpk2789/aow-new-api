@@ -19,6 +19,7 @@ namespace Aow.Infrastructure.Repositories
         private IFinancialYearRepository _account;
         private IUserCompanyRepository _userCompanyRepository;
         private IUserRepository _userRepository;
+        private IUserPaymentRepository _userPaymentRepository;
         private IProductCategoryRepository _productCategoryRepository;
         private IProductRepository _productRepository;
         private IProductAttributeRepository _productAttributeRepository;
@@ -49,6 +50,17 @@ namespace Aow.Infrastructure.Repositories
                     voucherRepository = new VoucherRepository(_repoContext);
                 }
                 return voucherRepository;
+            }
+        }
+        public IUserPaymentRepository UserPaymentRepo
+        {
+            get
+            {
+                if (_userPaymentRepository == null)
+                {
+                    _userPaymentRepository = new UserPaymentRepository(_repoContext);
+                }
+                return _userPaymentRepository;
             }
         }
         public IVoucherSundryItemRepository VoucherSundryItemRepo

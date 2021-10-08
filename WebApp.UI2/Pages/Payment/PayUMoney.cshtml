@@ -1,127 +1,114 @@
 ﻿@page
-@model WebApp.UI2.Pages.Payment.PayUMoneyModel.PayUModel
+@model WebApp.UI2.Pages.Payment.PayUMoneyModel
 
 @{
     ViewBag.Title = "Demo";
+    var furl = @ViewData["furl"];
+    var surl = @ViewData["surl"];
+
 }
 
 
 <div class="jumbotron">
     <h2>PayUMoney Form MVC</h2>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p> <a onclick="launchBOLT()" id="btnRetry" class="btn btn-sm btn-warning btn-flat pull-right">Pay</a></p>
+    <button onclick="handleRazorpayPayment()" id="rzp-button1" class="btn btn-primary" type="button">Pay</button>
 </div>
 
-<div class="row">
-   
-    <input type="hidden" id="bookingId" clientidmode="Static" value="1" />
-    <input type="hidden" id="hash" />
-    <input type="hidden" id="Totalamount" value="5" />
-    <input type="hidden" value="abc" clientidmode="Static" id="firstname" />
-    <input type="hidden" id="Email" />
-    <input type="hidden" id="Responseurl" />
-    <input type="hidden" id="Failureurl" />
-    <input type="hidden" id="saltcode" clientidmode="Static" name="saltcode" value="LXOnGmUFcu" />
-    <input type="hidden" id="key" clientidmode="Static" name="key" value="98vPTkPH" />
-
-</div>
-<script id="bolt" src="https://sboxcheckout-static.citruspay.com/bolt/run/bolt.min.js" bolt-color="e34524"
-        bolt-logo="http://boltiswatching.com/wp-content/uploads/2015/09/Bolt-Logo-e14421724859591.png"></script>
-<script>
-    function launchBOLT() {
-        var promise = $.ajax({
-            url: '/PayU/Hash',
-            type: 'post',
-            data: JSON.stringify({
-                //txnid: $('#bookingId').val(),
-                //key: $('#key').val(),
-                //salt: $('#saltcode').val(),
-                amount: parseInt(5),
-                pinfo: 'abc',
-                fname: $('#firstname').val(),
-                email: $('#Email').val(),
-                mobile: '56457864898',
-                udf5: 'dss',
-
-            }),
-            contentType: "application/json",
-            dataType: 'json',
-            success: function (json) {
 
 
 
+@section scripts {
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+
+        const requestConfig = {
+            headers: {
+                "Content-Type": "multipart/form-data"
             }
-        });
-        promise.done(function (json) {
-
-            $('#hash').val(json);
-
-
-            bolt.launch({
-                txnid: $('#bookingId').val(),
-                amount: parseInt(5),
-                productinfo: 'abc',
-                firstname: $('#firstname').val(),
-                email: $('#Email').val(),
-                phone: '56458664898',
-                udf5: 'dss',
-                hash: $('#hash').val(),
-                key: $('#key').val(),
-                surl: "https://localhost:44320/Payment/SuccessPayment",
-                furl:"https://localhost:44320/Payment/FailurePayment"
-            }, {
-                responseHandler: function (BOLT) {
-                    var salt = $('#saltcode').val();
-                    if (BOLT.response.txnStatus != 'CANCEL') {
-
-                        //Salt is passd here for demo purpose only. For practical use keep salt at server side only.
-                        var fr = '<form action=\"' + "@ViewBag.surl" + '\" method=\"post\">' +
-                            '<input type=\"hidden\" name=\"key\" value=\"' + BOLT.response.key + '\" />' +
-                            '<input type=\"hidden\" name=\"salt\" value=\"' + salt + '\" />' +
-                            '<input type=\"hidden\" name=\"txnid\" value=\"' + BOLT.response.txnid + '\" />' +
-                            '<input type=\"hidden\" name=\"amount\" value=\"' + BOLT.response.amount + '\" />' +
-                            '<input type=\"hidden\" name=\"productinfo\" value=\"' + BOLT.response.productinfo + '\" />' +
-                            '<input type=\"hidden\" name=\"firstname\" value=\"' + BOLT.response.firstname + '\" />' +
-                            '<input type=\"hidden\" name=\"email\" value=\"' + BOLT.response.email + '\" />' +
-                            '<input type=\"hidden\" name=\"udf5\" value=\"' + BOLT.response.udf5 + '\" />' +
-                            '<input type=\"hidden\" name=\"mihpayid\" value=\"' + BOLT.response.mihpayid + '\" />' +
-                            '<input type=\"hidden\" name=\"status\" value=\"' + BOLT.response.status + '\" />' +
-                            '<input type=\"hidden\" name=\"hash\" value=\"' + BOLT.response.hash + '\" />' +
-                            '<input type=\"hidden\" name=\"furl\" value=\"' + BOLT.response.furl + '\" />' +
-                            '</form>';
-                        var form = jQuery(fr);
-                        jQuery('body').append(form);
-                        form.submit();
-                        return false;
-                    } else if (BOLT.response.txnStatus != 'FAILED') {
-
-                        //Salt is passd here for demo purpose only. For practical use keep salt at server side only.
-                        var fr = '<form action=\"' + "@ViewBag.furl" + '\" method=\"post\">' +
-                            '<input type=\"hidden\" name=\"key\" value=\"' + $('#bookingId').val() + '\" />' +
-                            '<input type=\"hidden\" name=\"salt\" value=\"' + salt + '\" />' +
-                            '<input type=\"hidden\" name=\"txnid\" value=\"' + $('#bookingId').val() + '\" />' +
-                            '<input type=\"hidden\" name=\"amount\" value=\"' + BOLT.response.amount + '\" />' +
-                            '<input type=\"hidden\" name=\"productinfo\" value=\"' + BOLT.response.productinfo + '\" />' +
-                            '<input type=\"hidden\" name=\"firstname\" value=\"' + BOLT.response.firstname + '\" />' +
-                            '<input type=\"hidden\" name=\"email\" value=\"' + BOLT.response.email + '\" />' +
-                            '<input type=\"hidden\" name=\"udf5\" value=\"' + BOLT.response.udf5 + '\" />' +
-                            '<input type=\"hidden\" name=\"mihpayid\" value=\"' + BOLT.response.mihpayid + '\" />' +
-                            '<input type=\"hidden\" name=\"status\" value=\"' + BOLT.response.status + '\" />' +
-                            '<input type=\"hidden\" name=\"hash\" value=\"' + BOLT.response.hash + '\" />' +
-                            '<input type=\"hidden\" name=\"furl\" value=\"' + BOLT.response.furl + '\" />' +
-                            '</form>';
-                        var form = jQuery(fr);
-                        jQuery('body').append(form);
-                        form.submit();
-                        return false;
-                    }
-
+        };
+        var handleRazorpayPayment = async function () {
+            const response = await axios.post(`/Payment/InitializePayment`);
+            const order_id = response.data.id;
+            const options = await {
+                key: '@Model.RazorPayKey',
+                amount: 200,
+                name: 'Robust Packaging Eshop',
+                description: 'Carton Boxes',
+                image: '/your_logo.png',
+                order_id: order_id,
+                handler: (response) => {
+                    const confirmPaymentPayload = new FormData();
+                    confirmPaymentPayload.set('RazorpayPaymentId', response.razorpay_payment_id);
+                    confirmPaymentPayload.set('RazorpayOrderId', response.razorpay_order_id);
+                    confirmPaymentPayload.set('RazorpaySignature', response.razorpay_signature);
+                    axios.post(`/Payment/ConfirmPayment`, confirmPaymentPayload)
+                        .then(response => alert(response.data))
+                        .catch((err) => console.log(err))
                 },
-                catchException: function (BOLT) {
-                    console.log(BOLT);
-                    alert(BOLT.message);
+                prefill: {
+                    name: "TESTUSER",
+                    email: "testuser@mail.com",
+                    contact: "9999999999"
+                },
+                theme: {
+                    color: '#F37254'
                 }
+            };
+            const rzp1 = new window.Razorpay(options);
+            rzp1.on('payment.failed', function (response) {
+                alert(response.error.code);
+                alert(response.error.description);
+                alert(response.error.source);
+                alert(response.error.step);
+                alert(response.error.reason);
+                alert(response.error.metadata.order_id);
+                alert(response.error.metadata.payment_id);
             });
-        });
-    }
-</script>
+            rzp1.open();
+
+        };
+
+        var options = {
+            "key": "rzp_live_bFvkVChIS2svHe", // Enter the Key ID generated from the Dashboard
+            "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Acme Corp",
+            "description": "TRazorPayKeyazorPayKeyazorPayKeyublicKeyest Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+                alert(response.razorpay_payment_id);
+                alert(response.razorpay_order_id);
+                alert(response.razorpay_signature)
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+
+
+                        //var rzp1 = new Razorpay(options);
+                        //rzp1.on('payment.failed', function (response) {
+                        //    alert(response.error.code);
+                        //    alert(response.error.description);
+                        //    alert(response.error.source);
+                        //    alert(response.error.step);
+                        //    alert(response.error.reason);
+                        //    alert(response.error.metadata.order_id);
+                        //    alert(response.error.metadata.payment_id);
+                        //});
+                        //document.getElementById('rzp-button1').onclick = function (e) {
+                        //    rzp1.open();
+                        //    e.preventDefault();
+                        //}
+    </script>
+}
