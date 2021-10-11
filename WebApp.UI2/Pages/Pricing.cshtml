@@ -1,0 +1,51 @@
+﻿@page
+@model WebApp.UI2.Pages.PricingModel
+@{
+}
+<section id="content">
+    <div class="container">
+        <div class="row">
+          
+            <div class="col-lg-4">
+           
+            </div>
+            <div class="col-lg-4">
+                <div class="pricing-box-alt special">
+                    <div class="pricing-heading">
+                        <h3>Enterprise ERP <strong>Edition</strong></h3>
+                    </div>
+                    <div class="pricing-terms">                       
+                        <h6>&#36;3.00 / Month</h6>
+                    </div>
+                    <div class="pricing-content">
+                        <ul>
+                            <li><i class="icon-ok"></i> Unlimited Bussiness Transactions</li>
+                            <li><i class="icon-ok"></i> Unlimited Companies , Branches & Financial Years  </li>
+                            <li><i class="icon-ok"></i> Add Users Rights & User Roles  </li>
+                            <li><i class="icon-ok"></i> Highly Secured Servers</li>
+                            <li><i class="icon-ok"></i> 24x7 Support Available</li>
+                            <li><i class="icon-ok"></i> No hidden fees</li>
+                            <li><i class="icon-ok"></i> All Features Available(ex. Payroll , Inventory)</li>                           
+                        </ul>
+                    </div>
+                    <div class="pricing-action">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a href="/Home/OrderSummary" class="btn btn-success"><i class="icon-bolt"></i> Recharge Now</a>
+                        }
+                        else
+                        {
+                            <a href="/Account/Register" class="btn btn-success"><i class="icon-bolt"></i> Register Now</a>
+                        }
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+              
+            </div>
+        </div>
+     
+        
+    </div>
+</section>

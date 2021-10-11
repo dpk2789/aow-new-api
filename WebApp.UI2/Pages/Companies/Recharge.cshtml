@@ -1,0 +1,149 @@
+﻿@page
+@model WebApp.UI2.Pages.Companies.RechargeModel
+@{
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3>Company Recharge</h3>
+            <hr />
+            <div class="domain_r no-float">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="domain_n">
+                            <label>Company Name :</label>
+                            <label>@Model.Input.CompanyName</label>
+                            <input type="hidden" id="cmpid" value="@Model.Input.Id" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <form name="add_domains_frm" id="add_domains_frm" action="" method="post" class="domain-list-name">
+                            <input type="hidden" name="domain_list[]" value="accountingonweb.club">
+                            <div class="available">
+                                <select style="margin-top: -5px; font-size:12px; height:41px; width:174px;" onchange="CalRechargeAmt(this.value);">
+                                    <option value="150.00">1 Month  INR 150.00 </option>
+                                    <option value="300.00">2 Month  INR 300.00 </option>
+                                    <option value="450.00">3 Month  INR 450.00 </option>
+                                    <option value="800.00">6 Month  INR 800.00 </option>
+                                    <option value="1700.00">1 Year  INR 1700.00 </option>
+                                </select>
+
+                                <script>
+                                       function CalRechargeAmt(amt) {
+                                    // alert(amt);
+
+                                     $.ajax({
+                                         type: "POST",
+                                         url: "http://localhost:42853/Companies/CalRechargeAmt/",
+                                         data: { 'companyId': "@Model.Input.Id", 'planAmount' : amt },
+                                         success: function(response) {
+                                             if (response != null) {
+                                                 $('#rechargeAmt').val(response.rechargeAmount);
+                                                  $('#subTotal').text(response.rechargeAmount);
+                                                 $('#total').text(response.rechargeAmount);
+                                                         $('#cmpId').val(response.id);
+
+                                                     } else {
+                                                         alert("Something went wrong");
+                                                     }
+                                                 },
+                                         failure: function(response) {
+                                             alert(response.responseText);
+                                         },
+                                         error: function(response) {
+                                             alert(response.responseText);
+                                         }
+                                     }); };
+
+                                </script>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="col-md-4">
+                        SubTotal : <label id="subTotal"> </label><br />
+                        Total : <label id="total"> </label><br />
+                        @*@Html.ActionLink("CheckOut", "CompanyRecharge", "Companies", new { id = Model.Id, username = @User.Identity.Name }, new { @class = "btn btn-success btn-xs" })*@
+                        <input type="button" value="CheckOut" class="btn btn-large btn-success btn-xs" onclick="checkout()">
+                        <input type="hidden" id="rechargeAmt" />
+
+                        <script>
+
+                        </script>
+                    </div>
+
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div id="order_summery_records"></div>
+<script>
+
+     function checkout() {
+
+                              var amt = $('#rechargeAmt').val();
+                                 var cmpid = $('#cmpid').val();
+                                //  alert(cmpid);
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "http://localhost:42853/Companies/CompanyRecharge/",
+                                        data: { 'id': cmpid, 'amt' : amt , 'username' : "@User.Identity.Name" },
+                                        success: function (response) {
+                                            if (response != null) {
+                                                $('#order_summery_records').html(response);
+                                            }
+                                        },
+                                        failure: function(response) {
+                                            alert(response.responseText);
+                                            },
+                                        error: function(response) {
+                                            alert(response.responseText);
+                                        }
+                                    });
+    };
+
+    function show_order_summary() {
+        $('#order_summery_records').html('<img src="/Content/loading.gif">');
+        $.ajax({
+            type: "POST",
+            url: '',
+            data: 'action=order_summary',
+            success: function (response) {
+                $('#order_summery_records').html(response);
+            }
+        });
+    }
+
+    function remove_this_hosting(id) {
+        var r = confirm("Please click on OK to remove this item from cart or Cancel to go back.")
+        if (r == true) {
+            $('#c_hosting').html('<img src="/Content/loading.gif">');
+            $.ajax({
+                type: "POST",
+                url: 'https://www.znetlive.com/order/check_domain_availablity.php',
+                data: 'action=remove_hosting_domain_p&id=' + id,
+                success: function (response) {
+                    $('#c_hosting').html(response);
+                    alert('Item has been removed successfully from cart.');
+                    show_order_summary();
+                }
+            });
+        }
+        else {
+            return false;
+        }
+    };
+
+
+
+
+    //$(function () {
+    //    show_order_summary();
+    //    // show_order_summary_domain();
+    //});
+</script>

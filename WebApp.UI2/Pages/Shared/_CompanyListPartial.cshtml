@@ -3,7 +3,7 @@
 <table class="table">
     <tr>
         <th>Id</th>
-        <th>Companies</th>
+        <th>Name</th>
         <th></th>
     </tr>
     <tbody>
@@ -21,8 +21,9 @@
 
                     <td>
                         <a asp-route-id="@company.Id" asp-page="/Companies/Edit" class="fa fa-edit">Edit</a> |
-                        <a asp-page="/MyBooks/Dashboard" asp-route-companyId="@company.Id">My Books</a> |
-                        <button onclick="confirmAction(event)" data-product-id="@company.Id" type="button" class="btn-danger small">Delete</button>
+                        <a asp-page="/MyBooks/Dashboard" class="btn btn-outline-success" asp-route-companyId="@company.Id">My Books</a> |
+                         <a asp-route-id="@company.Id" class="btn btn-outline-primary" asp-page="/Companies/Recharge" >Recharge</a> |
+                        <button onclick="confirmAction(event)" data-product-id="@company.Id" class="btn btn-outline-danger" type="button" >Delete</button>
                     </td>
                 </tr>
             }
