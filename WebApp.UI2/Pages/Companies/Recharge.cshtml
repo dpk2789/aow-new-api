@@ -13,7 +13,7 @@
                     <div class="col-md-4">
                         <div class="domain_n">
                             <label>Company Name :</label>
-                            <label>@Model.Input.CompanyName</label>
+                            <label>@Model.Input.Name</label>
                             <input type="hidden" id="cmpid" value="@Model.Input.Id" />
                         </div>
                     </div>
@@ -22,6 +22,7 @@
                             <input type="hidden" name="domain_list[]" value="accountingonweb.club">
                             <div class="available">
                                 <select style="margin-top: -5px; font-size:12px; height:41px; width:174px;" onchange="CalRechargeAmt(this.value);">
+                                    <option value="1" selected>Select Plan </option>
                                     <option value="150.00">1 Month  INR 150.00 </option>
                                     <option value="300.00">2 Month  INR 300.00 </option>
                                     <option value="450.00">3 Month  INR 450.00 </option>
@@ -35,7 +36,7 @@
 
                                      $.ajax({
                                          type: "POST",
-                                         url: "http://localhost:42853/Companies/CalRechargeAmt/",
+                                         url: "/Payment/CalRechargeAmt/",
                                          data: { 'companyId': "@Model.Input.Id", 'planAmount' : amt },
                                          success: function(response) {
                                              if (response != null) {
@@ -65,12 +66,9 @@
                         SubTotal : <label id="subTotal"> </label><br />
                         Total : <label id="total"> </label><br />
                         @*@Html.ActionLink("CheckOut", "CompanyRecharge", "Companies", new { id = Model.Id, username = @User.Identity.Name }, new { @class = "btn btn-success btn-xs" })*@
-                        <input type="button" value="CheckOut" class="btn btn-large btn-success btn-xs" onclick="checkout()">
+                        <button onclick="handleRazorpayPayment()" id="rzp-button1" class="btn btn-large btn-success" type="button">Pay</button>
                         <input type="hidden" id="rechargeAmt" />
-
-                        <script>
-
-                        </script>
+                        <imp src="~/Indusmarty2_s1.png"></imp>
                     </div>
 
                 </div>
@@ -82,68 +80,102 @@
     </div>
 </div>
 <div id="order_summery_records"></div>
-<script>
 
-     function checkout() {
+@section scripts {
 
-                              var amt = $('#rechargeAmt').val();
-                                 var cmpid = $('#cmpid').val();
-                                //  alert(cmpid);
-                                    $.ajax({
-                                        type: "POST",
-                                        url: "http://localhost:42853/Companies/CompanyRecharge/",
-                                        data: { 'id': cmpid, 'amt' : amt , 'username' : "@User.Identity.Name" },
-                                        success: function (response) {
-                                            if (response != null) {
-                                                $('#order_summery_records').html(response);
-                                            }
-                                        },
-                                        failure: function(response) {
-                                            alert(response.responseText);
-                                            },
-                                        error: function(response) {
-                                            alert(response.responseText);
-                                        }
-                                    });
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+
+    const requestConfig = {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
     };
+        var handleRazorpayPayment = async function () {
+            const amt = $('#rechargeAmt').val();
+            const response = await axios.post(`/Payment/CompanyRecharge?amt=` + amt);
+        const order_id = response.data.id;
 
-    function show_order_summary() {
-        $('#order_summery_records').html('<img src="/Content/loading.gif">');
-        $.ajax({
-            type: "POST",
-            url: '',
-            data: 'action=order_summary',
-            success: function (response) {
-                $('#order_summery_records').html(response);
+
+        const options = await {
+            key: '@Model.RazorPayKey',
+            amount: amt,
+            "currency": "USD",
+            name: 'TND IT Solutions',
+            description: 'Web And Mobile App Solutions',
+            image: '/images/Indusmarty2_s1.png',
+            order_id: order_id,
+            handler: (response) => {
+                const confirmPaymentPayload = new FormData();
+                confirmPaymentPayload.set('RazorpayPaymentId', response.razorpay_payment_id);
+                confirmPaymentPayload.set('RazorpayOrderId', response.razorpay_order_id);
+                confirmPaymentPayload.set('RazorpaySignature', response.razorpay_signature);
+                axios.post(`/Payment/ConfirmPayment`, confirmPaymentPayload)
+                    .then(response => alert(response.data))
+                    .catch((err) => console.log(err))
+            },
+            prefill: {
+                name: "TESTUSER",
+                email: "@Model.Input.Email",
+                contact: "9999999999"
+            },
+            theme: {
+                color: '#F37254'
             }
+        };
+        const rzp1 = new window.Razorpay(options);
+        rzp1.on('payment.failed', function (response) {
+            alert(response.error.code);
+            alert(response.error.description);
+            alert(response.error.source);
+            alert(response.error.step);
+            alert(response.error.reason);
+            alert(response.error.metadata.order_id);
+            alert(response.error.metadata.payment_id);
         });
-    }
+        rzp1.open();
 
-    function remove_this_hosting(id) {
-        var r = confirm("Please click on OK to remove this item from cart or Cancel to go back.")
-        if (r == true) {
-            $('#c_hosting').html('<img src="/Content/loading.gif">');
-            $.ajax({
-                type: "POST",
-                url: 'https://www.znetlive.com/order/check_domain_availablity.php',
-                data: 'action=remove_hosting_domain_p&id=' + id,
-                success: function (response) {
-                    $('#c_hosting').html(response);
-                    alert('Item has been removed successfully from cart.');
-                    show_order_summary();
-                }
-            });
-        }
-        else {
-            return false;
+    };
+
+    var options = {
+        "key": "rzp_live_bFvkVChIS2svHe", // Enter the Key ID generated from the Dashboard
+        "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Acme Corp",
+        "description": "TRazorPayKeyazorPayKeyazorPayKeyublicKeyest Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response) {
+            alert(response.razorpay_payment_id);
+            alert(response.razorpay_order_id);
+            alert(response.razorpay_signature)
+        },
+        "prefill": {
+            "name": "Gaurav Kumar",
+            "email": "gaurav.kumar@example.com",
+            "contact": "9999999999"
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
         }
     };
 
-
-
-
-    //$(function () {
-    //    show_order_summary();
-    //    // show_order_summary_domain();
-    //});
-</script>
+                    //var rzp1 = new Razorpay(options);
+                    //rzp1.on('payment.failed', function (response) {
+                    //    alert(response.error.code);
+                    //    alert(response.error.description);
+                    //    alert(response.error.source);
+                    //    alert(response.error.step);
+                    //    alert(response.error.reason);
+                    //    alert(response.error.metadata.order_id);
+                    //    alert(response.error.metadata.payment_id);
+                    //});
+                    //document.getElementById('rzp-button1').onclick = function (e) {
+                    //    rzp1.open();
+                    //    e.preventDefault();
+                    //}
+    </script>
+}

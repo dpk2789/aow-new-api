@@ -21,7 +21,7 @@ namespace WebApp.UI2.Controllers
         private readonly RazorpayClient _razorpayClient;
         private readonly IEmailSender _emailSender;
         private string RazorPayKey { get; }
-      
+
         public PaymentController()
         {
             RazorPayKey = "rzp_live_ovIIdD5BdthHdu";
@@ -48,7 +48,7 @@ namespace WebApp.UI2.Controllers
             public string[] notes { get; set; }
             public string created_at { get; set; }
         }
-       
+
         [HttpPost]
         public async Task<IActionResult> InitializePayment()
         {
@@ -107,7 +107,7 @@ namespace WebApp.UI2.Controllers
                             var content = new StringContent(request, Encoding.UTF8, "application/json");
                             var postOrderResult = await client.PostAsync(createOrderUri, content);
                             string orderResult = postOrderResult.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                        }                   
+                        }
 
                         var link = $"<a href='#'>Click here</a>";
 
@@ -160,6 +160,46 @@ namespace WebApp.UI2.Controllers
                 result.Append(hash[i].ToString("X2").ToLower());
             }
             return result.ToString();
+        }
+
+        public ActionResult CalRechargeAmt(Guid companyId, double planAmount)
+        {
+            var result = new { rechargeAmount = planAmount, id = companyId };
+            return Json(result);
+        }
+
+        public string RandomString(int size = 10, bool lowerCase = true)
+        {
+            StringBuilder builder = new StringBuilder();
+            Random random = new Random();
+            char ch;
+            for (int i = 0; i < size; i++)
+            {
+                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
+                builder.Append(ch);
+            }
+            if (lowerCase)
+                return builder.ToString().ToLower();
+            return builder.ToString();
+        }
+        public ActionResult CompanyRecharge(Guid? cmpId, string amt)
+        {
+            decimal val = Convert.ToDecimal(amt);
+            val = val * 100;
+            var options = new Dictionary<string, object>
+        {
+            { "amount", val },
+            { "currency", "INR" },
+            { "receipt", "recipt_1" },
+            // auto capture payments rather than manual capture
+            // razor pay recommended option
+            { "payment_capture", true }
+        };
+
+            var order = _razorpayClient.Order.Create(options);
+            var orderId = order["id"].ToString();
+            var orderJson = order.Attributes.ToString();
+            return Ok(orderJson);
         }
     }
 }
