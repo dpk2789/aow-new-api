@@ -40,21 +40,21 @@ namespace WebApp.UI2.Pages
             {
                 using (MailMessage msz = new MailMessage())
                 {
-                    msz.From = new MailAddress("shadesofweb81@gmail.com", "Accounting On Web"); //sender
-                    msz.Subject = "test sub";
+                    msz.From = new MailAddress("support@accountingonweb.com", "Accounting On Web"); //sender
+                    msz.Subject = Input.Email;
                     msz.Body = Input.Email + Input.Body;
                     msz.IsBodyHtml = true;
-                    msz.To.Add(new MailAddress("support@accountingonweb.com"));//admin email
-
+                    msz.To.Add(new MailAddress("support@accountingonweb.com"));//can be multiple mail address where you want to send email
+                   // msz.CC.Add(new MailAddress("tnd.itsolutions@gmail.com"));
 
                     //sender credentials
                     SmtpClient smtp = new SmtpClient();
-                    smtp.Host = "smtp.gmail.com";
-                    smtp.Port = 587;
+                    smtp.Host = "mail5009.site4now.net";
+                    smtp.Port = 8889;
                     smtp.Credentials = new System.Net.NetworkCredential
-                                    ("shadesofweb81@gmail.com", "shadesPassword&*9");
+                                    ("support@accountingonweb.com", "Password#$5");
 
-                    smtp.EnableSsl = true;
+                    smtp.EnableSsl = false;
                     smtp.UseDefaultCredentials = false;
                     smtp.Send(msz);
 
@@ -64,7 +64,8 @@ namespace WebApp.UI2.Pages
             }
             catch (Exception ex)
             {
-                ViewData["ErrorMsg"] = "Innner Exception" + ex.InnerException.Message + " <br/>" + "exception" + ex.Message;
+                ViewData["ErrorMsg"] = "exception" + ex.ToString();
+                //throw;
             }
 
             return Page();

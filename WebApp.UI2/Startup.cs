@@ -53,8 +53,9 @@ namespace WebApp.UI2
             {
                 // app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see http  s://aka.ms/aspnetcore-hsts.
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
+                app.UseDeveloperExceptionPage();
+                // app.UseExceptionHandler("/Error");
+                 app.UseHsts();
                 //app.UseExceptionHandler(errorApp =>
                 //{
                 //    errorApp.Run(async context =>
