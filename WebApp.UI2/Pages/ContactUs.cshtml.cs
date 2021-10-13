@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
@@ -35,29 +36,37 @@ namespace WebApp.UI2.Pages
             if (!ModelState.IsValid) return Page();
 
             // await _emailSender.SendEmailAsync(Input.Email, "test sub", "test body");
-            using (MailMessage msz = new MailMessage())
+            try
             {
-                msz.From = new MailAddress("shadesofweb81@gmail.com", "Accounting On Web"); //sender
-                msz.Subject = "test sub";
-                msz.Body = Input.Email + Input.Body;
-                msz.IsBodyHtml = true;
-                msz.To.Add(new MailAddress("support@accountingonweb.com"));//admin email
+                using (MailMessage msz = new MailMessage())
+                {
+                    msz.From = new MailAddress("shadesofweb81@gmail.com", "Accounting On Web"); //sender
+                    msz.Subject = "test sub";
+                    msz.Body = Input.Email + Input.Body;
+                    msz.IsBodyHtml = true;
+                    msz.To.Add(new MailAddress("support@accountingonweb.com"));//admin email
 
 
-                //sender credentials
-                SmtpClient smtp = new SmtpClient();
-                smtp.Host = "smtp.gmail.com";
-                smtp.Port = 587;
-                smtp.Credentials = new System.Net.NetworkCredential
-                                ("shadesofweb81@gmail.com", "shadesPassword&*9");
+                    //sender credentials
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = "smtp.gmail.com";
+                    smtp.Port = 587;
+                    smtp.Credentials = new System.Net.NetworkCredential
+                                    ("shadesofweb81@gmail.com", "shadesPassword&*9");
 
-                smtp.EnableSsl = true;
-                // smtp.UseDefaultCredentials = true;
-                smtp.Send(msz);
+                    smtp.EnableSsl = true;
+                    smtp.UseDefaultCredentials = false;
+                    smtp.Send(msz);
 
-                await smtp.SendMailAsync(msz);
+                    await smtp.SendMailAsync(msz);
+                }
+                ViewData["ConfirmMsg"] = "Your message has been sent. Thank you!";
             }
-            ViewData["ConfirmMsg"] = "Your message has been sent. Thank you!";
+            catch (Exception ex)
+            {
+                ViewData["ErrorMsg"] = "Innner Exception" + ex.InnerException.Message + " <br/>" + "exception" + ex.Message;
+            }
+
             return Page();
             // If we got this far, something failed, redisplay form
         }
