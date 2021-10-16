@@ -22,10 +22,11 @@ namespace WebApp.UI2.Controllers
         private readonly IEmailSender _emailSender;
         private string RazorPayKey { get; }
 
-        public PaymentController()
+        public PaymentController(IEmailSender emailSender)
         {
             RazorPayKey = "rzp_live_ovIIdD5BdthHdu";
             _razorpayClient = new RazorpayClient(RazorPayKey, "HefGk8cKCQ0ztGQbbcvBuy8d");
+            _emailSender = emailSender;
         }
 
         public class ConfirmPaymentPayload
@@ -33,6 +34,7 @@ namespace WebApp.UI2.Controllers
             public string RazorpayPaymentId { get; set; }
             public string RazorpayOrderId { get; set; }
             public string RazorpaySignature { get; set; }
+            public decimal amount { get; set; }
         }
         public class RazorpayResponse
         {
@@ -49,12 +51,13 @@ namespace WebApp.UI2.Controllers
             public string created_at { get; set; }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> InitializePayment()
+        public ActionResult CompanyRecharge(Guid? cmpId, string amt)
         {
+            decimal val = Convert.ToDecimal(amt);
+            val = val * 100;
             var options = new Dictionary<string, object>
         {
-            { "amount", 200 },
+            { "amount", val },
             { "currency", "INR" },
             { "receipt", "recipt_1" },
             // auto capture payments rather than manual capture
@@ -88,6 +91,15 @@ namespace WebApp.UI2.Controllers
                     dynamic orderJson = order.Attributes.ToString();
                     var data = JsonConvert.DeserializeObject<RazorpayResponse>(orderJson);
                     var payment = _razorpayClient.Payment.Fetch(confirmPayment.RazorpayPaymentId);
+                    var id = payment["id"];
+                    var rrn = payment["acquirer_data"];
+                    var rrnNo = rrn["rrn"];
+                    var email = payment["email"];
+                    var contactNo =payment["contact"];
+                    var numvber = payment["vpa"];
+                    var test = payment.All();
+                    // {[vpa, { 9950772781@upi}]}
+                   // var number= test.Find(x => x.Attributes == "vpa");
                     if (payment["status"] == "captured")
                     {
                         if (User.Identity.IsAuthenticated)
@@ -102,6 +114,7 @@ namespace WebApp.UI2.Controllers
                             orderRequest.RazorpayOrderId = confirmPayment.RazorpayOrderId;
                             orderRequest.RazorpayPaymentId = confirmPayment.RazorpayPaymentId;
                             orderRequest.RazorpaySignature = confirmPayment.RazorpaySignature;
+                            //orderRequest.a = confirmPayment.amount;
 
                             var request = JsonConvert.SerializeObject(orderRequest);
                             var content = new StringContent(request, Encoding.UTF8, "application/json");
@@ -111,6 +124,9 @@ namespace WebApp.UI2.Controllers
 
                         var link = $"<a href='#'>Click here</a>";
 
+                        // await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                        //$"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(url)}'>clicking here</a>.");
+                        //var email = User.Identity.Name;
                         await _emailSender.SendEmailAsync(User.Identity.Name, "New Order Recieved",
                             "New Order Recieved");
 
@@ -164,7 +180,17 @@ namespace WebApp.UI2.Controllers
 
         public ActionResult CalRechargeAmt(Guid companyId, double planAmount)
         {
-            var result = new { rechargeAmount = planAmount, id = companyId };
+            DateTime startDateTime = DateTime.Now.ToUniversalTime();
+            DateTime endDateTime;
+            if (planAmount == 200)
+            {
+                endDateTime = DateTime.Now.AddDays(30);
+            }
+            else
+            {
+                endDateTime = DateTime.Now.ToUniversalTime();
+            }
+            var result = new { rechargeAmount = planAmount, id = companyId, startDateTime = startDateTime.ToLongDateString(), endDateTime = endDateTime.ToLongDateString() };
             return Json(result);
         }
 
@@ -182,24 +208,6 @@ namespace WebApp.UI2.Controllers
                 return builder.ToString().ToLower();
             return builder.ToString();
         }
-        public ActionResult CompanyRecharge(Guid? cmpId, string amt)
-        {
-            decimal val = Convert.ToDecimal(amt);
-            val = val * 100;
-            var options = new Dictionary<string, object>
-        {
-            { "amount", val },
-            { "currency", "INR" },
-            { "receipt", "recipt_1" },
-            // auto capture payments rather than manual capture
-            // razor pay recommended option
-            { "payment_capture", true }
-        };
 
-            var order = _razorpayClient.Order.Create(options);
-            var orderId = order["id"].ToString();
-            var orderJson = order.Attributes.ToString();
-            return Ok(orderJson);
-        }
     }
 }

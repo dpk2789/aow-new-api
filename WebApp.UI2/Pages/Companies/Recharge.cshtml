@@ -23,11 +23,11 @@
                             <div class="available">
                                 <select style="margin-top: -5px; font-size:12px; height:41px; width:174px;" onchange="CalRechargeAmt(this.value);">
                                     <option value="1" selected>Select Plan </option>
-                                    <option value="150.00">1 Month  INR 150.00 </option>
-                                    <option value="300.00">2 Month  INR 300.00 </option>
-                                    <option value="450.00">3 Month  INR 450.00 </option>
-                                    <option value="800.00">6 Month  INR 800.00 </option>
-                                    <option value="1700.00">1 Year  INR 1700.00 </option>
+                                    <option value="5">1 Month  INR 200.00 </option>
+                                    <option value="400">2 Month  INR 400.00 </option>
+                                    <option value="600">3 Month  INR 600.00 </option>
+                                    <option value="1100">6 Month  INR 1100.00 </option>
+                                    <option value="2200">1 Year  INR 2200.00 </option>
                                 </select>
 
                                 <script>
@@ -42,6 +42,8 @@
                                              if (response != null) {
                                                  $('#rechargeAmt').val(response.rechargeAmount);
                                                   $('#subTotal').text(response.rechargeAmount);
+                                                   $('#startDay').text(response.startDateTime);
+                                                    $('#endDay').text(response.endDateTime);
                                                  $('#total').text(response.rechargeAmount);
                                                          $('#cmpId').val(response.id);
 
@@ -65,6 +67,8 @@
                     <div class="col-md-4">
                         SubTotal : <label id="subTotal"> </label><br />
                         Total : <label id="total"> </label><br />
+                        Recharge StartDay : <label id="startDay"> </label><br />
+                        Recharge  EndDate : <label id="endDay"> </label><br />
                         @*@Html.ActionLink("CheckOut", "CompanyRecharge", "Companies", new { id = Model.Id, username = @User.Identity.Name }, new { @class = "btn btn-success btn-xs" })*@
                         <button onclick="handleRazorpayPayment()" id="rzp-button1" class="btn btn-large btn-success" type="button">Pay</button>
                         <input type="hidden" id="rechargeAmt" />
@@ -83,8 +87,8 @@
 
 @section scripts {
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
 
     const requestConfig = {
         headers: {
@@ -110,15 +114,27 @@
                 confirmPaymentPayload.set('RazorpayPaymentId', response.razorpay_payment_id);
                 confirmPaymentPayload.set('RazorpayOrderId', response.razorpay_order_id);
                 confirmPaymentPayload.set('RazorpaySignature', response.razorpay_signature);
+                confirmPaymentPayload.set('Amount', amt);
                 axios.post(`/Payment/ConfirmPayment`, confirmPaymentPayload)
-                    .then(response => alert(response.data))
-                    .catch((err) => console.log(err))
+                .then(function (response) {
+                    console.log(response);
+                    if (response.data) {
+                        toastr.success(response.data)
+                        window.location.href = '/MyBooks/Payment/SuccessPayment'
+                    } else {
+                        toastr.error(response.data)
+                    }
+                })
+                .catch(function (response) {
+                    console.log(error);
+                    toastr.error('Some Error Occur!!')
+                });                    
             },
-            prefill: {
-                name: "TESTUSER",
-                email: "@Model.Input.Email",
-                contact: "9999999999"
-            },
+            //prefill: {
+            //    name: "@Model.Input.Email",
+            //    email: "@Model.Input.Email",
+            //    contact: "9999999999"
+            //},
             theme: {
                 color: '#F37254'
             }
@@ -177,5 +193,5 @@
                     //    rzp1.open();
                     //    e.preventDefault();
                     //}
-    </script>
+</script>
 }
