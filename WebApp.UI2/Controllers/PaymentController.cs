@@ -50,6 +50,25 @@ namespace WebApp.UI2.Controllers
             public string[] notes { get; set; }
             public string created_at { get; set; }
         }
+        public class PaymentViewModel
+        {
+            public string RazorpayPaymentId { get; set; }
+            public string RazorpayOrderId { get; set; }
+            public string RazorpaySignature { get; set; }
+            public string RazorReference { get; set; }
+            public string SessionId { get; set; }
+            public string UserId { get; set; }
+            public string Email { get; set; }
+            public string ContactNo { get; set; }
+            public string upi { get; set; }
+            public string rrnNo { get; set; }
+            public string status { get; set; }
+            public string AddressLine1 { get; set; }
+            public string City { get; set; }
+            public string PostCode { get; set; }
+            public DateTime StartDateUtc { get; set; }
+            public DateTime EndDateUtc { get; set; }
+        }
 
         public ActionResult CompanyRecharge(Guid? cmpId, string amt)
         {
@@ -95,11 +114,13 @@ namespace WebApp.UI2.Controllers
                     var rrn = payment["acquirer_data"];
                     var rrnNo = rrn["rrn"];
                     var email = payment["email"];
-                    var contactNo =payment["contact"];
-                    var numvber = payment["vpa"];
+                    var contactNo = payment["contact"];
+                    var upi = payment["vpa"];
+                    var status = payment["status"];
                     var test = payment.All();
+
                     // {[vpa, { 9950772781@upi}]}
-                   // var number= test.Find(x => x.Attributes == "vpa");
+                    // var number= test.Find(x => x.Attributes == "vpa");
                     if (payment["status"] == "captured")
                     {
                         if (User.Identity.IsAuthenticated)
@@ -109,12 +130,16 @@ namespace WebApp.UI2.Controllers
                             var userAccessToken = User.Claims.FirstOrDefault(x => x.Type == "AcessToken")?.Value;
                             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
 
-                            var orderRequest = new OrderViewModel();
+                            var orderRequest = new PaymentViewModel();
                             orderRequest.UserId = User.Identity.Name;
                             orderRequest.RazorpayOrderId = confirmPayment.RazorpayOrderId;
                             orderRequest.RazorpayPaymentId = confirmPayment.RazorpayPaymentId;
                             orderRequest.RazorpaySignature = confirmPayment.RazorpaySignature;
-                            //orderRequest.a = confirmPayment.amount;
+                            orderRequest.rrnNo = rrnNo;
+                            orderRequest.Email = email;
+                            orderRequest.ContactNo = contactNo;
+                            orderRequest.upi = upi;
+                            orderRequest.status = status;
 
                             var request = JsonConvert.SerializeObject(orderRequest);
                             var content = new StringContent(request, Encoding.UTF8, "application/json");

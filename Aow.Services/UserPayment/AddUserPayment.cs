@@ -1,4 +1,5 @@
 ﻿using Aow.Infrastructure.IRepositories;
+using System;
 using System.Threading.Tasks;
 
 namespace Aow.Services.UserPayment
@@ -11,8 +12,15 @@ namespace Aow.Services.UserPayment
         {
             _repoWrapper = repoWrapper;
         }
-
-        public class OrderRequest
+      
+        public class CreateResponse
+        {
+            public Guid Id { get; set; }
+            public string Name { get; set; }
+            public string Description { get; set; }
+            public bool Success { get; set; }
+        }
+        public class AddPaymentRequest
         {
             public string RazorpayPaymentId { get; set; }
             public string RazorpayOrderId { get; set; }
@@ -34,7 +42,7 @@ namespace Aow.Services.UserPayment
             public bool Success { get; set; }
             public string Message { get; set; }
         }
-        public async Task<AddUserPaymentResponse> Do(OrderRequest request)
+        public async Task<AddUserPaymentResponse> Do(AddPaymentRequest request)
         {
             var orderByUser = new Aow.Infrastructure.Domain.UserPayment
             {
