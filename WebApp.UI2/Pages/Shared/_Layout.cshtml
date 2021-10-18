@@ -13,6 +13,8 @@
           Cash Book,Online Ledger ,Bussiness Online ,accountancy web ,accounting solutions">
     <meta name="google-site-verification" content="SjdanId64q7Oswietj1GXGEx2y5fLhMrFAleh7rIw_I" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- Toastr -->
+    <link href="~/toastr.js/toastr.css" rel="stylesheet" />
     <!-- Font A  <!-- Font Awesome Icons -->
     <link href="~/fontawesome-free/css/all.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
@@ -39,10 +41,10 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
-                          <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/AboutUs">About Us</a>
                         </li>
-                         <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Pricing">Pricing</a>
                         </li>
                         <li class="nav-item">
@@ -51,9 +53,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
-                        
-                        
-                       
+
+
+
                         @if (Context.User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
@@ -108,8 +110,10 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/axios/axios.js"></script>
+    <!-- Toastr -->
+    <script src="~/toastr.js/toastr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-  
+
     <!-- Messenger Chat plugin Code -->
     <div id="fb-root"></div>
 
@@ -118,25 +122,25 @@
     </div>
 
     <script>
-            var chatbox = document.getElementById('fb-customer-chat');
-            chatbox.setAttribute("page_id", "108959544143098");
-            chatbox.setAttribute("attribution", "biz_inbox");
+        var chatbox = document.getElementById('fb-customer-chat');
+        chatbox.setAttribute("page_id", "108959544143098");
+        chatbox.setAttribute("attribution", "biz_inbox");
 
-            window.fbAsyncInit = function () {
-                FB.init({
-                    xfbml: true,
-                    version: 'v12.0'
-                });
-            };
+        window.fbAsyncInit = function () {
+            FB.init({
+                xfbml: true,
+                version: 'v12.0'
+            });
+        };
 
-            (function (d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s); js.id = id;
-                js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
-        </script>
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

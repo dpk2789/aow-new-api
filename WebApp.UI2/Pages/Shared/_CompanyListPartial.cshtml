@@ -23,13 +23,12 @@
                         <a asp-route-id="@company.Id" asp-page="/Companies/Edit" class="fa fa-edit">Edit</a> |
                         <a asp-page="/MyBooks/Dashboard" class="btn btn-outline-success" asp-route-companyId="@company.Id">My Books</a> |
                          <a asp-route-id="@company.Id" class="btn btn-outline-primary" asp-page="/Companies/Recharge" >Recharge</a> |
+                         <a asp-route-id="@company.Id" class="btn btn-outline-primary" asp-page="/Companies/UserCompanyRecharges" >Active Plan</a> |
                         <button onclick="confirmAction(event)" data-product-id="@company.Id" class="btn btn-outline-danger" type="button" >Delete</button>
                     </td>
                 </tr>
             }
         }
-
-
 
     </tbody>
 </table>

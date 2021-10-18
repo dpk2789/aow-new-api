@@ -59,6 +59,7 @@ namespace Aow.Infrastructure
             builder.Entity<VoucherItem>().Property(p => p.Price).HasColumnType("decimal(18,4)");
             builder.Entity<VoucherItem>().Property(p => p.Quantity).HasColumnType("decimal(18,4)");
             builder.Entity<VoucherSundryItem>().Property(p => p.ItemAmount).HasColumnType("decimal(18,4)");
+            builder.Entity<UserPayment>().Property(p => p.Amount).HasColumnType("decimal(18,4)");
             // builder.ApplyConfiguration(new ProductCategoryConfiguration());
             base.OnModelCreating(builder);
         }

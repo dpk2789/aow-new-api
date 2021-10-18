@@ -12,7 +12,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using WebApp.UI2.Helpers;
-using WebApp.UI2.Models.Checkout;
 
 namespace WebApp.UI2.Controllers
 {
@@ -35,6 +34,7 @@ namespace WebApp.UI2.Controllers
             public string RazorpayOrderId { get; set; }
             public string RazorpaySignature { get; set; }
             public decimal amount { get; set; }
+            public Guid CompanyId { get; set; }
         }
         public class RazorpayResponse
         {
@@ -58,8 +58,10 @@ namespace WebApp.UI2.Controllers
             public string RazorReference { get; set; }
             public string SessionId { get; set; }
             public string UserId { get; set; }
+            public Guid CompanyId { get; set; }
             public string Email { get; set; }
             public string ContactNo { get; set; }
+            public decimal Amount { get; set; }
             public string upi { get; set; }
             public string rrnNo { get; set; }
             public string status { get; set; }
@@ -68,6 +70,13 @@ namespace WebApp.UI2.Controllers
             public string PostCode { get; set; }
             public DateTime StartDateUtc { get; set; }
             public DateTime EndDateUtc { get; set; }
+            public string Currency { get; set; }
+            public string Receipt { get; set; }
+            public string Offerid { get; set; }
+            public string Attempts { get; set; }
+            public string Notes { get; set; }
+            public string CreatedAt { get; set; }
+            public int NoOfDays { get; set; }
         }
 
         public ActionResult CompanyRecharge(Guid? cmpId, string amt)
@@ -108,7 +117,10 @@ namespace WebApp.UI2.Controllers
                 {
                     var order = _razorpayClient.Order.Fetch(confirmPayment.RazorpayOrderId);
                     dynamic orderJson = order.Attributes.ToString();
-                    var data = JsonConvert.DeserializeObject<RazorpayResponse>(orderJson);
+                    var razorpayResponse = JsonConvert.DeserializeObject<RazorpayResponse>(orderJson);
+                    var amtPaid = razorpayResponse.amount_paid;
+                    var createdAt = razorpayResponse.created_at;
+                    var currency = razorpayResponse.currency;
                     var payment = _razorpayClient.Payment.Fetch(confirmPayment.RazorpayPaymentId);
                     var id = payment["id"];
                     var rrn = payment["acquirer_data"];
@@ -117,8 +129,30 @@ namespace WebApp.UI2.Controllers
                     var contactNo = payment["contact"];
                     var upi = payment["vpa"];
                     var status = payment["status"];
-                    var test = payment.All();
-
+                    var amt = payment["amount"];
+                    var noOfDays = 0;
+                    DateTime startDateTime = DateTime.Now.ToUniversalTime();
+                    DateTime endDateTime;
+                    if (amtPaid == 200)
+                    {
+                        noOfDays = 30;
+                        endDateTime = DateTime.Now.ToUniversalTime().AddDays(noOfDays);
+                    }
+                    if (amtPaid == 400)
+                    {
+                        noOfDays = 60;
+                        endDateTime = DateTime.Now.ToUniversalTime().AddDays(noOfDays);
+                    }
+                    if (amtPaid == 600)
+                    {
+                        noOfDays = 90;
+                        endDateTime = DateTime.Now.ToUniversalTime().AddDays(noOfDays);
+                    }
+                    else
+                    {
+                        noOfDays = 5;
+                        endDateTime = DateTime.Now.ToUniversalTime().AddDays(5);
+                    }
                     // {[vpa, { 9950772781@upi}]}
                     // var number= test.Find(x => x.Attributes == "vpa");
                     if (payment["status"] == "captured")
@@ -126,21 +160,27 @@ namespace WebApp.UI2.Controllers
                         if (User.Identity.IsAuthenticated)
                         {
                             using var client = new HttpClient();
-                            var createOrderUri = new Uri(ApiUrls.Order.Create);
+                            var createOrderUri = new Uri(ApiUrls.Payment.Create);
                             var userAccessToken = User.Claims.FirstOrDefault(x => x.Type == "AcessToken")?.Value;
                             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
 
-                            var orderRequest = new PaymentViewModel();
+                            var orderRequest = new PaymentViewModel
+                            {
+                                UserId = User.Identity.Name,
+                                RazorpayOrderId = confirmPayment.RazorpayOrderId,
+                                RazorpayPaymentId = confirmPayment.RazorpayPaymentId,
+                                RazorpaySignature = confirmPayment.RazorpaySignature,
+                                rrnNo = rrnNo,
+                                Email = email,
+                                ContactNo = contactNo,
+                                upi = upi,
+                                Amount = amtPaid,
+                                StartDateUtc = startDateTime,
+                                EndDateUtc = endDateTime,
+                                NoOfDays = noOfDays,
+                                CompanyId = confirmPayment.CompanyId
+                            };
                             orderRequest.UserId = User.Identity.Name;
-                            orderRequest.RazorpayOrderId = confirmPayment.RazorpayOrderId;
-                            orderRequest.RazorpayPaymentId = confirmPayment.RazorpayPaymentId;
-                            orderRequest.RazorpaySignature = confirmPayment.RazorpaySignature;
-                            orderRequest.rrnNo = rrnNo;
-                            orderRequest.Email = email;
-                            orderRequest.ContactNo = contactNo;
-                            orderRequest.upi = upi;
-                            orderRequest.status = status;
-
                             var request = JsonConvert.SerializeObject(orderRequest);
                             var content = new StringContent(request, Encoding.UTF8, "application/json");
                             var postOrderResult = await client.PostAsync(createOrderUri, content);

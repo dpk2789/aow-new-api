@@ -97,8 +97,9 @@
     };
         var handleRazorpayPayment = async function () {
             const amt = $('#rechargeAmt').val();
+            const cmpId = $('#cmpid').val();
             const response = await axios.post(`/Payment/CompanyRecharge?amt=` + amt);
-        const order_id = response.data.id;
+            const order_id = response.data.id;
 
 
         const options = await {
@@ -115,20 +116,17 @@
                 confirmPaymentPayload.set('RazorpayOrderId', response.razorpay_order_id);
                 confirmPaymentPayload.set('RazorpaySignature', response.razorpay_signature);
                 confirmPaymentPayload.set('Amount', amt);
+                 confirmPaymentPayload.set('CompanyId', cmpId);
                 axios.post(`/Payment/ConfirmPayment`, confirmPaymentPayload)
                 .then(function (response) {
                     console.log(response);
-                    if (response.data) {
-                        toastr.success(response.data)
-                        window.location.href = '/MyBooks/Payment/SuccessPayment'
-                    } else {
-                        toastr.error(response.data)
-                    }
+                    toastr.success(response.data);
+                        window.location.href = '/Payment/SuccessPayment'
                 })
-                .catch(function (response) {
-                    console.log(error);
+                .catch(err => {
+                    alert(err);
                     toastr.error('Some Error Occur!!')
-                });                    
+                });
             },
             //prefill: {
             //    name: "@Model.Input.Email",
