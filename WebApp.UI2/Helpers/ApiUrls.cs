@@ -106,6 +106,7 @@
 
         public static class Payment
         {
+            public const string GetUserPayments = Rootlocal + "/api/Payment/GetUserPayments";
             public const string Create = Rootlocal + "/api/Payment/AddUserPayment";
         }
 

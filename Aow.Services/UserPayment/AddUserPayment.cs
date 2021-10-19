@@ -79,15 +79,17 @@ namespace Aow.Services.UserPayment
                 Address1 = request.Address1,
                 Address2 = request.Address2,
                 City = request.City,
-                PostCode = request.PostCode,               
-                rrnNo = request.rrnNo,              
+                PostCode = request.PostCode,
+                rrnNo = request.rrnNo,
                 upi = request.upi,
                 Amount = request.Amount,
                 StartDateUtc = request.StartDateUtc,
                 EndDateUtc = request.EndDateUtc,
                 NoOfDays = request.NoOfDays.Value,
                 CompanyId = request.CompanyId,
-                AppUserId = user.Id
+                AppUserId = user.Id,
+                CreatedAt = request.CreatedAt,
+                CreatedUtc= DateTime.UtcNow
             };
 
             _repoWrapper.UserPaymentRepo.Create(orderByUser);

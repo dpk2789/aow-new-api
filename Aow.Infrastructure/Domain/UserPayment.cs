@@ -14,6 +14,7 @@ namespace Aow.Infrastructure.Domain
         public string AppUserId { get; set; }
         public AppUser AppUser { get; set; }
         public Guid CompanyId { get; set; }
+        public Company Company { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public decimal Amount { get; set; }

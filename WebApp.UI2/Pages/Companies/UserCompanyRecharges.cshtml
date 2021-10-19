@@ -2,3 +2,34 @@
 @model WebApp.UI2.Pages.Companies.UserCompanyRechargesModel
 @{
 }
+
+
+<div id="product-main">
+    <table class="table">
+        <tr>
+            <th>Id</th>
+            <th>No. Of Days</th>
+            <th></th>
+        </tr>
+        <tbody>
+            @if (Model != null)
+            {
+                @foreach (var company in Model.CompanyRecharges)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => company.CompanyId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => company.NoOfDays)
+                        </td>
+
+                        <td>
+                        </td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>

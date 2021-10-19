@@ -178,7 +178,8 @@ namespace WebApp.UI2.Controllers
                                 StartDateUtc = startDateTime,
                                 EndDateUtc = endDateTime,
                                 NoOfDays = noOfDays,
-                                CompanyId = confirmPayment.CompanyId
+                                CompanyId = confirmPayment.CompanyId,
+                                CreatedAt = createdAt
                             };
                             orderRequest.UserId = User.Identity.Name;
                             var request = JsonConvert.SerializeObject(orderRequest);

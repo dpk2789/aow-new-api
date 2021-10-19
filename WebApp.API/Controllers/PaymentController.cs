@@ -1,6 +1,6 @@
-﻿using Aow.Infrastructure.Paging;
-using Aow.Services.UserPayment;
+﻿using Aow.Services.UserPayment;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace WebApp.API.Controllers
@@ -10,9 +10,9 @@ namespace WebApp.API.Controllers
     public class PaymentController : ControllerBase
     {
         [HttpGet("api/Payment/GetUserPayments")]
-        public async Task<IActionResult> GetUserPayments([FromQuery] PagingParameters pagingParameters, string userName, [FromServices] GetUserPayments getPayments)
+        public async Task<IActionResult> GetUserPayments(string userName, Guid cmpId, [FromServices] GetUserPayments getPayments)
         {
-            var result = await getPayments.Do(pagingParameters, userName);
+            var result = await getPayments.Do(userName, cmpId);
             return Ok(result);
         }
 

@@ -26,5 +26,6 @@ namespace Aow.Infrastructure.Domain
         public string PinCode { get; set; }
         public virtual IList<FinancialYear> FinancialYears { get; set; }
         public virtual IList<AppUserCompany> AppUserCompanies { get; set; }
+        public virtual IList<UserPayment> UserPayments { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Aow.Infrastructure.Domain;
 using Aow.Infrastructure.Paging;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace Aow.Infrastructure.Repositories
 
         public Company GetCompany(Guid Id)
         {
-            return FindByCondition(x => x.Id == Id).FirstOrDefault();
+            return FindByCondition(x => x.Id == Id).Include(x => x.UserPayments).FirstOrDefault();
         }
 
         public Task<PagedList<Company>> GetCompanies(PagingParameters ownerParameters)
@@ -24,6 +25,6 @@ namespace Aow.Infrastructure.Repositories
                                     ownerParameters.PageNumber, ownerParameters.PageSize));
         }
 
-      
+
     }
 }
