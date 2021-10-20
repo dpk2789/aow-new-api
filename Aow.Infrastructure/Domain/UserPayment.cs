@@ -20,22 +20,18 @@ namespace Aow.Infrastructure.Domain
         public decimal Amount { get; set; }
         public string upi { get; set; }
         public string rrnNo { get; set; }
-        public string status { get; set; }
-        public DateTime StartDateUtc { get; set; }
-        public DateTime EndDateUtc { get; set; }
+        public string status { get; set; }  
         public string CreatedAt { get; set; }
         public string Currency { get; set; }
         public string Receipt { get; set; }
         public string Offerid { get; set; }
         public string Attempts { get; set; }
-        public string Notes { get; set; }
-        public int NoOfDays { get; set; }
+        public string Notes { get; set; }     
         public bool PaymentStatus { get; set; }
         public bool PrepaidTimeFinished { get; set; }
         public DateTime CreatedUtc {  get; set;}
         public string FirstName { get; set; }
-        public string LastName { get; set; }
-      
+        public string LastName { get; set; }      
         public string Address1 { get; set; }
         public string Address2 { get; set; }
         public string City { get; set; }

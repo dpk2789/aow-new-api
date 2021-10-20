@@ -42,7 +42,11 @@ namespace Aow.Services.Companies
             {
                 Id = companyId,
                 Name = request.Name,
-                TaxType= request.TaxType
+                TaxType = request.TaxType,
+                StartDateUtc = DateTime.UtcNow,
+                EndDateUtc = DateTime.UtcNow,
+                Status = false,
+                NoOfDays = 0
             };
             _repoWrapper.CompanyRepo.Create(company);
             var appUserCompany = new AppUserCompany

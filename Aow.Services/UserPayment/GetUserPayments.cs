@@ -1,5 +1,4 @@
 ﻿using Aow.Infrastructure.IRepositories;
-using Aow.Infrastructure.Paging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,9 +59,9 @@ namespace Aow.Services.UserPayment
             {
                 Id = x.Id,
                 CompanyId = x.CompanyId,
-                StartDateUtc = x.StartDateUtc,
-                EndDateUtc = x.EndDateUtc,
-                NoOfDays = x.NoOfDays
+                StartDateUtc = x.Company.StartDateUtc,
+                EndDateUtc = x.Company.EndDateUtc,
+                NoOfDays = x.Company.NoOfDays
             });
 
             return newList;

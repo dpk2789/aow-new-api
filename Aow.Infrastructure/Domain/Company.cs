@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Aow.Infrastructure.Domain
 {
     public class Company : AuditableEntity<Guid>
-    {        
+    {
         public string Name { get; set; }
         public string TaxNumber { get; set; }
         public string TaxType { get; set; }
@@ -24,6 +24,11 @@ namespace Aow.Infrastructure.Domain
         public string Country { get; set; }
         public int? CountryId { get; set; }
         public string PinCode { get; set; }
+        public DateTime StartDateUtc { get; set; }
+        public DateTime EndDateUtc { get; set; }
+        public string CreatedAt { get; set; }
+        public int NoOfDays { get; set; }
+        public bool Status { get; set; }
         public virtual IList<FinancialYear> FinancialYears { get; set; }
         public virtual IList<AppUserCompany> AppUserCompanies { get; set; }
         public virtual IList<UserPayment> UserPayments { get; set; }
