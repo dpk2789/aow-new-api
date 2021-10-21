@@ -90,6 +90,17 @@ namespace Aow.Services.UserPayment
             };
 
             _repoWrapper.UserPaymentRepo.Create(orderByUser);
+
+            var company = _repoWrapper.CompanyRepo.GetCompany(request.CompanyId);
+            if (company == null)
+            {
+                return null;
+            }
+            company.StartDateUtc = request.StartDateUtc;
+            company.EndDateUtc = request.EndDateUtc;
+            company.NoOfDays = request.NoOfDays.Value;
+            _repoWrapper.CompanyRepo.Update(company);
+
             AddUserPaymentResponse addUserPaymentResponse = new AddUserPaymentResponse();
             int i = await _repoWrapper.SaveNew();
             if (i > 0)

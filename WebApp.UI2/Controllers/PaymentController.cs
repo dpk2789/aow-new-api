@@ -254,7 +254,7 @@ namespace WebApp.UI2.Controllers
             }
             else
             {
-                endDateTime = DateTime.Now.ToUniversalTime();
+                endDateTime = DateTime.Now.ToUniversalTime().AddDays(5);
             }
             var result = new { rechargeAmount = planAmount, id = companyId, startDateTime = startDateTime.ToLongDateString(), endDateTime = endDateTime.ToLongDateString() };
             return Json(result);
