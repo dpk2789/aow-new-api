@@ -1,30 +1,34 @@
 ﻿@model IEnumerable<WebApp.UI2.Pages.Companies.IndexModel.CompanyViewModel>
 
-<table class="table">
-    <tr>
-        <th>Id</th>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+        @* <th>Id</th>*@
         <th>Name</th>
+         <th>Tax Type</th>
         <th></th>
     </tr>
+    </thead>
+    
     <tbody>
         @if (Model != null)
         {
             @foreach (var company in Model)
             {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => company.Id)
-                    </td>
+                   
                     <td>
                         @Html.DisplayFor(modelItem => company.Name)
                     </td>
-
+                      <td>
+                        @Html.DisplayFor(modelItem => company.TaxType)
+                        </td>
                     <td>
                         <a asp-route-id="@company.Id" asp-page="/Companies/Edit" class="fa fa-edit">Edit</a> |
                         <a asp-page="/MyBooks/Dashboard" class="btn btn-outline-success" asp-route-companyId="@company.Id">My Books</a> |
-                         <a asp-route-id="@company.Id" class="btn btn-outline-primary" asp-page="/Companies/Recharge" >Recharge</a> |
-                         <a asp-route-id="@company.Id" class="btn btn-outline-primary" asp-page="/Companies/UserCompanyRecharges" >Active Plan</a> |
-                        <button onclick="confirmAction(event)" data-product-id="@company.Id" class="btn btn-outline-danger" type="button" >Delete</button>
+                        <a asp-route-id="@company.Id" class="btn btn-outline-primary" asp-page="/Companies/Recharge">Recharge</a> |
+                        @*  <a asp-route-id="@company.Id" class="btn btn-outline-primary" asp-page="/Companies/UserCompanyRecharges" >Active Plan</a> |*@
+                        <button onclick="confirmAction(event)" data-product-id="@company.Id" class="btn btn-outline-danger" type="button">Delete</button>
                     </td>
                 </tr>
             }

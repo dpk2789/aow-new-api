@@ -16,6 +16,12 @@ namespace Aow.Services.Companies
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
+            public string TaxNumber { get; set; }
+            public string TaxType { get; set; }
+            public string Email { get; set; }
+            public string Mobile { get; set; }
+            public string Currency { get; set; }
+            public int? CurrencyId { get; set; }
             public DateTime StartDateUtc { get; set; }
             public DateTime EndDateUtc { get; set; }
             public string Description { get; set; }
@@ -31,6 +37,7 @@ namespace Aow.Services.Companies
             {
                 Id = company.Id,
                 Name = company.Name,
+                TaxType = company.TaxType,
                 NoOfDays = company.NoOfDays,
                 StartDateUtc = company.StartDateUtc,
                 EndDateUtc = company.EndDateUtc,
