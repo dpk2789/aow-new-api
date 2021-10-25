@@ -22,12 +22,13 @@ namespace WebApp.UI2.Pages.Companies
         [BindProperty] public RechargeViewModel Input { get; set; }
         public class RechargeViewModel
         {
-            public Guid Id { get; set; }         
+            public Guid Id { get; set; }
             public string Name { get; set; }
             public string PANNumber { get; set; }
             public string Email { get; set; }
             public string UserId { get; set; }
             public string Mobile { get; set; }
+            public int NoOfDays { get; set; }
         }
 
         public async Task<IActionResult> OnGet(Guid Id)

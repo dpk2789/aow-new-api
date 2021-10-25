@@ -20,27 +20,59 @@ namespace Aow.Services.Voucher
 
         public async Task<DeleteVoucherResponse> Do(Guid id)
         {
-            var voucher = await _repoWrapper.VoucherRepo.GetVoucher(id);
-            if (voucher == null)
+            try
             {
-                return null;
+                var voucher = await _repoWrapper.VoucherRepo.GetVoucherForDelete(id);
+                if (voucher == null)
+                {
+                    return null;
+                }
+                if (voucher.JournalEntries != null)
+                {
+                    foreach (var jentry in voucher.JournalEntries)
+                    {
+                        _repoWrapper.JournalEntryRepo.Delete(jentry);
+                    }
+                }
+                if (voucher.VoucherSundryItems != null)
+                {
+                    foreach (var sundryItem in voucher.VoucherSundryItems)
+                    {
+                        _repoWrapper.VoucherSundryItemRepo.Delete(sundryItem);
+                    }
+                }
+                if (voucher.VoucherItems != null)
+                {
+                    foreach (var item in voucher.VoucherItems)
+                    {
+                        _repoWrapper.VoucherItemRepo.Delete(item);
+                    }
+                }
+                _repoWrapper.VoucherRepo.Delete(voucher);
+                int i = await _repoWrapper.SaveNew();
+                if (i <= 0)
+                {
+                    return new DeleteVoucherResponse
+                    {
+                        Message = "Error Deleting",
+                        Success = false
+                    };
+                }
+                else
+                {
+                    return new DeleteVoucherResponse
+                    {
+                        Message = "Voucher Deleted",
+                        Success = true
+                    };
+                }
             }
-            _repoWrapper.VoucherRepo.Delete(voucher);
-            int i = await _repoWrapper.SaveNew();
-            if (i <= 0)
+            catch (Exception ex)
             {
                 return new DeleteVoucherResponse
                 {
-                    Message = "Error Deleting",
+                    Message = ex.Message,
                     Success = false
-                };
-            }
-            else
-            {
-                return new DeleteVoucherResponse
-                {
-                    Message = "Voucher Deleted",
-                    Success = true
                 };
             }
         }

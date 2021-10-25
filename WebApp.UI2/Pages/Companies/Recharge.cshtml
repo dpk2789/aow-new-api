@@ -23,7 +23,7 @@
                             <div class="available">
                                 <select style="margin-top: -5px; font-size:12px; height:41px; width:174px;" onchange="CalRechargeAmt(this.value);">
                                     <option value="1" selected>Select Plan </option>
-                                    <option value="5">1 Month  INR 200.00 </option>
+                                    <option value="200">1 Month  INR 200.00 </option>
                                     <option value="400">2 Month  INR 400.00 </option>
                                     <option value="600">3 Month  INR 600.00 </option>
                                     <option value="1100">6 Month  INR 1100.00 </option>
@@ -33,17 +33,18 @@
                                 <script>
                                        function CalRechargeAmt(amt) {
                                     // alert(amt);
-
+                                    const noOfDays = $('#noOfDays').val();
                                      $.ajax({
                                          type: "POST",
                                          url: "/Payment/CalRechargeAmt/",
-                                         data: { 'companyId': "@Model.Input.Id", 'planAmount' : amt },
+                                         data: { 'companyId': "@Model.Input.Id", 'planAmount' : amt ,noOfDays:noOfDays},
                                          success: function(response) {
                                              if (response != null) {
                                                  $('#rechargeAmt').val(response.rechargeAmount);
                                                   $('#subTotal').text(response.rechargeAmount);
                                                    $('#startDay').text(response.startDateTime);
                                                     $('#endDay').text(response.endDateTime);
+                                                      $('#noOfDaysLable').text(response.noOfDays);
                                                  $('#total').text(response.rechargeAmount);
                                                          $('#cmpId').val(response.id);
 
@@ -67,6 +68,8 @@
                     <div class="col-md-4">
                         SubTotal : <label id="subTotal"> </label><br />
                         Total : <label id="total"> </label><br />
+                        No Of Days : <label id="noOfDaysLable"> @Model.Input.NoOfDays</label><br />
+                        <input id="noOfDays" type="hidden" value="@Model.Input.NoOfDays" />
                         Recharge StartDay : <label id="startDay"> </label><br />
                         Recharge  EndDate : <label id="endDay"> </label><br />
                         @*@Html.ActionLink("CheckOut", "CompanyRecharge", "Companies", new { id = Model.Id, username = @User.Identity.Name }, new { @class = "btn btn-success btn-xs" })*@

@@ -23,6 +23,13 @@ namespace Aow.Infrastructure.Repositories
             return result;
         }
 
+        public async Task<Voucher> GetVoucherForDelete(Guid Id)
+        {
+            var result = await FindByCondition(x => x.Id == Id).Include(x => x.JournalEntries).Include(x => x.VoucherSundryItems).
+            Include(x => x.VoucherItems).FirstOrDefaultAsync();
+            return result;
+        }
+
         public Task<PagedList<Voucher>> GetVouchers(PagingParameters ownerParameters, string voucherName, Guid FinancialYearId)
         {
             return Task.FromResult(PagedList<Voucher>.ToPagedList(FindAll().Where(x => x.FinancialYearId == FinancialYearId && x.VoucherName == voucherName).

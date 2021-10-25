@@ -20,29 +20,41 @@ namespace Aow.Services.Companies
         }
         public async Task<DeleteCompanyResponse> Do(Guid id)
         {
-            var company = _repoWrapper.CompanyRepo.GetCompany(id);
-            if (company == null)
+            try
             {
-                return null;
+                var company = _repoWrapper.CompanyRepo.GetCompany(id);
+                if (company == null)
+                {
+                    return null;
+                }
+                _repoWrapper.CompanyRepo.Delete(company);
+                int i = await _repoWrapper.SaveNew();
+                if (i <= 0)
+                {
+                    return new DeleteCompanyResponse
+                    {
+                        Message = "Error Deleting",
+                        Success = false
+                    };
+                }
+                else
+                {
+                    return new DeleteCompanyResponse
+                    {
+                        Message = "Company Deleted",
+                        Success = true
+                    };
+                }
             }
-            _repoWrapper.CompanyRepo.Delete(company);
-            int i = await _repoWrapper.SaveNew();
-            if (i <= 0)
+            catch (Exception ex)
             {
                 return new DeleteCompanyResponse
                 {
-                    Message = "Error Deleting",
+                    Message = ex.Message,
                     Success = false
                 };
             }
-            else
-            {
-                return new DeleteCompanyResponse
-                {
-                    Message = "Company Deleted",
-                    Success = true
-                };
-            }
+           
         }
     }
 }

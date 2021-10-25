@@ -20,7 +20,7 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
         {
             public Guid? Id { get; set; }
             public string FinancialYearId { get; set; }
-            public decimal VoucherNumber { get; set; }
+            public string VoucherNumber { get; set; }
             public int VoucherTypeId { get; set; }
             public string VoucherName { get; set; }
             public Guid LedgerId { get; set; }
@@ -76,6 +76,7 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
             VoucherInvoiceViewModel inputModel = new VoucherInvoiceViewModel();
             inputModel.FinancialYearId = fyrId;
             inputModel.VoucherName = voucherName;
+           // inputModel.VoucherNumber = 0;
             Input = inputModel;
             return Page();
         }
