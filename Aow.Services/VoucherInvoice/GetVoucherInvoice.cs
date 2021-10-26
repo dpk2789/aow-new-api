@@ -1,6 +1,7 @@
 ﻿using Aow.Infrastructure.IRepositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aow.Services.VoucherInvoice
@@ -88,7 +89,7 @@ namespace Aow.Services.VoucherInvoice
                 VoucherName = voucher.VoucherName
             };
             var jEntries = new List<GetVoucherInvoiceJournalEntries>();
-            foreach (var jentry in voucher.JournalEntries)
+            foreach (var jentry in voucher.JournalEntries.OrderBy(x => x.SrNo))
             {
                 if (voucher.VoucherName == "Sale Invoice")
                 {
@@ -98,13 +99,10 @@ namespace Aow.Services.VoucherInvoice
                         voucherViewModel.LedgerId = jentry.Ledger.Id;
                     }
                 }
-                else
+                if (jentry.SrNo == 1)
                 {
-                    if (jentry.CrDrType == "Cr")
-                    {
-                        voucherViewModel.LedgerName = jentry.Ledger.Name;
-                        voucherViewModel.LedgerId = jentry.Ledger.Id;
-                    }
+                    voucherViewModel.LedgerName = jentry.Ledger.Name;
+                    voucherViewModel.LedgerId = jentry.Ledger.Id;
                 }
                 var jViewModel = new GetVoucherInvoiceJournalEntries();
                 jViewModel.Id = jentry.Id;
@@ -132,6 +130,7 @@ namespace Aow.Services.VoucherInvoice
                     viewModel.SrNo = jentry.SrNo;
                     viewModel.ProductId = jentry.ProductId;
                     //   viewModel.RootCategory = ledger.Parent.Name;
+                    ItemsTotal = jentry.ItemAmount.Value + ItemsTotal;
                     items.Add(viewModel);
                 }
                 voucherViewModel.VoucherItems = items;

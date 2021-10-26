@@ -102,14 +102,14 @@ namespace WebApp.UI2.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmPayment(ConfirmPaymentPayload confirmPayment)
         {
-            var attributes = new Dictionary<string, string>
-        {
-            { "razorpay_payment_id", confirmPayment.RazorpayPaymentId },
-            { "razorpay_order_id", confirmPayment.RazorpayOrderId },
-            { "razorpay_signature", confirmPayment.RazorpaySignature }
-        };
             try
             {
+                var attributes = new Dictionary<string, string>
+                    {
+                        { "razorpay_payment_id", confirmPayment.RazorpayPaymentId },
+                        { "razorpay_order_id", confirmPayment.RazorpayOrderId },
+                        { "razorpay_signature", confirmPayment.RazorpaySignature }
+                    };
                 Utils.verifyPaymentSignature(attributes);
                 // OR
                 bool isValid = Utils.ValidatePaymentSignature(attributes);
@@ -244,19 +244,43 @@ namespace WebApp.UI2.Controllers
             return result.ToString();
         }
 
-        public ActionResult CalRechargeAmt(Guid companyId, double planAmount)
+        public ActionResult CalRechargeAmt(Guid companyId, double planAmount, int noOfDays)
         {
             DateTime startDateTime = DateTime.Now.ToUniversalTime();
-            DateTime endDateTime;
+            DateTime endDateTime = DateTime.Now.ToUniversalTime();
             if (planAmount == 200)
             {
-                endDateTime = DateTime.Now.AddDays(30);
+                noOfDays = noOfDays + 30;
+                endDateTime = DateTime.Now.ToUniversalTime().AddDays(noOfDays);
             }
-            else
+            if (planAmount == 400)
             {
-                endDateTime = DateTime.Now.ToUniversalTime().AddDays(5);
+                noOfDays = noOfDays + 60;
+                endDateTime = DateTime.Now.ToUniversalTime().AddDays(noOfDays);
             }
-            var result = new { rechargeAmount = planAmount, id = companyId, startDateTime = startDateTime.ToLongDateString(), endDateTime = endDateTime.ToLongDateString() };
+            if (planAmount == 600)
+            {
+                noOfDays = noOfDays + 90;
+                endDateTime = DateTime.Now.ToUniversalTime().AddDays(noOfDays);
+            }
+            if (planAmount == 1100)
+            {
+                noOfDays = noOfDays + 180;
+                endDateTime = DateTime.Now.ToUniversalTime().AddDays(noOfDays);
+            }
+            if (planAmount == 2200)
+            {
+                noOfDays = noOfDays + 365;
+                endDateTime = DateTime.Now.ToUniversalTime().AddDays(noOfDays);
+            }
+            var result = new
+            {
+                rechargeAmount = planAmount,
+                id = companyId,
+                startDateTime = startDateTime.ToLongDateString(),
+                endDateTime = endDateTime.ToLongDateString(),
+                noOfDays = noOfDays
+            };
             return Json(result);
         }
 
