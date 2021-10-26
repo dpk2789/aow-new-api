@@ -32,6 +32,22 @@ namespace WebApp.API.Controllers
             return BadRequest();
         }
 
+        [HttpPost("api/VoucherInvoice/UpdateVoucherInvoice")]
+        public async Task<ActionResult> UpdateVoucher([FromBody] UpdateVoucherWithItems.UpdateVoucherInvoiceRequest request, [FromServices] UpdateVoucherWithItems updateVoucherWithItems)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = await updateVoucherWithItems.Do(request);
+
+                if (!response.Success)
+                {
+                    return BadRequest(response);
+                }
+                return Ok(response);
+            }
+            return BadRequest();
+        }
+
 
     }
 }

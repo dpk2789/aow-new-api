@@ -61,10 +61,16 @@ var addVoucherWithItemsRequest = {
 
 function AddInvoice(e) {
     // let confirmAction = confirm("Are you sure to delete this product?");
-    performPostRequest(e);
+    let url = "AddVoucherInvoice";
+    performPostRequest(e, url);
+}
+function UpdateInvoice(e) {
+    // let confirmAction = confirm("Are you sure to delete this product?");
+    let url = "UpdateVoucherInvoice";
+    performPostRequest(e, url);
 }
 
-function performPostRequest(e) {
+function performPostRequest(e, url) {
     e.preventDefault();
     let buttonValue = $(this).closest("input");
     let voucherId = $('.voucherId').val();
@@ -146,7 +152,7 @@ function performPostRequest(e) {
     addVoucherWithItemsRequest.termsDays = termsDays;
     addVoucherWithItemsRequest.data = JSON.stringify(OrderDetl);
     addVoucherWithItemsRequest.data2 = JSON.stringify(sundryItems);
-    axios.post(`${apiUrl}/api/VoucherInvoice/AddVoucherInvoice`, this.addVoucherWithItemsRequest, {
+    axios.post(`${apiUrl}/api/VoucherInvoice/` + url, this.addVoucherWithItemsRequest, {
         headers: {
             Authorization: "Bearer " + userAccessToken
         }
@@ -161,7 +167,7 @@ function performPostRequest(e) {
             }
         })
         .catch(function (response) {
-            console.log(error);
+            console.log(response);
             toastr.error('Some Error Occur!!')
         });
 };
