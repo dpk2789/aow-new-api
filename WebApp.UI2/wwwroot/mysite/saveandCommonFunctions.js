@@ -46,6 +46,7 @@ $("#Input_LedgerName").autocomplete({
 });
 
 var addVoucherWithItemsRequest = {
+    id: "string",
     financialYearId: "string",
     voucherName: "string",
     data: "string",
@@ -73,7 +74,7 @@ function UpdateInvoice(e) {
 function performPostRequest(e, url) {
     e.preventDefault();
     let buttonValue = $(this).closest("input");
-    let voucherId = $('.voucherId').val();
+    let voucherId = document.getElementById('voucherId').value;
     let apiUrl = document.getElementById('apiurl').value;
     let date = $('#voucherDate').val();
     let userId = document.getElementById('userId');
@@ -141,7 +142,7 @@ function performPostRequest(e, url) {
 
     alert(JSON.stringify(sundryItems) + '  ' + sundryItems.length)
 
-
+    addVoucherWithItemsRequest.id = voucherId;   
     addVoucherWithItemsRequest.financialYearId = financialYearId;
     addVoucherWithItemsRequest.accountId = AccountId;
     addVoucherWithItemsRequest.invoice = Invoice;
@@ -168,6 +169,6 @@ function performPostRequest(e, url) {
         })
         .catch(function (response) {
             console.log(response);
-            toastr.error('Some Error Occur!!')
+            toastr.error(response)
         });
 };

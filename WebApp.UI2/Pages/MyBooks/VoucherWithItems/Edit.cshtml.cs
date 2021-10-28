@@ -72,7 +72,11 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
         public async Task<IActionResult> OnGet(Guid Id)
         {
             var cmpid = _cookieHelper.Get("cmpCookee");
-
+            var fyrId = _cookieHelper.Get("fYrCookee");
+            if (string.IsNullOrEmpty(fyrId) && string.IsNullOrEmpty(fyrId))
+            {
+                return RedirectToPage("/");
+            }
             if (string.IsNullOrEmpty(cmpid) && string.IsNullOrEmpty(cmpid))
             {
                 return RedirectToPage("/");
@@ -87,8 +91,9 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
             var result = postTask.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             if (result != null)
             {
-                var data = JsonConvert.DeserializeObject<InputModel>(result);
+                var data = JsonConvert.DeserializeObject<InputModel>(result);               
                 Input = data;
+                Input.FinancialYearId = fyrId;
             }
             return Page();
         }

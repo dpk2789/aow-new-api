@@ -17,7 +17,7 @@ namespace Aow.Services.VoucherInvoice
         public class GetVoucherInvoiceResponse
         {
             public Guid Id { get; set; }
-            public string FinancialYearId { get; set; }
+            public Guid? FinancialYearId { get; set; }
             public string VoucherNumber { get; set; }
             public int VoucherTypeId { get; set; }
             public string VoucherName { get; set; }
@@ -86,7 +86,8 @@ namespace Aow.Services.VoucherInvoice
                 Date = voucher.Date,
                 VoucherNumber = voucher.VoucherNumber,
                 Total = voucher.Total,
-                VoucherName = voucher.VoucherName
+                VoucherName = voucher.VoucherName,
+                FinancialYearId = voucher.FinancialYearId
             };
             var jEntries = new List<GetVoucherInvoiceJournalEntries>();
             foreach (var jentry in voucher.JournalEntries.OrderBy(x => x.SrNo))
@@ -127,6 +128,7 @@ namespace Aow.Services.VoucherInvoice
                     viewModel.ItemName = jentry.Product.Name;
                     viewModel.Quantity = jentry.Quantity;
                     viewModel.ItemAmount = jentry.ItemAmount;
+                    viewModel.MRPPerUnit = jentry.MRPPerUnit;
                     viewModel.SrNo = jentry.SrNo;
                     viewModel.ProductId = jentry.ProductId;
                     //   viewModel.RootCategory = ledger.Parent.Name;
@@ -153,6 +155,7 @@ namespace Aow.Services.VoucherInvoice
             voucherViewModel.SundryItems = sundryItems;
             voucherViewModel.ItemsTotal = ItemsTotal;
             voucherViewModel.SundryTotal = SundryitemsTotal;
+            voucherViewModel.Total = ItemsTotal + SundryitemsTotal;
             return voucherViewModel;
         }
 

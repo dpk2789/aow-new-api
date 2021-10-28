@@ -51,7 +51,8 @@
                     <div class="row">
                         <div class="col-12">
                             <form method="post" enctype="multipart/form-data" id="questionForm">
-                                <input type="hidden" value="@Model.Input.FinancialYearId" id="financialYearId" />                                
+                                <input type="hidden" value="@Model.Input.FinancialYearId" id="financialYearId" />                         
+                                <input type="hidden" value="@Model.Input.Id" id="voucherId" /> 
                                 <input type="hidden" id="VoucherName" value="@Model.Input.VoucherName" />
                                 <input type="hidden" value="@userId" id="userId" />
                                 <input type="hidden" value="@Model.ApiUrl" id="apiurl" />
@@ -284,8 +285,6 @@
 
                     </div>
                     <!-- /.row -->
-
-
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
