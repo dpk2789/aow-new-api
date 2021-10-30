@@ -49,11 +49,12 @@ namespace Aow.Services.Products
         }
         public IEnumerable<ProductViewModelResponse> Do(PagingParameters pagingParameters, Guid companyId)
         {
-            var list = _productRepository.GetProducts(pagingParameters, companyId).GetAwaiter().GetResult();            
+            var list = _productRepository.GetProducts(pagingParameters, companyId).GetAwaiter().GetResult();
             var newList = list.Where(x => x.ItemType != "Sundry Item").Select(x => new ProductViewModelResponse
             {
                 Id = x.Id,
                 ProductCategoryId = x.ProductCategoryId,
+                CategoryName = x.ProductCategory.Name,
                 Name = x.Name,
                 Code = x.Code,
                 SalePrice = x.SalePrice,

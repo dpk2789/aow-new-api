@@ -17,6 +17,8 @@ namespace Aow.Services.ProductCategory
             public Guid Id { get; set; }
             public string Name { get; set; }
             public string CompanyId { get; set; }
+            public Guid? ParentCategoryId { get; set; }
+
         }
         public class UpdateProductCategoryResponse
         {
@@ -36,6 +38,7 @@ namespace Aow.Services.ProductCategory
                     return null;
                 }
                 category.Name = request.Name;
+                category.ParentCategoryId = request.ParentCategoryId;
                 _repoWrapper.ProductCategoryRepo.Update(category);
 
                 int i = await _repoWrapper.SaveNew();

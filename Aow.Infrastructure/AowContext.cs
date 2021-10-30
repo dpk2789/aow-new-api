@@ -1,5 +1,4 @@
 ﻿using Aow.Infrastructure.Common;
-using Aow.Infrastructure.Configuration;
 using Aow.Infrastructure.Domain;
 using AowCore.Domain;
 using Microsoft.AspNetCore.Identity;

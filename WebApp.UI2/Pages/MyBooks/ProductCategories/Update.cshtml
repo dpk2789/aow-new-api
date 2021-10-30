@@ -44,7 +44,15 @@
                         <div class="col-12">
                             <form method="post" enctype="multipart/form-data">
                                 <input type="hidden" value="@Model.Input.Id" id="categoryId" />
+                                <input type="hidden" value="@Model.Input.CompanyId" id="CompanyId" />
                                 <div asp-validation-summary="All" class="text-danger"></div>
+                                <div class="mb-3 row">
+                                    <label asp-for="Input.ParentCategoryId" class="col-sm-2 col-form-label"></label>
+                                    <div class="col-sm-6">
+                                        @Html.DropDownList("ParentCategoryId", (IEnumerable<SelectListItem>)ViewBag.ParentCategoryIdSelectList, "(None)", new { @class = "form-control" })
+                                    </div>
+                                    <span asp-validation-for="Input.ParentCategoryId" class="text-danger"></span>
+                                </div>
                                 <div class="mb-3 row">
                                     <label asp-for="Input.Name" class="col-sm-2 col-form-label"></label>
                                     <div class="col-sm-6">
@@ -80,7 +88,7 @@
 
 @section scripts{
     @*<script src="~/js/product.js"></script>*@
-    <script>
+<script>
        var apiUrl = '@Model.ApiUrl';
 
         function UpdateProductCategory(e) {
@@ -91,15 +99,19 @@
     var updateProductCategoryRequest = {
             id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             name: "f1",
-            companyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            companyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            parentCategoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         };
         function performPostRequest(e) {
             let userId = document.getElementById('userId');
-            let fName = document.getElementById('Input_Name').value;
+            let categoryName = document.getElementById('Input_Name').value;
             let categoryId = document.getElementById('categoryId').value;
-            updateProductCategoryRequest.name = fName;
+             let companyId = document.getElementById('CompanyId').value;
+            let parentCategoryId = document.getElementById('ParentCategoryId').value;
+            updateProductCategoryRequest.name = categoryName;
             updateProductCategoryRequest.id = categoryId;
-
+              updateProductCategoryRequest.companyId = companyId;
+              updateProductCategoryRequest.parentCategoryId = parentCategoryId;
             let userAccessToken = userId.value;
             console.log(this.addFinancialYearRequest);
 
@@ -123,5 +135,5 @@
                 });
             e.preventDefault();
         }
-    </script>
+</script>
 }

@@ -14,18 +14,20 @@ namespace Aow.Services.ProductCategory
         public class GetProductCategoryResponse
         {
             public Guid Id { get; set; }
-            public string Name { get; set; }        
-            public Guid CompanyId { get; set; }          
+            public string Name { get; set; }
+            public Guid CompanyId { get; set; }
+            public Guid? ParentCategoryId { get; set; }
         }
 
         public GetProductCategoryResponse Do(Guid id)
         {
-            var financialYear = _repoWrapper.ProductCategoryRepo.GetProductCategory(id);
-            GetProductCategoryResponse getCompanyResponse = new GetProductCategoryResponse
+            var category = _repoWrapper.ProductCategoryRepo.GetProductCategory(id);
+            var getCompanyResponse = new GetProductCategoryResponse
             {
-                Id = financialYear.Id,
-                CompanyId = financialYear.Id,
-                Name = financialYear.Name,      
+                Id = category.Id,
+                CompanyId = category.CompanyId,
+                Name = category.Name,
+                ParentCategoryId = category.ParentCategoryId
             };
 
             return getCompanyResponse;
