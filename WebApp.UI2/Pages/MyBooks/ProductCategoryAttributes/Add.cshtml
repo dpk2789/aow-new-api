@@ -1,4 +1,70 @@
 ﻿@page
 @model WebApp.UI2.Pages.MyBooks.ProductCategoryAttributes.AddModel
 @{
+     var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <input type="hidden" asp-for="@Model.Input.ProductCategoryId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@Model.Input.Name" class="control-label"></label>
+                <input asp-for="@Model.Input.Name" class="form-control" />
+                <span asp-validation-for="@Model.Input.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    @*<script src="~/js/product.js"></script>*@
+    <script>
+
+        var apiUrl = '@Model.ApiUrl';
+
+        function AddProduct(e) {
+           // let confirmAction = confirm("Are you sure to delete this product?");
+            performPostRequest(e);
+        }
+
+        var addProductRequest = {
+            name: "f1",
+            categoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        };
+        function performPostRequest(e) {
+            let userId = document.getElementById('userId');
+            let fName = document.getElementById('Input_Name').value;
+            let categoryId = document.getElementById('CategoryId').value;
+            addProductRequest.name = fName;
+            addProductRequest.categoryId = categoryId;
+
+            let userAccessToken = userId.value;
+            console.log(this.addProductRequest);
+
+            axios.post(`${apiUrl}/api/Products/AddProduct`, this.addProductRequest, {
+                headers: {
+                    Authorization: "Bearer " + userAccessToken
+                }
+            })
+                 .then(function (response) {
+                     console.log(response);
+                     if (response.data.success) {
+                         toastr.success(response.data.description)
+                         window.location.href = '/MyBooks/Products/index'
+                     } else {
+                         toastr.error(response.data.description)
+                     }
+                })
+                .catch(function (response) {
+                    console.log(error);
+                    toastr.error('Some Error Occur!!')
+                });
+            e.preventDefault();
+        }
+    </script>
 }
