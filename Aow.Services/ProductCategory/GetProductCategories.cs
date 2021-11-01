@@ -18,11 +18,11 @@ namespace Aow.Services.ProductCategory
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
-            public DateTime? Start { get; set; }
-            public DateTime? End { get; set; }
-            public bool IsActive { get; set; }
-            public bool? IsLocked { get; set; }
+            public string ParentCategoryName { get; set; }
+            public Guid? ParentCategoryId { get; set; }
+
         }
+
         public IEnumerable<GetProductCategoriesResponse> Do(PagingParameters pagingParameters, Guid companyId)
         {
             var user = _repoWrapper.CompanyRepo.GetCompany(companyId);
@@ -30,14 +30,23 @@ namespace Aow.Services.ProductCategory
             {
                 return null;
             };
+            var categories = new List<GetProductCategoriesResponse>();
             var list = _repoWrapper.ProductCategoryRepo.GetProductCategories(pagingParameters, companyId).GetAwaiter().GetResult();
-            var newList = list.Where(x => x.Type != "Sundry Item").Select(x => new GetProductCategoriesResponse
+            var newList = list.Where(x => x.Type != "Sundry Item");
+            foreach (var item in newList)
             {
-                Id = x.Id,
-                Name = x.Name,                
-            });
+                var getProductCategoriesResponse = new GetProductCategoriesResponse();
+                getProductCategoriesResponse.Id = item.Id;
+                getProductCategoriesResponse.Name = item.Name;
+                if (item.ParentCategoryId != null)
+                {
+                    var category = list.FirstOrDefault(x => x.Id == item.ParentCategoryId);
+                    getProductCategoriesResponse.ParentCategoryName = category.Name;
+                }
+                categories.Add(getProductCategoriesResponse);
+            }
 
-            return newList;
+            return categories;
         }
     }
 }

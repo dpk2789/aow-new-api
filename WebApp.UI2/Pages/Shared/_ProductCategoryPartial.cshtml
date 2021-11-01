@@ -1,27 +1,31 @@
 ﻿@model IEnumerable<WebApp.UI2.Pages.MyBooks.ProductCategories.IndexModel.ProductCategoriesViewModel>
 
-    <div id="resultTable">
-        <table id="productCategoryTable" class="table table-bordered table-striped">
-            <thead>
+<div id="resultTable">
+    <table id="productCategoryTable" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Parent Category</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model)
+            {
                 <tr>
-                    <th>Name</th>
-                    <th></th>
+                    <td>
+                        @Html.DisplayFor(modelItem => category.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => category.ParentCategoryName)
+                    </td>
+                    <td>
+                        <a asp-route-id="@category.Id" asp-page="/MyBooks/ProductCategories/Update" class="fa fa-edit">Edit</a> |
+                         <a asp-route-id="@category.Id" asp-page="/MyBooks/ProductCategoryAttributes/Index" class="btn btn-sm btn-outline-primary">Attributes</a> |
+                        <button onclick="confirmAction(event)" data-category-id="@category.Id" type="button" class="btn-danger small">Delete</button>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var category in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => category.Name)
-                        </td>
-
-                        <td>
-                            <a asp-route-id="@category.Id" asp-page="/MyBooks/ProductCategories/Update" class="fa fa-edit">Edit</a> |
-                            <button onclick="confirmAction(event)" data-category-id="@category.Id" type="button" class="btn-danger small">Delete</button>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+            }
+        </tbody>
+    </table>
+</div>

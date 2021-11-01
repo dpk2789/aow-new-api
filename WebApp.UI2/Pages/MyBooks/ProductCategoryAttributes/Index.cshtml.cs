@@ -1,15 +1,15 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
 using WebApp.UI2.Helpers;
 
-namespace WebApp.UI2.Pages.MyBooks.ProductCategories
+namespace WebApp.UI2.Pages.MyBooks.ProductCategoryAttributes
 {
     public class IndexModel : PageModel
     {
@@ -21,25 +21,21 @@ namespace WebApp.UI2.Pages.MyBooks.ProductCategories
             _cookieHelper = cookieHelper;
         }
 
-        public class ProductCategoriesViewModel
+        public class CategoryAttributesViewModel
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
-            public string ParentCategoryName { get; set; }
+            public string CategoryId { get; set; }
         }
 
         [BindProperty]
-        public IEnumerable<ProductCategoriesViewModel> ProductCategories { get; set; }
-        public async Task<IActionResult> OnGet()
-        {
-            var cmpid = _cookieHelper.Get("cmpCookee");
+        public IEnumerable<CategoryAttributesViewModel> CategoryAttributes { get; set; }
+      
 
-            if (string.IsNullOrEmpty(cmpid) && string.IsNullOrEmpty(cmpid))
-            {
-                return RedirectToPage("/");
-            }
+        public async Task<IActionResult> OnGet(Guid categoryId)
+        {
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.ProductCategories.GetProductCategories + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
+            var getProductsUri = new Uri(ApiUrls.ProductAttributes.GetProductAttributes + "?PageNumber=1&PageSize=10&categoryId=" + categoryId);
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
             var getUserInfo = await client.GetAsync(getProductsUri);
@@ -47,8 +43,8 @@ namespace WebApp.UI2.Pages.MyBooks.ProductCategories
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             if (resultuerinfo != null)
             {
-                var data = JsonConvert.DeserializeObject<IEnumerable<ProductCategoriesViewModel>>(resultuerinfo);
-                ProductCategories = data;
+                var data = JsonConvert.DeserializeObject<IEnumerable<CategoryAttributesViewModel>>(resultuerinfo);
+                CategoryAttributes = data;
             }
             return Page();
         }
