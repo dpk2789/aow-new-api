@@ -15,8 +15,7 @@ namespace WebApp.UI2.Pages.MyBooks.ProductCategoryAttributes
             _cookieHelper = cookieHelper;
         }
         public class ProductsAttributeViewModel
-        {
-            public Guid Id { get; set; }
+        {           
             public Guid ProductCategoryId { get; set; }
             public string Name { get; set; }
             public string ProductName { get; set; }
@@ -24,9 +23,12 @@ namespace WebApp.UI2.Pages.MyBooks.ProductCategoryAttributes
 
         }
         [BindProperty] public ProductsAttributeViewModel Input { get; set; }
-        public void OnGet(Guid? categoryId)
+        public IActionResult OnGet(Guid id)
         {
-            Input.ProductCategoryId = categoryId.Value;
+            ProductsAttributeViewModel inputModel = new ProductsAttributeViewModel();
+            inputModel.ProductCategoryId = id;
+            Input = inputModel;
+            return Page();
         }
     }
 }

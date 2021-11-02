@@ -15,7 +15,7 @@ namespace Aow.Services.ProductAttribute
         public class AddProductAttributeRequest
         {
             public string Name { get; set; }
-            public string CompanyId { get; set; }
+            public Guid CategoryId { get; set; }
         }
         public class AddProductAttributeResponse
         {
@@ -29,16 +29,15 @@ namespace Aow.Services.ProductAttribute
         {
             try
             {
-                Guid ProductId = Guid.NewGuid();
-                Guid cmpId = Guid.Parse(request.CompanyId);
-                var financialYear = new Aow.Infrastructure.Domain.ProductCategory
+                Guid ProductId = Guid.NewGuid();              
+                var attribute = new Aow.Infrastructure.Domain.ProductAttribute
                 {
                     Id = ProductId,
                     Name = request.Name,
-                    CompanyId = cmpId,
+                    ProductCategoryId = request.CategoryId,
                 };
 
-                _repoWrapper.ProductCategoryRepo.Create(financialYear);
+                _repoWrapper.ProductAttributeRepo.Create(attribute);
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {
@@ -52,7 +51,7 @@ namespace Aow.Services.ProductAttribute
                 {
                     return new AddProductAttributeResponse
                     {
-                        Id = financialYear.Id,
+                        Id = attribute.Id,
                         Name = request.Name,
                         Success = true,
                         Description = "Product Attribute SuccessFully Added"

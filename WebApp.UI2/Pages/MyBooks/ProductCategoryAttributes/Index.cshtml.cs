@@ -29,13 +29,12 @@ namespace WebApp.UI2.Pages.MyBooks.ProductCategoryAttributes
         }
 
         [BindProperty]
-        public IEnumerable<CategoryAttributesViewModel> CategoryAttributes { get; set; }
-      
+        public IEnumerable<CategoryAttributesViewModel> CategoryAttributes { get; set; }      
 
-        public async Task<IActionResult> OnGet(Guid categoryId)
+        public async Task<IActionResult> OnGet(Guid id)
         {
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.ProductAttributes.GetProductAttributes + "?PageNumber=1&PageSize=10&categoryId=" + categoryId);
+            var getProductsUri = new Uri(ApiUrls.ProductAttributes.GetProductAttributes + "?PageNumber=1&PageSize=10&categoryId=" + id);
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
             var getUserInfo = await client.GetAsync(getProductsUri);
@@ -45,6 +44,7 @@ namespace WebApp.UI2.Pages.MyBooks.ProductCategoryAttributes
             {
                 var data = JsonConvert.DeserializeObject<IEnumerable<CategoryAttributesViewModel>>(resultuerinfo);
                 CategoryAttributes = data;
+                ViewData["categoryId"] = id;
             }
             return Page();
         }
