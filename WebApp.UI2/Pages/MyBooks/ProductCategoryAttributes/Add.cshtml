@@ -114,7 +114,7 @@
                  console.log(response);
                  if (response.data.success) {
                      toastr.success(response.data.description)
-                     window.location.href = '/MyBooks/ProductCategories/index'
+                     window.location.href = '/MyBooks/ProductCategoryAttributes/Index?id='+categoryId
                  } else {
                      toastr.error(response.data.description)
                  }

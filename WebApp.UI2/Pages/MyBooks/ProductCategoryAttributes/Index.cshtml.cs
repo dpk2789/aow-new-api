@@ -26,6 +26,7 @@ namespace WebApp.UI2.Pages.MyBooks.ProductCategoryAttributes
             public Guid Id { get; set; }
             public string Name { get; set; }
             public string CategoryId { get; set; }
+            public string ParentCategoryName { get; set; }
         }
 
         [BindProperty]

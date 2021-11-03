@@ -12,9 +12,9 @@ namespace WebApp.API.Controllers
     public class ProductAttributesController : ControllerBase
     {
         [HttpGet("api/ProductAttributes/GetProductAttributes")]
-        public IActionResult GetProductAttributes([FromQuery] PagingParameters pagingParameters, Guid cmpId, [FromServices] GetProductAttributes getProductCategories)
+        public IActionResult GetProductAttributes([FromQuery] PagingParameters pagingParameters, Guid categoryId, [FromServices] GetProductAttributes getProductCategories)
         {
-            var result = getProductCategories.Do(pagingParameters, cmpId);
+            var result = getProductCategories.Do(pagingParameters, categoryId);
             return Ok(result);
         }
 

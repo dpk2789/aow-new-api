@@ -1,7 +1,7 @@
 ﻿@page
 @model WebApp.UI2.Pages.MyBooks.ProductCategoryAttributes.IndexModel
 @{
-   
+
 }
 
 
@@ -36,10 +36,38 @@
                                 <a asp-route-id="@ViewBag.categoryId" class="btn btn-success" asp-page="/MyBooks/ProductCategoryAttributes/Add">Add Category Attribute </a>
                             </h3>
                         </div>
-                      
+
                         <!-- /.card-header -->
                         <div class="card-body" id="product-main">
-                           
+                            <div id="resultTable">
+                                <table id="productCategoryTable" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Parent Category</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var category in Model.CategoryAttributes)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => category.Name)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => category.ParentCategoryName)
+                                                </td>
+                                                <td>
+                                                    <a asp-route-id="@category.Id" asp-page="/MyBooks/ProductCategories/Update" class="fa fa-edit">Edit</a> |
+                                                    <a asp-route-id="@category.Id" asp-page="/MyBooks/ProductCategoryAttributes/Index" class="btn btn-sm btn-outline-primary">Attributes</a> |
+                                                    <button onclick="confirmAction(event)" data-category-id="@category.Id" type="button" class="btn-danger small">Delete</button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <!-- /.card-body -->
                     </div>

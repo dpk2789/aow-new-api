@@ -18,24 +18,17 @@ namespace Aow.Services.ProductAttribute
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
-            public DateTime? Start { get; set; }
-            public DateTime? End { get; set; }
-            public bool IsActive { get; set; }
-            public bool? IsLocked { get; set; }
+            public string ParentCategoryName { get; set; }
         }
 
-        public IEnumerable<GetProductAttributesResponse> Do(PagingParameters pagingParameters, Guid companyId)
+        public IEnumerable<GetProductAttributesResponse> Do(PagingParameters pagingParameters, Guid categoryId)
         {
-            var user = _repoWrapper.CompanyRepo.GetCompany(companyId);
-            if (user == null)
-            {
-                return null;
-            };
-            var list = _repoWrapper.ProductCategoryRepo.GetProductCategories(pagingParameters, companyId).GetAwaiter().GetResult();
-            var newList = list.Where(x => x.Type != "Sundry Item").Select(x => new GetProductAttributesResponse
+            var list = _repoWrapper.ProductAttributeRepo.GetProductAttributes(pagingParameters, categoryId).GetAwaiter().GetResult();
+            var newList = list.Select(x => new GetProductAttributesResponse
             {
                 Id = x.Id,
                 Name = x.Name,
+                ParentCategoryName = x.ProductCategory.Name
             });
 
             return newList;
