@@ -51,7 +51,15 @@
             public const string GetProductAttributes = Rootlocal + "/api/ProductAttributes/GetProductAttributes";
             public const string GetProductAttribute = Rootlocal + "/api/ProductAttributes/GetProductAttribute";
             public const string Create = Rootlocal + "/api/ProductAttributes/AddProductAttribute";
-            public const string Update = Rootlocal + "/api/ProductAttributes/UpdateProductCategory";
+            public const string Update = Rootlocal + "/api/ProductAttributes/UpdateProductAttribute";
+            public const string Delete = Rootlocal + "api/ProductAttributes/DeleteProductCategory/{postId}";
+        }
+        public static class ProductAttributeOption
+        {
+            public const string GetProductAttributeOptions = Rootlocal + "/api/ProductAttributes/GetProductAttributes";
+            public const string GetProductAttributeOption = Rootlocal + "/api/ProductAttributeOption/GetProductAttributeOption";
+            public const string Create = Rootlocal + "/api/ProductAttributes/AddProductAttribute";
+            public const string Update = Rootlocal + "/api/ProductAttributes/UpdateProductAttribute";
             public const string Delete = Rootlocal + "api/ProductAttributes/DeleteProductCategory/{postId}";
         }
         public static class SundryItem

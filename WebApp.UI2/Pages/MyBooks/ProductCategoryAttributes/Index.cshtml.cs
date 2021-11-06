@@ -26,11 +26,11 @@ namespace WebApp.UI2.Pages.MyBooks.ProductCategoryAttributes
             public Guid Id { get; set; }
             public string Name { get; set; }
             public string CategoryId { get; set; }
-            public string ParentCategoryName { get; set; }
+            public string CategoryName { get; set; }
         }
 
         [BindProperty]
-        public IEnumerable<CategoryAttributesViewModel> CategoryAttributes { get; set; }      
+        public IEnumerable<CategoryAttributesViewModel> CategoryAttributes { get; set; }
 
         public async Task<IActionResult> OnGet(Guid id)
         {
@@ -44,8 +44,10 @@ namespace WebApp.UI2.Pages.MyBooks.ProductCategoryAttributes
             if (resultuerinfo != null)
             {
                 var data = JsonConvert.DeserializeObject<IEnumerable<CategoryAttributesViewModel>>(resultuerinfo);
+                var firstRow = data.FirstOrDefault();
                 CategoryAttributes = data;
                 ViewData["categoryId"] = id;
+                ViewData["categoryName"] = firstRow.CategoryName;
             }
             return Page();
         }

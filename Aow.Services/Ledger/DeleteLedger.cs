@@ -20,29 +20,41 @@ namespace Aow.Services.Ledger
 
         public async Task<DeleteLedgerResponse> Do(Guid id)
         {
-            var ledger = _repoWrapper.LedgerRepositoryRepo.GetLedger(id);
-            if (ledger == null)
+            try
             {
-                return null;
+                var ledger = _repoWrapper.LedgerRepositoryRepo.GetLedger(id);
+                if (ledger == null)
+                {
+                    return null;
+                }
+                _repoWrapper.LedgerRepositoryRepo.Delete(ledger);
+                int i = await _repoWrapper.SaveNew();
+                if (i <= 0)
+                {
+                    return new DeleteLedgerResponse
+                    {
+                        Message = "Error Deleting",
+                        Success = false
+                    };
+                }
+                else
+                {
+                    return new DeleteLedgerResponse
+                    {
+                        Message = "Ledger Deleted",
+                        Success = true
+                    };
+                }
             }
-            _repoWrapper.LedgerRepositoryRepo.Delete(ledger);
-            int i = await _repoWrapper.SaveNew();
-            if (i <= 0)
+            catch (Exception ex)
             {
                 return new DeleteLedgerResponse
                 {
-                    Message = "Error Deleting",
-                    Success = false
+                    Success = false,
+                    Message = ex.Message
                 };
             }
-            else
-            {
-                return new DeleteLedgerResponse
-                {
-                    Message = "Ledger Deleted",
-                    Success = true
-                };
-            }
+          
         }
     }
 }

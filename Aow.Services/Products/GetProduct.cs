@@ -41,10 +41,12 @@ namespace Aow.Services.Products
             {
                 return null;
             }
-            GetProductViewModel getProductViewModel = new GetProductViewModel();
-            getProductViewModel.Id = product.Id;
-            getProductViewModel.ProductCategoryId = product.ProductCategoryId;
-            getProductViewModel.Name = product.Name;
+            GetProductViewModel getProductViewModel = new GetProductViewModel
+            {
+                Id = product.Id,
+                ProductCategoryId = product.ProductCategoryId,
+                Name = product.Name
+            };
             return getProductViewModel;
         }
     }

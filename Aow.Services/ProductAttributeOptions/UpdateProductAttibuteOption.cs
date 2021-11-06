@@ -2,45 +2,46 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Aow.Services.ProductAttribute
+namespace Aow.Services.ProductAttributeOptions
 {
     [Service]
-    public class AddProductAttribute
+    public class UpdateProductAttibuteOption
     {
         private IRepositoryWrapper _repoWrapper;
-        public AddProductAttribute(IRepositoryWrapper repoWrapper)
+        public UpdateProductAttibuteOption(IRepositoryWrapper repoWrapper)
         {
             _repoWrapper = repoWrapper;
         }
-        public class AddProductAttributeRequest
+        public class UpdateAttributesOptionsRequest
         {
+            public Guid? Id { get; set; }
             public string Name { get; set; }
-            public Guid CategoryId { get; set; }
+            public Guid AttributeId { get; set; }
+            public bool IsChecked { get; set; }
         }
-        public class AddProductAttributeResponse
+        public class UpdateProductAttributeOptionResponse
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
             public bool Success { get; set; }
         }
-        public async Task<AddProductAttributeResponse> Do(AddProductAttributeRequest request)
+
+        public async Task<UpdateProductAttributeOptionResponse> Do(UpdateAttributesOptionsRequest request)
         {
             try
             {
-                Guid ProductId = Guid.NewGuid();              
-                var attribute = new Aow.Infrastructure.Domain.ProductAttribute
+                var option = _repoWrapper.ProductAttributeOptionRepo.GetProductAttributeOption(request.Id.Value);
+                if (option == null)
                 {
-                    Id = ProductId,
-                    Name = request.Name,
-                    ProductCategoryId = request.CategoryId,
-                };
-
-                _repoWrapper.ProductAttributeRepo.Create(attribute);
+                    return null;
+                }
+                option.Name = request.Name;
+                _repoWrapper.ProductAttributeOptionRepo.Update(option);
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {
-                    return new AddProductAttributeResponse
+                    return new UpdateProductAttributeOptionResponse
                     {
                         Name = request.Name,
                         Success = false
@@ -48,18 +49,18 @@ namespace Aow.Services.ProductAttribute
                 }
                 else
                 {
-                    return new AddProductAttributeResponse
+                    return new UpdateProductAttributeOptionResponse
                     {
-                        Id = attribute.Id,
+                        Id = option.Id,
                         Name = request.Name,
                         Success = true,
-                        Description = "Product Attribute SuccessFully Added"
+                        Description = "Attribute Option SuccessFully Added"
                     };
                 }
             }
             catch (Exception ex)
             {
-                return new AddProductAttributeResponse
+                return new UpdateProductAttributeOptionResponse
                 {
                     Name = request.Name,
                     Success = false,

@@ -18,7 +18,7 @@ namespace Aow.Services.ProductAttribute
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
-            public string ParentCategoryName { get; set; }
+            public string CategoryName { get; set; }
         }
 
         public IEnumerable<GetProductAttributesResponse> Do(PagingParameters pagingParameters, Guid categoryId)
@@ -28,7 +28,7 @@ namespace Aow.Services.ProductAttribute
             {
                 Id = x.Id,
                 Name = x.Name,
-                ParentCategoryName = x.ProductCategory.Name
+                CategoryName = x.ProductCategory.Name
             });
 
             return newList;

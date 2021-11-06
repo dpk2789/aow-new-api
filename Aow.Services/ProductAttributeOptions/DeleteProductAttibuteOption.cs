@@ -2,36 +2,35 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Aow.Services.ProductCategory
+namespace Aow.Services.ProductAttributeOptions
 {
     [Service]
-    public class DeleteProductCategory
+    public class DeleteProductAttibuteOption
     {
         private IRepositoryWrapper _repoWrapper;
-        public DeleteProductCategory(IRepositoryWrapper repoWrapper)
+        public DeleteProductAttibuteOption(IRepositoryWrapper repoWrapper)
         {
             _repoWrapper = repoWrapper;
         }
-        public class DeleteProductCategoryResponse
+        public class DeleteProductAttibuteOptionResponse
         {
             public string Message { get; set; }
             public bool Success { get; set; }
         }
-
-        public async Task<DeleteProductCategoryResponse> Do(Guid id)
+        public async Task<DeleteProductAttibuteOptionResponse> Do(Guid id)
         {
             try
             {
-                var category = _repoWrapper.ProductCategoryRepo.GetProductCategory(id);
-                if (category == null)
+                var option = _repoWrapper.ProductAttributeOptionRepo.GetProductAttributeOption(id);
+                if (option == null)
                 {
                     return null;
                 }
-                _repoWrapper.ProductCategoryRepo.Delete(category);
+                _repoWrapper.ProductAttributeOptionRepo.Delete(option);
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {
-                    return new DeleteProductCategoryResponse
+                    return new DeleteProductAttibuteOptionResponse
                     {
                         Message = "Error Deleting",
                         Success = false
@@ -39,22 +38,22 @@ namespace Aow.Services.ProductCategory
                 }
                 else
                 {
-                    return new DeleteProductCategoryResponse
+                    return new DeleteProductAttibuteOptionResponse
                     {
-                        Message = "Product Category Deleted",
+                        Message = "Option Deleted",
                         Success = true
                     };
                 }
             }
             catch (Exception ex)
             {
-                return new DeleteProductCategoryResponse
+                return new DeleteProductAttibuteOptionResponse
                 {
                     Success = false,
                     Message = ex.Message
                 };
             }
-         
+
         }
     }
 }

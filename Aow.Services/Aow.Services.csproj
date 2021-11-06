@@ -12,9 +12,4 @@
     <ProjectReference Include="..\Aow.Infrastructure\Aow.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ProductAttributeOptions\" />
-    <Folder Include="ProductAttribute\" />
-  </ItemGroup>
-
 </Project>

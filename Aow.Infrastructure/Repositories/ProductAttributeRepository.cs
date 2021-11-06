@@ -17,7 +17,7 @@ namespace Aow.Infrastructure.Repositories
 
         public ProductAttribute GetProductAttribute(Guid Id)
         {
-            return FindByCondition(x => x.Id == Id).FirstOrDefault();
+            return FindByCondition(x => x.Id == Id).Include(x => x.ProductCategory).Include(x => x.ProductAttributeOptions).FirstOrDefault();
         }
 
         public Task<PagedList<ProductAttribute>> GetProductAttributes(PagingParameters ownerParameters, Guid categoryId)
