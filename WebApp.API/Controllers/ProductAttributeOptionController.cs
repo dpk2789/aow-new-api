@@ -31,7 +31,7 @@ namespace WebApp.API.Controllers
         }
 
         [HttpPut("api/ProductAttributeOption/UpdateProductAttributeOption")]
-        public async Task<IActionResult> UpdateProductAttributeOption([FromBody] UpdateProductAttibute.UpdateProductAttributeRequest request, [FromServices] UpdateProductAttibute updateProductAttribute)
+        public async Task<IActionResult> UpdateProductAttributeOption([FromBody] UpdateProductAttibuteOption.UpdateAttributesOptionsRequest request, [FromServices] UpdateProductAttibuteOption updateProductAttribute)
         {
             var response = await updateProductAttribute.Do(request);
 

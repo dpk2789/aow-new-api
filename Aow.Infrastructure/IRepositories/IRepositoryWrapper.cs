@@ -20,6 +20,7 @@ namespace Aow.Infrastructure.IRepositories
         IVoucherItemRepository VoucherItemRepo { get; }
         IJournalEntryRepository JournalEntryRepo { get; }
         IVoucherSundryItemRepository VoucherSundryItemRepo { get; }
+        IProductVarientRepository ProductVarientRepo { get; }
         Task<int> SaveNew();
         int Save();
     }

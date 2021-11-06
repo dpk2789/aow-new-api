@@ -11,7 +11,14 @@ using System.Net.Http.Headers;
 namespace WebApp.UI2.Pages.MyBooks.AttributeOptions
 {
     public class EditModel : PageModel
-    {      
+    {
+        private readonly ICookieHelper _cookieHelper;
+        public string ApiUrl { get; }
+        public EditModel(ICookieHelper cookieHelper)
+        {
+            ApiUrl = ApiUrls.Rootlocal;
+            _cookieHelper = cookieHelper;
+        }
         public class AttributesOption
         {
             public Guid? Id { get; set; }

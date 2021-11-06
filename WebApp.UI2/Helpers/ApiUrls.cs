@@ -37,15 +37,6 @@
             public const string Update = Rootlocal + "/api/ProductCategories/UpdateProductCategory";
             public const string Delete = Rootlocal + "api/ProductCategories/DeleteProductCategory/{postId}";
         }
-        public static class Product
-        {
-            public const string GetProducts = Rootlocal + "/api/Products/GetProducts";
-            public const string GetProduct = Rootlocal + "/api/Products/GetProduct";
-            public const string GetProductByName = Rootlocal + "/api/Products/GetProductByName";
-            public const string Create = Rootlocal + "/api/Products/CreateProduct";
-            public const string Update = Rootlocal + "/api/Products/UpdateProduct";
-            public const string Delete = Rootlocal + "/Products/{postId}";
-        }
         public static class ProductAttributes
         {
             public const string GetProductAttributes = Rootlocal + "/api/ProductAttributes/GetProductAttributes";
@@ -62,6 +53,24 @@
             public const string Update = Rootlocal + "/api/ProductAttributes/UpdateProductAttribute";
             public const string Delete = Rootlocal + "api/ProductAttributes/DeleteProductCategory/{postId}";
         }
+        public static class Product
+        {
+            public const string GetProducts = Rootlocal + "/api/Products/GetProducts";
+            public const string GetProduct = Rootlocal + "/api/Products/GetProduct";
+            public const string GetProductByName = Rootlocal + "/api/Products/GetProductByName";
+            public const string Create = Rootlocal + "/api/Products/CreateProduct";
+            public const string Update = Rootlocal + "/api/Products/UpdateProduct";
+            public const string Delete = Rootlocal + "/Products/{postId}";
+        }
+        public static class ProductVarients
+        {
+            public const string GetProductVarients = Rootlocal + "/api/ProductVarients/GetProductVarients";
+            public const string GetProductVarient = Rootlocal + "/api/ProductVarients/GetProductVarient";
+            public const string Create = Rootlocal + "/api/ProductVarients/AddProductVarient";
+            public const string Update = Rootlocal + "/api/ProductAttributes/UpdateProductAttribute";
+            public const string Delete = Rootlocal + "api/ProductAttributes/DeleteProductCategory/{postId}";
+        }
+    
         public static class SundryItem
         {
             public const string GetSundryItems = Rootlocal + "/api/SundryItem/GetSundryItems";

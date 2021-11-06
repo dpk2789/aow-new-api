@@ -47,5 +47,20 @@ namespace WebApp.API.Controllers
             }
             return Ok(response);
         }
+
+        [HttpDelete("api/ProductAttributes/DeleteProductAttribute")]
+        public async Task<IActionResult> DeleteProductAttribute(Guid id, [FromServices] DeleteProductAttibute deleteProduct)
+        {
+            var result = await deleteProduct.Do(id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            if (!result.Success)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
+        }
     }
 }

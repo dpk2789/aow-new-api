@@ -1,7 +1,7 @@
 ﻿@page
 @model WebApp.UI2.Pages.MyBooks.ProductCategoryAttributes.IndexModel
 @{
-
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
 }
 
 
@@ -15,7 +15,7 @@
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-page="/MyBooks/ProductCategories/Index">Product Categories</a></li>
                         <li class="breadcrumb-item active">Attributes </li>
                     </ol>
                 </div><!-- /.col -->
@@ -39,33 +39,13 @@
 
                         <!-- /.card-header -->
                         <div class="card-body" id="product-main">
+                            <input type="hidden" value="@userId" id="userId" />
+                             <input type="hidden" value="@ViewBag.categoryId" id="categoryId" />
                             <div id="resultTable">
-                                <table id="productCategoryTable" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Parent Category</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var category in Model.CategoryAttributes)
-                                        {
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => category.Name)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => category.CategoryName)
-                                                </td>
-                                                <td>
-                                                    <a asp-route-id="@category.Id" asp-page="/MyBooks/ProductCategoryAttributes/Update" class="fa fa-edit">Edit</a> |                                               
-                                                    <button onclick="confirmAction(event)" data-category-id="@category.Id" type="button" class="btn-danger small">Delete</button>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                                @if (Model.CategoryAttributes != null)
+                                {
+                                    <partial name="_AttributeListPartial" model="@Model.CategoryAttributes" />
+                                }
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -77,3 +57,65 @@
 </div>
 
 
+@section scripts{
+<script>
+    var apiUrl = '@Model.ApiUrl';
+    $(function () {
+        DataTableInit();
+    });
+
+    function DataTableInit() {
+        $("#attributeTable").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#attributeTable_wrapper .col-md-6:eq(0)');
+    }
+
+    function confirmAction(e) {
+        let confirmAction = confirm("Are you sure to delete this Attribute?");
+        if (confirmAction) {
+            //  alert("Action successfully executed");
+            removeProduct(e);
+        } else {
+            alert("Action canceled");
+        }
+    };
+
+    var getPartialAttributesList = function () {
+        let categoryId = document.getElementById('categoryId').value;
+         axios.get('/Partials/GetAttributeListPartialView?id=' + categoryId)
+            .then(res => {
+                var html = res.data;
+                var el = document.getElementById('resultTable');
+                el.outerHTML = html;
+                DataTableInit();
+                console.log(res);
+            })
+    }
+
+    var removeProduct = function (e) {
+        let attributeId = e.target.dataset.attributeId;
+        let el = document.getElementById('userId');
+        let userAccessToken = el.value;
+        console.log(attributeId);
+
+        axios.delete(apiUrl + "/api/ProductAttributes/DeleteProductAttribute?id=" + attributeId, {
+            headers: {
+                Authorization: "Bearer " + userAccessToken
+            }
+        }).then(res => {
+            console.log(res);
+            if (res.data.success) {
+               // alert(res.data.message)
+                toastr.success(res.data.message)
+            }
+            getPartialAttributesList();
+        })
+            .catch(err => {
+                alert(err.error);
+            })
+
+    }
+
+</script>
+}

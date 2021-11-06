@@ -1,0 +1,29 @@
+﻿@model IEnumerable<WebApp.UI2.Pages.MyBooks.ProductCategoryAttributes.IndexModel.CategoryAttributesViewModel>
+
+
+<table id="attributeTable" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Parent Category</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var attributenew in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => attributenew.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => attributenew.CategoryName)
+                </td>
+                <td>
+                    <a asp-route-id="@attributenew.Id" asp-page="/MyBooks/ProductCategoryAttributes/Update" class="fa fa-edit">Edit</a> |
+                    <button onclick="confirmAction(event)" data-attribute-id="@attributenew.Id" type="button" class="btn-danger small">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
