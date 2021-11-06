@@ -25,21 +25,15 @@ namespace WebApp.UI2.Pages.MyBooks.ProductVarients
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
-            public string ParentCategoryName { get; set; }
+            public string SalePrice { get; set; }
         }
 
         [BindProperty]
-        public IEnumerable<ProductVarientsViewModel> ProductCategories { get; set; }
-        public async Task<IActionResult> OnGet()
-        {
-            var cmpid = _cookieHelper.Get("cmpCookee");
-
-            if (string.IsNullOrEmpty(cmpid) && string.IsNullOrEmpty(cmpid))
-            {
-                return RedirectToPage("/");
-            }
+        public IEnumerable<ProductVarientsViewModel> Varients { get; set; }
+        public async Task<IActionResult> OnGet(Guid id)
+        {         
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.va.GetProductCategories + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
+            var getProductsUri = new Uri(ApiUrls.ProductVarients.GetProductVarients + "?PageNumber=1&PageSize=10&productId=" + id);
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
             var getUserInfo = await client.GetAsync(getProductsUri);
@@ -48,7 +42,8 @@ namespace WebApp.UI2.Pages.MyBooks.ProductVarients
             if (resultuerinfo != null)
             {
                 var data = JsonConvert.DeserializeObject<IEnumerable<ProductVarientsViewModel>>(resultuerinfo);
-                ProductCategories = data;
+                Varients = data;
+                ViewData["ProductId"] = id;
             }
             return Page();
         }

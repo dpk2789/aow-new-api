@@ -1,12 +1,87 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+using WebApp.UI2.Helpers;
 
 namespace WebApp.UI2.Pages.MyBooks.ProductVarients
 {
     public class AddModel : PageModel
     {
-        public void OnGet()
+        public class AddVarientViewModel
         {
+            public Guid ProductId { get; set; }
+            public string Name { get; set; }
+            public IList<AddVarientAttributesViewModel> AttributesViewModels { get; set; }
+
+        }
+        public class AddVarientAttributesViewModel
+        {
+            public Guid? Id { get; set; }
+            public string Name { get; set; }
+            public bool IsChecked { get; set; }
+            public IEnumerable<AddVarientAttributesOptionsViewModel> AttributesOptionsViewModels { get; set; }
+        }
+
+        public class AddVarientAttributesOptionsViewModel
+        {
+            public Guid? Id { get; set; }
+            public string Name { get; set; }
+            public bool IsChecked { get; set; }
+        }
+        [BindProperty] public AddVarientViewModel Input { get; set; }
+        public async Task<IActionResult> OnGet(Guid id)
+        {
+            using var client = new HttpClient();
+            var getProductsUri = new Uri(ApiUrls.ProductVarients.GetProductAttributesAndOptions + "?productId=" + id);
+            var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+            var getUserInfo = await client.GetAsync(getProductsUri);
+
+            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            AddVarientViewModel inputModel = new AddVarientViewModel();
+            if (resultuerinfo != null)
+            {
+                var data = JsonConvert.DeserializeObject<IList<AddVarientAttributesViewModel>>(resultuerinfo);
+                inputModel.AttributesViewModels = data;
+            }
+            inputModel.ProductId = id;
+            Input = inputModel;
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPost(Guid id, AddVarientViewModel request, Guid[] OptionsSelectedOnView)
+        {
+            if (ModelState.IsValid)
+            {
+                request.Name = Input.Name;
+
+                using var client = new HttpClient();
+                Uri u = new Uri(ApiUrls.ProductVarients.Create);
+                //postTask.Wait();               
+
+                if (OptionsSelectedOnView != null)
+                {
+                    foreach (var option in OptionsSelectedOnView)
+                    {
+
+                    }
+                }
+                var json = JsonConvert.SerializeObject(new { request.Name, });
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                //HTTP POST
+                var postTask = await client.PutAsync(u, content);
+                string result = postTask.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+
+            return Page();
         }
     }
 }
+

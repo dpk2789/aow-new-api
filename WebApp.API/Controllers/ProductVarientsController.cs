@@ -1,4 +1,5 @@
 ﻿using Aow.Infrastructure.Paging;
+using Aow.Services.ProductAttributeOptions;
 using Aow.Services.ProductVariants;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,6 +11,13 @@ namespace WebApp.API.Controllers
     [ApiController]
     public class ProductVarientsController : ControllerBase
     {
+        [HttpGet("api/ProductVarients/GetProductAttributeOptionsByProduct")]
+        public async Task<IActionResult> GetProductAttributeOptionsByProduct(Guid productId, [FromServices] GetProductAttributeOptionsByProduct getAttributeOptions)
+        {
+            var result =await getAttributeOptions.Do(productId);
+            return Ok(result);
+        }
+
         [HttpGet("api/ProductVarients/GetProductVarients")]
         public IActionResult GetProductVarients([FromQuery] PagingParameters pagingParameters, Guid productId, [FromServices] GetProductVariants getProductVariants)
         {

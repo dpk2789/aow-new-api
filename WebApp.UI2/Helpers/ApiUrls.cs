@@ -64,6 +64,7 @@
         }
         public static class ProductVarients
         {
+            public const string GetProductAttributesAndOptions = Rootlocal + "/api/ProductVarients/GetProductAttributeOptionsByProduct";
             public const string GetProductVarients = Rootlocal + "/api/ProductVarients/GetProductVarients";
             public const string GetProductVarient = Rootlocal + "/api/ProductVarients/GetProductVarient";
             public const string Create = Rootlocal + "/api/ProductVarients/AddProductVarient";

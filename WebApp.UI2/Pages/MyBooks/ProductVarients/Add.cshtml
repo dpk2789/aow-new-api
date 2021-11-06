@@ -1,4 +1,109 @@
 ﻿@page
 @model WebApp.UI2.Pages.MyBooks.ProductVarients.AddModel
 @{
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
 }
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Product Varients Form</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item">
+                            <a asp-route-id="@Model.Input.ProductId" asp-page="/MyBooks/ProductVarients/Index">Varients</a>
+                        </li>
+                        <li class="breadcrumb-item active">Add Varients</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content-header -->
+
+    <section class="content">
+        <div class="container-fluid">
+            <!-- SELECT2 EXAMPLE -->
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title">Add Varient Option</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form asp-action="Edit">
+                                <input type="hidden" asp-for="@Model.Input.ProductId" />
+                                <input type="hidden" value="@userId" id="userId" />
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="mb-3 row">
+                                    <label asp-for="Input.Name" class="col-sm-2 col-form-label"></label>
+                                    <div class="col-sm-6">
+                                        <input asp-for="@Model.Input.Name" class="form-control" />
+
+                                    </div>
+                                    <span asp-validation-for="@Model.Input.Name" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="container">
+                                            @{
+                                                foreach (var tag in Model.Input.AttributesViewModels)
+                                                {
+                                                    <div style="float:left;padding:10px">
+                                                        @*<input type="checkbox" value=@tag.Id name="AttributeSelectedOnView">*@
+                                                        <label>@tag.Name</label>
+                                                        @foreach (var option in tag.AttributesOptionsViewModels)
+                                                        {
+                                                            <ul>
+                                                                <li>
+                                                                    <input type="checkbox" value=@option.Id name=OptionsSelectedOnView>
+                                                                    <label>@option.Name</label>
+                                                                </li>
+                                                            </ul>
+                                                        }
+
+                                                    </div>
+                                                }
+                                            }
+
+                                            <div class="clearfix"></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.row -->
+
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <button onclick="UpdateOption(event)" class="btn btn-info float-right" style="margin-left:20px">Add</button>
+                    <button type="submit" class="btn btn-default float-right">Cancel</button>
+                </div>
+            </div>
+            <!-- /.card -->
+
+        </div>
+        <!-- /.container-fluid -->
+
+
+    </section>
+
+</div>

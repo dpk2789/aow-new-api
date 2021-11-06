@@ -3,6 +3,7 @@ using Aow.Infrastructure.IRepositories;
 using Aow.Infrastructure.Paging;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,8 +23,15 @@ namespace Aow.Infrastructure.Repositories
 
         public Task<PagedList<ProductAttribute>> GetProductAttributes(PagingParameters ownerParameters, Guid categoryId)
         {
-            return Task.FromResult(PagedList<ProductAttribute>.ToPagedList(FindAll().Where(x => x.ProductCategoryId == categoryId).Include(x => x.ProductCategory).OrderBy(on => on.Name),
+            return Task.FromResult(PagedList<ProductAttribute>.ToPagedList(FindAll().Where(x => x.ProductCategoryId == categoryId).
+                Include(x => x.ProductCategory).Include(p => p.ProductAttributeOptions),
                                     ownerParameters.PageNumber, ownerParameters.PageSize));
         }
+        public Task<List<ProductAttribute>> GetProductAttributesByCatrgory(Guid categoryId)
+        {
+            return (FindAll().Where(x => x.ProductCategoryId == categoryId).
+                Include(x => x.ProductCategory).Include(p => p.ProductAttributeOptions).ToListAsync());
+        }
+
     }
 }
