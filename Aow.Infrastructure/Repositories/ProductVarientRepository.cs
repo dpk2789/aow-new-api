@@ -17,14 +17,16 @@ namespace Aow.Infrastructure.Repositories
 
         public ProductVariant GetProductVariant(Guid Id)
         {
-            return FindByCondition(x => x.Id == Id).FirstOrDefault();
+            return FindByCondition(x => x.Id == Id).Include(x => x.Products).
+                Include(x => x.Products.ProductCategory).Include(x => x.ProductVariantProductAttributeOptions).FirstOrDefault();
         }
 
         public Task<PagedList<ProductVariant>> GetProductVarients(PagingParameters ownerParameters, Guid productId)
         {
-            return Task.FromResult(PagedList<ProductVariant>.ToPagedList(FindAll().Where(x => x.ProductId == productId).Include(x => x.Products).OrderBy(on => on.Name),
+            return Task.FromResult(PagedList<ProductVariant>.ToPagedList(FindAll().Where(x => x.ProductId == productId).
+                Include(x => x.Products).OrderBy(on => on.Name),
                                     ownerParameters.PageNumber, ownerParameters.PageSize));
         }
-      
+
     }
 }

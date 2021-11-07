@@ -1,0 +1,30 @@
+﻿@model IEnumerable<WebApp.UI2.Pages.MyBooks.ProductVarients.IndexModel.ProductVarientsViewModel>
+
+<div id="resultTable">
+    <table id="VarientsTable" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Sale Price</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var varient in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => varient.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => varient.SalePrice)
+                    </td>
+                    <td>
+                        <a asp-route-id="@varient.Id" asp-page="/MyBooks/ProductVarients/Update" class="fa fa-edit">Edit</a> |
+                        <button onclick="confirmAction(event)" data-varient-id="@varient.Id" type="button" class="btn-danger small">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

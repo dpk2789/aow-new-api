@@ -1,7 +1,7 @@
 ﻿@page
 @model WebApp.UI2.Pages.MyBooks.ProductVarients.UpdateModel
 @{
-     var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
 }
 
 <div class="content-wrapper">
@@ -46,7 +46,8 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <form  method="post">
+                            <form method="post">
+                                <input type="hidden" asp-for="@Model.Input.Id" />
                                 <input type="hidden" asp-for="@Model.Input.ProductId" />
                                 <input type="hidden" value="@userId" id="userId" />
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -61,25 +62,25 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="container">
-                                   @*         @{
-                                                foreach (var tag in Model.Input.AttributesViewModels)
+                                            @{
+                                                foreach (var tag in Model.Input.Attributes)
                                                 {
                                                     <div style="float:left;padding:10px">
-                                                      
+
                                                         <label>@tag.Name</label>
-                                                        @foreach (var option in tag.AttributesOptionsViewModels)
+                                                        @foreach (var option in tag.Options)
                                                         {
                                                             <ul>
-                                                                <li>
-                                                                    <input type="checkbox" value=@option.Id name=OptionsSelectedOnView>
-                                                                    <label>@option.Name</label>
+                                                                <li class="checkbox">
+                                                                    <input type="checkbox" class="form-check-input larger" checked="@option.IsChecked" value=@option.Id name=OptionsSelectedOnView>
+                                                                    @option.Name
                                                                 </li>
                                                             </ul>
                                                         }
 
                                                     </div>
                                                 }
-                                            }*@
+                                            }
 
                                             <div class="clearfix"></div>
                                         </div>
@@ -95,7 +96,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                    
+
                     <button type="submit" class="btn btn-default float-right">Cancel</button>
                 </div>
             </div>

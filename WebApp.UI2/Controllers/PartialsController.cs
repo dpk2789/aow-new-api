@@ -194,7 +194,6 @@ namespace WebApp.UI2.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAttributeListPartialView(Guid id)
         {
-
             using var client = new HttpClient();
             var getProductsUri = new Uri(ApiUrls.ProductAttributes.GetProductAttributes + "?PageNumber=1&PageSize=10&categoryId=" + id);
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
@@ -203,8 +202,23 @@ namespace WebApp.UI2.Controllers
 
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
           
-            var data = JsonConvert.DeserializeObject<IEnumerable<WebApp.UI2.Pages.MyBooks.VoucherWithItems.IndexModel.VoucherWithItemsViewModel>>(resultuerinfo);
-            return PartialView("_VoucherInvoiceListPartial", data);
+            var data = JsonConvert.DeserializeObject<IEnumerable<WebApp.UI2.Pages.MyBooks.ProductCategoryAttributes.IndexModel.CategoryAttributesViewModel>>(resultuerinfo);
+            return PartialView("_AttributeListPartial", data);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetVarientsListPartialView(Guid id)
+        {
+            using var client = new HttpClient();
+            var getProductsUri = new Uri(ApiUrls.ProductVarients.GetProductVarients + "?PageNumber=1&PageSize=10&productId=" + id);
+            var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+            var getUserInfo = await client.GetAsync(getProductsUri);
+
+            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            var data = JsonConvert.DeserializeObject<IEnumerable<WebApp.UI2.Pages.MyBooks.ProductVarients.IndexModel.ProductVarientsViewModel>>(resultuerinfo);
+            return PartialView("_VarientsListPartial", data);
         }
     }
 }

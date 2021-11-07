@@ -1,6 +1,8 @@
 ﻿using Aow.Infrastructure.IRepositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Aow.Services.ProductVariants
 {
@@ -35,36 +37,43 @@ namespace Aow.Services.ProductVariants
             public bool IsChecked { get; set; }
         }
 
-        public GetProductVariantResponse Do(Guid Id)
+        public async Task<GetProductVariantResponse> Do(Guid Id)
         {
             var varient = _repoWrapper.ProductVarientRepo.GetProductVariant(Id);
             if (varient == null)
             {
                 return null;
             }
-            GetProductVariantResponse getProductAttributeResponse = new GetProductVariantResponse
+            var getProductAttributeResponse = new GetProductVariantResponse
             {
                 Id = varient.Id,
                 Name = varient.Name,
                 ProductId = varient.ProductId
             };
-            if (varient.ProductVariantProductAttributeOptions != null)
+            var varientsInPvPat = await _repoWrapper.ProductVariantAndOptionRepo.GetVarientsWithOptionsByVarient(varient.Id);
+            var getAttributes = await _repoWrapper.ProductAttributeRepo.GetProductAttributesByCatrgory(varient.Products.ProductCategoryId);
+            var attviewModelList = new List<GetVariantAttributesResponse>();
+            foreach (var attribute in getAttributes)
             {
-                var attviewModelList = new List<GetVariantAttributesResponse>();
-                foreach (var attribute in varient.Products.ProductCategory.ProductAttributes)
+                var optionList = new List<GetVariantAttributesOptionsResponse>();
+                var attributeResponse = new GetVariantAttributesResponse();
+                attributeResponse.Id = attribute.Id;
+                attributeResponse.Name = attribute.Name;
+                foreach (var attributeOption in attribute.ProductAttributeOptions)
                 {
-                    var optionList = new List<GetVariantAttributesOptionsResponse>();
-                    GetVariantAttributesResponse getAttributesOptionsResponse = new GetVariantAttributesResponse();
-                    foreach (var attributeOption in attribute.ProductAttributeOptions)
+                    var optionsResponse = new GetVariantAttributesOptionsResponse();
+                    optionsResponse.Id = attributeOption.Id;
+                    optionsResponse.Name = attributeOption.Name;
+                    if (varientsInPvPat.Any(x => x.ProductAttributeOptionsId == attributeOption.Id))
                     {
-                        GetVariantAttributesOptionsResponse getVariantAttributesOptionsResponse = new GetVariantAttributesOptionsResponse();
-                        optionList.Add(getVariantAttributesOptionsResponse);
+                        optionsResponse.IsChecked = true;
                     }
-                    attviewModelList.Add(getAttributesOptionsResponse);
+                    optionList.Add(optionsResponse);
                 }
-
+                attributeResponse.Options = optionList;
+                attviewModelList.Add(attributeResponse);
             }
-
+            getProductAttributeResponse.Attributes = attviewModelList;
             return getProductAttributeResponse;
         }
     }

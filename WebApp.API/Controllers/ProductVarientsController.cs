@@ -14,7 +14,7 @@ namespace WebApp.API.Controllers
         [HttpGet("api/ProductVarients/GetProductAttributeOptionsByProduct")]
         public async Task<IActionResult> GetProductAttributeOptionsByProduct(Guid productId, [FromServices] GetProductAttributeOptionsByProduct getAttributeOptions)
         {
-            var result =await getAttributeOptions.Do(productId);
+            var result = await getAttributeOptions.Do(productId);
             return Ok(result);
         }
 
@@ -26,9 +26,9 @@ namespace WebApp.API.Controllers
         }
 
         [HttpGet("api/ProductVarients/GetProductVarient")]
-        public IActionResult GetProductVarient([FromQuery] Guid id, [FromServices] GetProductVariant getProduct)
+        public async Task<IActionResult> GetProductVarient([FromQuery] Guid id, [FromServices] GetProductVariant getProduct)
         {
-            var result = getProduct.Do(id);
+            var result = await getProduct.Do(id);
             return Ok(result);
         }
 
@@ -42,6 +42,33 @@ namespace WebApp.API.Controllers
                 return BadRequest("Failed to add to cart");
             }
             return Ok(response);
+        }
+
+        [HttpPut("api/ProductVarients/UpdateProductVarient")]
+        public async Task<IActionResult> UpdateProductVarient([FromBody] UpdateProductVariant.UpdateProductVariantRequest request, [FromServices] UpdateProductVariant updateProductAttribute)
+        {
+            var response = await updateProductAttribute.Do(request);
+
+            if (!response.Success)
+            {
+                return BadRequest("Failed to add to cart");
+            }
+            return Ok(response);
+        }
+
+        [HttpDelete("api/ProductVarients/DeleteProductVarient")]
+        public async Task<IActionResult> DeleteProductVarient(Guid id, [FromServices] DeleteProductVariant deleteProduct)
+        {
+            var result = await deleteProduct.Do(id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            if (!result.Success)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
         }
     }
 }

@@ -68,7 +68,7 @@
             public const string GetProductVarients = Rootlocal + "/api/ProductVarients/GetProductVarients";
             public const string GetProductVarient = Rootlocal + "/api/ProductVarients/GetProductVarient";
             public const string Create = Rootlocal + "/api/ProductVarients/AddProductVarient";
-            public const string Update = Rootlocal + "/api/ProductAttributes/UpdateProductAttribute";
+            public const string Update = Rootlocal + "/api/ProductVarients/UpdateProductVarient";
             public const string Delete = Rootlocal + "api/ProductAttributes/DeleteProductCategory/{postId}";
         }
     
