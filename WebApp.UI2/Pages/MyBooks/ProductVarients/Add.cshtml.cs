@@ -56,31 +56,25 @@ namespace WebApp.UI2.Pages.MyBooks.ProductVarients
             return Page();
         }
 
-        public async Task<IActionResult> OnPost(Guid id, AddVarientViewModel request, Guid[] OptionsSelectedOnView)
+        public async Task<IActionResult> OnPost(AddVarientViewModel request, Guid[] OptionsSelectedOnView)
         {
             if (ModelState.IsValid)
             {
                 request.Name = Input.Name;
-
+                request.ProductId = Input.ProductId;
                 using var client = new HttpClient();
                 Uri u = new Uri(ApiUrls.ProductVarients.Create);
                 //postTask.Wait();               
 
-                if (OptionsSelectedOnView != null)
-                {
-                    foreach (var option in OptionsSelectedOnView)
-                    {
-
-                    }
-                }
-                var json = JsonConvert.SerializeObject(new { request.Name, });
+            
+                var json = JsonConvert.SerializeObject(new { request.Name, request.ProductId, OptionsSelectedOnView });
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 //HTTP POST
-                var postTask = await client.PutAsync(u, content);
+                var postTask = await client.PostAsync(u, content);
                 string result = postTask.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             }
 
-            return Page();
+            return RedirectToPage("/MyBooks/ProductVarients/Index", new { id = request.ProductId });
         }
     }
 }

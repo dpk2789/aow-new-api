@@ -18,13 +18,21 @@ namespace Aow.Services.ProductVariants
             public Guid ProductId { get; set; }
             public string Name { get; set; }
             public string ProductName { get; set; }
-            public IList<ProductVariantProductAttributeOptionResponse> AttributesOptions { get; set; }
+            public IList<GetVariantAttributesResponse> Attributes { get; set; }
         }
-        public class ProductVariantProductAttributeOptionResponse
+        public class GetVariantAttributesResponse
         {
             public Guid? Id { get; set; }
-            public string Name { get; set; }            
-            public Guid? ProductAttributeOptionsId { get; set; }
+            public string Name { get; set; }
+            public IEnumerable<GetVariantAttributesOptionsResponse> Options { get; set; }
+            public bool IsChecked { get; set; }
+        }
+
+        public class GetVariantAttributesOptionsResponse
+        {
+            public Guid? Id { get; set; }
+            public string Name { get; set; }
+            public bool IsChecked { get; set; }
         }
 
         public GetProductVariantResponse Do(Guid Id)
@@ -37,21 +45,24 @@ namespace Aow.Services.ProductVariants
             GetProductVariantResponse getProductAttributeResponse = new GetProductVariantResponse
             {
                 Id = varient.Id,
-                ProductName = varient.Products.Name,
-                ProductId = varient.Products.Id,
-                Name = varient.Name
+                Name = varient.Name,
+                ProductId = varient.ProductId
             };
             if (varient.ProductVariantProductAttributeOptions != null)
             {
-                var optionList = new List<ProductVariantProductAttributeOptionResponse>();
-                foreach (var option in varient.ProductVariantProductAttributeOptions)
+                var attviewModelList = new List<GetVariantAttributesResponse>();
+                foreach (var attribute in varient.Products.ProductCategory.ProductAttributes)
                 {
-                    ProductVariantProductAttributeOptionResponse getAttributesOptionsResponse = new ProductVariantProductAttributeOptionResponse();
-                    getAttributesOptionsResponse.Id = option.Id;
-                    getAttributesOptionsResponse.Name = option.ProductAttributeOptions.Name;
-                    optionList.Add(getAttributesOptionsResponse);
+                    var optionList = new List<GetVariantAttributesOptionsResponse>();
+                    GetVariantAttributesResponse getAttributesOptionsResponse = new GetVariantAttributesResponse();
+                    foreach (var attributeOption in attribute.ProductAttributeOptions)
+                    {
+                        GetVariantAttributesOptionsResponse getVariantAttributesOptionsResponse = new GetVariantAttributesOptionsResponse();
+                        optionList.Add(getVariantAttributesOptionsResponse);
+                    }
+                    attviewModelList.Add(getAttributesOptionsResponse);
                 }
-                getProductAttributeResponse.AttributesOptions = optionList;
+
             }
 
             return getProductAttributeResponse;

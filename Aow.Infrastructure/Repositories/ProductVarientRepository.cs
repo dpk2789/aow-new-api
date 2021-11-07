@@ -25,7 +25,6 @@ namespace Aow.Infrastructure.Repositories
             return Task.FromResult(PagedList<ProductVariant>.ToPagedList(FindAll().Where(x => x.ProductId == productId).Include(x => x.Products).OrderBy(on => on.Name),
                                     ownerParameters.PageNumber, ownerParameters.PageSize));
         }
-
       
     }
 }

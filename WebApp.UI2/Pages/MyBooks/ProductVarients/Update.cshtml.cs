@@ -1,12 +1,59 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using WebApp.UI2.Helpers;
 
 namespace WebApp.UI2.Pages.MyBooks.ProductVarients
 {
     public class UpdateModel : PageModel
     {
-        public void OnGet()
+        public class UpdateVarientViewModel
         {
+            public Guid Id { get; set; }
+            public Guid ProductId { get; set; }
+            public string Name { get; set; }
+            public IList<UpdateVarientAttributesViewModel> AttributesViewModels { get; set; }
+
+        }
+        public class UpdateVarientAttributesViewModel
+        {
+            public Guid? Id { get; set; }
+            public string Name { get; set; }
+            public bool IsChecked { get; set; }
+            public IEnumerable<UpdateVarientAttributesOptionsViewModel> AttributesOptionsViewModels { get; set; }
+        }
+
+        public class UpdateVarientAttributesOptionsViewModel
+        {
+            public Guid? Id { get; set; }
+            public string Name { get; set; }
+            public bool IsChecked { get; set; }
+        }
+
+        [BindProperty] public UpdateVarientViewModel Input { get; set; }
+        public async Task<IActionResult> OnGet(Guid id)
+        {
+            using var client = new HttpClient();
+            var getProductsUri = new Uri(ApiUrls.ProductVarients.GetProductVarient + "?id=" + id);
+            var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+            var getUserInfo = await client.GetAsync(getProductsUri);
+
+            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+         
+            if (resultuerinfo != null)
+            {
+                var data = JsonConvert.DeserializeObject<UpdateVarientViewModel>(resultuerinfo);
+                Input = data;
+            }
+          
+            return Page();
         }
     }
 }

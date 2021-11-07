@@ -93,7 +93,7 @@ namespace WebApp.UI2.Pages.MyBooks.ProductCategoryAttributes
                 var postTask = await client.PutAsync(u, content);
                 string result = postTask.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             }
-            var url = "https://localhost:44320/MyBooks/ProductCategoryAttributes/Update?id=" + request.Id;
+          
             return RedirectToPage("/MyBooks/ProductCategoryAttributes/Update", new { Id = request.Id } );
         }
     }

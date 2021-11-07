@@ -16,6 +16,8 @@ namespace Aow.Services.ProductVariants
         {
             public string Name { get; set; }
             public Guid ProductId { get; set; }
+            public Guid[] OptionsSelectedOnView { get; set; }
+            
         }
         public class AddProductVariantResponse
         {
@@ -38,6 +40,17 @@ namespace Aow.Services.ProductVariants
                 };
 
                 _repoWrapper.ProductVarientRepo.Create(varient);
+                if (request.OptionsSelectedOnView != null)
+                {
+                    foreach (var option in request.OptionsSelectedOnView)
+                    {
+                        var optionVarient = new Aow.Infrastructure.Domain.ProductVariantProductAttributeOption();
+                        optionVarient.Id = Guid.NewGuid();
+                        optionVarient.ProductAttributeOptionsId = option;
+                        optionVarient.ProductVariantId = varient.Id;
+                        _repoWrapper.ProductVariantAndOptionRepo.Create(optionVarient);
+                    }
+                }
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {
