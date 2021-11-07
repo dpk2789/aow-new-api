@@ -44,11 +44,15 @@ namespace WebApp.UI2.Pages.MyBooks.ProductCategoryAttributes
             if (resultuerinfo != null)
             {
                 var data = JsonConvert.DeserializeObject<IEnumerable<CategoryAttributesViewModel>>(resultuerinfo);
-                var firstRow = data.FirstOrDefault();
-                CategoryAttributes = data;
-                ViewData["categoryId"] = id;
-                ViewData["categoryName"] = firstRow.CategoryName;
+                if (data.Count() != 0)
+                {
+                    var firstRow = data.FirstOrDefault();
+                    CategoryAttributes = data;                    
+                    ViewData["categoryName"] = firstRow.CategoryName;
+                }
+              
             }
+            ViewData["categoryId"] = id;
             return Page();
         }
     }
