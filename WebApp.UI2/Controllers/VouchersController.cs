@@ -87,6 +87,35 @@ namespace WebApp.UI2.Controllers
             }));
         }
 
+        public async Task<JsonResult> GetVarientsForInvoice(string term, string productId)
+        {          
+            List<ProductViewModel> ProductViewModelList = null;          
+            using var client = new HttpClient();
+            var getProductsUri = new Uri(ApiUrls.ProductVarients.GetAllVarientsByProduct + "?productId=" + productId);
+
+            var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+            var getUserInfo = await client.GetAsync(getProductsUri);
+
+            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            if (resultuerinfo != null)
+            {
+                var data = JsonConvert.DeserializeObject<IList<ProductViewModel>>(resultuerinfo);
+                ProductViewModelList = data.Where(c => c.Name.IndexOf(term, StringComparison.CurrentCultureIgnoreCase) != -1).ToList();
+                // LedgerCategories = data.Where(ii => ii.Name.IndexOf(term)>-1).ToList();
+            }
+            return Json(ProductViewModelList.Select(m => new
+            {
+                id = m.Id,
+                value = m.Name,
+                label = String.Format("{0}/{1}/{2}", m.Code, m.Name, m.SalePrice),
+                mRPPerUnit = m.SalePrice,
+                name = m.Name,             
+                productId = m.ProductId,              
+            }));
+        }
+
         public async Task<JsonResult> GetProductsForSundryItems(string term, string HeadName, string crdr)
         {
             var cmpid = _cookieHelper.Get("cmpCookee");

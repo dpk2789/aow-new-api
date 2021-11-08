@@ -22,9 +22,9 @@ namespace Aow.Services.ProductVariants
   
         }
 
-        public IEnumerable<GetProductVariantsResponse> Do(PagingParameters pagingParameters, Guid companyId)
+        public IEnumerable<GetProductVariantsResponse> Do(PagingParameters pagingParameters, Guid productId)
         {
-            var list = _repoWrapper.ProductVarientRepo.GetProductVarients(pagingParameters, companyId).GetAwaiter().GetResult();
+            var list = _repoWrapper.ProductVarientRepo.GetProductVarients(pagingParameters, productId).GetAwaiter().GetResult();
             var newList = list.Select(x => new GetProductVariantsResponse
             {
                 Id = x.Id,

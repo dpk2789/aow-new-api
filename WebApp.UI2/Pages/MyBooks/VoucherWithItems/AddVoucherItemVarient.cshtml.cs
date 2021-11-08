@@ -15,7 +15,7 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
     {
         public class AddVoucherItemVarientViewModel
         {
-            public Guid VarientId { get; set; }
+            public Guid ProductId { get; set; }
             public string Name { get; set; }
             public string Quantity { get; set; }
             public string PurchasePrice { get; set; }
@@ -37,7 +37,7 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
                 var data = JsonConvert.DeserializeObject<IList<AddVoucherItemVarientViewModel>>(resultuerinfo);
                 //inputModel = data;
             }
-            inputModel.VarientId = id;
+            inputModel.ProductId = id;
             Input = inputModel;
             return Page();
         }
