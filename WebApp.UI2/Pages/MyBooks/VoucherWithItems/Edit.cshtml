@@ -32,7 +32,7 @@
 
     <section class="content">
         <div class="container-fluid">
-            <!-- SELECT2 EXAMPLE -->
+            <!-- SELECT2 EXAMPLE --> 
             <div class="card card-info">
                 <div class="card-header">
                     <h3 class="card-title">Edit @Model.Input.VoucherName</h3>
@@ -172,8 +172,9 @@
                                                                 <input type="hidden" id="hdnappendMRPPerUnit" class="hdnappendMRPPerUnit" value="@item.MRPPerUnit" />
                                                                 <button class="btn btn-sm btn-outline-warning fas fa-edit addVoucherVariant" value="@item.Id" style='cursor:pointer;'></button>
                                                                 @*<button class="btn btn-sm btn-outline-light fa fa-edit edit" value="@item.Id" style='cursor:pointer;'></button>*@
-                                                                <button class="btn btn-sm btn-outline-danger fas fa-trash-alt delete" value="@item.Id" style='cursor:pointer;'></button>
-                                                                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">modal</button>
+                                                                  @*<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">modal</button>*@
+                                                                <button class="btn btn-sm btn-outline-danger fas fa-trash-alt delete" value="@item.Id" style='cursor:pointer;'></button>                                                               
+                                                                 <a asp-route-id="@item.Id" asp-page="/MyBooks/VoucherWithItems/AddVoucherItemVarient" class="btn btn-sm btn-outline-primary"><i class="fas fa-cubes"></i></a> |
 
                                                             </td>
                                                         </tr>
