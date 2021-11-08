@@ -1,6 +1,6 @@
 ﻿using Aow.Infrastructure.Common;
 using System;
-
+using System.Collections.Generic;
 
 namespace Aow.Infrastructure.Domain
 {
@@ -17,7 +17,8 @@ namespace Aow.Infrastructure.Domain
         public virtual Product Product { get; set; }
         public Guid VoucherId { get; set; }
         public virtual Voucher Voucher { get; set; }
-       
+        public virtual IList<VoucherItemVariant> VoucherItemVariants { get; set; }
+
     }
 }
 

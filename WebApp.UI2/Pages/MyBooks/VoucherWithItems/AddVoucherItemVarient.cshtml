@@ -1,0 +1,218 @@
+﻿@page
+@model WebApp.UI2.Pages.MyBooks.VoucherWithItems.AddVoucherItemVarientModel
+@{
+}
+<table class="table table-hover table-responsive table-bordered table-striped">
+    <thead>
+        <tr>
+            <td class="col-md-1">S.No</td>
+            <td class="col-md-2">Item Name</td>
+            <td class="col-md-2">Description</td>
+            <td class="col-md-2">Amount</td>
+            <td class="col-md-2">Quantity</td>
+            <td class="col-md-2">Total</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td>
+            </td>
+            <td>
+                <input type="text" id="txtStoreItem" class="ui-autocomplete-input form-control" data-url="@Url.Action("GetItemsForInvoice", "Vouchers")" placeholder="Enter Product" />
+                <input type="hidden" id="hdnStoreItemId" class="form-control" />
+                <input type="hidden" id="hdnProductId" class="form-control" />
+                <input type="hidden" id="hdnProductAccountId" class="form-control" />
+                <input type="hidden" id="hdnAccountCategoryName" class="form-control  hdnAccountCategoryName" />
+                <input type="hidden" id="hdnItemType" class="form-control  hdnItemType" />
+            </td>
+            <td>
+                <input type="text" id="txtDescription" class="form-control" placeholder="Description" />
+
+            </td>
+            <td>
+                <input type="text" id="txtMRP" class="form-control" maxlength="7" placeholder="MRP" />
+            </td>
+            <td>
+                <input type="text" id="txtQuantity" class="form-control" onchange="recalculateExtendedPrice()" placeholder="Quantity" />
+            </td>
+            <td>
+                <input type="text" id="txtAmount" class="form-control  txtAmount" placeholder="Amount" value="0" />
+                <input type="hidden" id="hdnAmount" class="form-control  hdnAmount" />
+            </td>
+            <td>
+                <input id="btnAdd" type="button" value="Add" class="btn btn-primary btn-sm btnadd" />
+                @*<a href="#" class="glyphicon glyphicon-pencil btnadd" id="btnadd" title="Add"></a>*@
+                <a href="#" class="fa fa-edit btnupdate" id="btnupdate" title="Edit" style="display:none;"></a>
+                <a href="#" class="fa fa-erase btnnew" id="btnnew" title="New" style="display:none;"></a>
+            </td>
+        </tr>
+    </thead>
+
+    <tbody id="tbodyitems" class="tbodyitems bordered">
+
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><input type='hidden' id="hdnItemTotal" class='hdnItemTotal' /></td>
+            <td>Total</td>
+            <td class='itemstotalclass'> </td>
+        </tr>
+    </tbody>
+</table>
+
+
+@section Scripts {
+<script>
+
+        $("#txtVarientItem").autocomplete({
+        minLength: 1,
+        source: function (request, response) {
+            let url = $(this.element).data("url");
+            let voucherItemId = $("#VoucherItemId").val();
+            let varientProductId = $("#varientProductId").val();
+
+            //alert(voucherItemId);
+            $.getJSON(url, { term: request.term, voucherItemId: voucherItemId, varientProductId: varientProductId}, function (data) {
+                response(data)
+            })
+        },
+        appendTo: $(".modal-body ui-autocomplete-input-abc"),
+        select: function (event, ui) {
+            $("#hdnVarientId").val(ui.item.id);
+            $("#txtVarientItem").val(ui.item.value);
+            $("#txtVarientDescription").val(ui.item.label);
+            $('#txtVarientDescription').focus()
+
+            $("#hdnItemType").val(ui.item.Itemtype);
+        },
+        change: function (event, ui) {
+            if (!ui.item) {
+                $(event.target).val("");
+            }
+        }
+    });
+
+            $('.btnVarientAdd').on("click", function (e) {
+            let newcontent = "";
+            let ItemType = $('#hdnItemType').val();
+            let txtStoreItem = $('#txtVarientItem').val();
+            let txtDescription = $('#txtVarientDescription').val();
+            let hdnVarientId = $('#hdnVarientId').val();
+            let txtMRP = $('#txtVarientMRP').val();
+            let txtQuantity = $('#txtVarientQuantity').val();
+            let txtAmount = $('#txtVarientAmount').val();
+            let hdnAmount = $('#hdnVarientAmount').val();
+
+
+            golbalPreviousAmount = txtAmount;
+            if (isNaN(txtQuantity) || txtQuantity === "") {
+                txtQuantity = 0;
+            }
+            let hdnAccountCategoryName = $('#hdnAccountCategoryName').val();
+            //  alert(hdnAccountCategoryName)
+            $('.dvitemexistmsg').html("");
+            newcontent = "";
+            let itemstotal = 0;
+            let itemstotalWithOutTax = 0;
+            let dueMoney = 0;
+            let x = 0;
+
+            $('#tbodyVarientItems tr').each(function () {
+                let text = $(this).find("td").eq(4).html();
+                if (text !== "Total") {
+
+                    let hdnappendhdnItemType = $(this).find(".hdnappendVarientItemType").val();
+                    let hdnappendProductName = $(this).find('.hdnappendVarientProductName').val();
+                    let amnt = $(this).find('.hdnappendVarientAmount').val();
+
+                    itemstotal = parseFloat(itemstotal) + parseFloat(amnt);
+                    itemstotalWithOutTax = parseFloat(itemstotalWithOutTax) + parseFloat(amnt);
+                    dueMoney = parseFloat(dueMoney) + parseFloat(amnt);
+                    x = parseFloat(x) + parseFloat(1);
+
+                    newcontent += "<tr >";
+                    newcontent += "<td>" + x + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(1).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(2).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(3).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(4).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(5).html(); + " </td >";
+                    newcontent += "<td   >";
+
+
+                    let hdnappendMRP = $(this).find('.hdnappendVarientMRP').val();
+                    let hdnappendQuantity = $(this).find('.hdnappendVarientQuantity').val();
+                    let hdnappendProductId = $(this).find(".hdnappendVarientProductId").val();
+                    let hdnappenItemDesc = $(this).find(".hdnappenVarientItemDesc").val();
+
+
+                    newcontent += "<input type='hidden' class='hdnappendVarientProductId' value=" + hdnappendProductId + " />";
+                    newcontent += "<input type='hidden' class='hdnappendVarientProductName' value=" + hdnappendProductName + " />";
+                    newcontent += "<input type='hidden' class='hdnappenVarientItemDesc' value=" + hdnappenItemDesc + " />";
+                    newcontent += "<input type='hidden' class='hdnappendVarientAmount' value=" + amnt + " />";
+                    newcontent += "<input type='hidden' class='hdnappendVarientMRP' value=" + hdnappendMRP + " />";
+                    newcontent += "<input type='hidden' class='hdnappendVarientQuantity' value=" + hdnappendQuantity + " />";
+                    newcontent += "<input type='hidden' class='hdnappendhdnVarientItemType' value=" + hdnappendhdnItemType + " />";
+                    newcontent += "<a  class='fa fa-edit editVarient' style='cursor:pointer;'/>";
+                    newcontent += "<a  class='fa fa-trash deleteVarient' style='cursor:pointer;'/>";
+                    newcontent += "</td >";
+                    newcontent += "</tr >";
+                }
+            });
+
+            itemstotal = parseFloat(itemstotal) + parseFloat(txtAmount);
+            x = parseFloat(x) + parseFloat(1);
+
+            //alert(hdnBatchId);
+            newcontent += "<tr >";
+            newcontent += "<td  >" + x + " </td >";
+            newcontent += "<td  class='txtStoreItem'>" + txtStoreItem + " </td >";
+            newcontent += "<td  class='txtDescription'>" + txtDescription + " </td >";
+            newcontent += "<td  >" + txtMRP + " </td >";
+            newcontent += "<td  >" + txtQuantity + " </td >";
+            newcontent += "<td  >" + txtAmount + " </td >";
+            newcontent += "<td   >";
+            newcontent += "<input type='hidden' class='hdnappendVarientProductId' value=" + hdnVarientId + " />";
+            newcontent += "<input type='hidden' class='hdnappendVarientProductName' value=" + txtStoreItem + " />";
+            newcontent += "<input type='hidden' class='hdnappenVarientItemDesc' value=" + txtDescription + " />";
+            newcontent += "<input type='hidden' class='hdnappendVarientMRP' value=" + txtMRP + " />";
+            newcontent += "<input type='hidden' class='hdnappendVarientQuantity' value=" + txtQuantity + " />";
+            newcontent += "<input type='hidden' class='hdnappendVarientAmount' value=" + parseFloat(txtAmount) + " />";
+            newcontent += "<input type='hidden' class='hdnappendVarientItemType' value=" + ItemType + " />";
+            newcontent += "<a  class='fa fa-edit editVarient' style='cursor:pointer;'/>";
+            newcontent += "<a  class='fa fa-trash deleteVarient' style='cursor:pointer;'/>";
+            newcontent += "</td >";
+            newcontent += "</tr >";
+
+
+            if (txtStoreItem === "SubTotal") {
+                let subTotal = 0;
+                $('#tbodyVarientItems tr').each(function () {
+                    let text = $(this).find("td").eq(3).html();
+                    if (text !== "Total") {
+                        let amnt = $(this).find('.hdnappendVarientAmount').val();
+                        subTotal = parseFloat(subTotal) + parseFloat(amnt);
+                    }
+                });
+
+                newcontent += "<tr >";
+                newcontent += "<td  ></td >";
+                newcontent += "<td  ></td >";
+                newcontent += "<td  ><input type='hidden' class='itemsVarienttotalhdnclass' value=" + subTotal + " /></td >";
+                newcontent += "<td  ></td >";
+                newcontent += "<td  class='itemstotalclass'>" + numberWithCommas(parseFloat(subTotal).toFixed(2)) + " </td >";
+                newcontent += "<td   >";
+                newcontent += "<input type='hidden' class='hdnappendAmount' value=" + subTotal + " />";
+                newcontent += "<a  class='fa fa-edit editVarient' style='cursor:pointer;'/>";
+                newcontent += "<a  class='fa fa-trash deleteVarient' style='cursor:pointer;'/>";
+                newcontent += "</td >";
+                newcontent += "</tr >";
+                itemstotal = subTotal;
+            }
+
+            $('#tbodyVarientItems').empty().append(newcontent);
+            ClearItemVarientAdd();
+        });
+</script>
+}

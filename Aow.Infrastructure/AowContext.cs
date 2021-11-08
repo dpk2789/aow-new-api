@@ -37,7 +37,8 @@ namespace Aow.Infrastructure
 
         public DbSet<JournalEntry> JournalEntries { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
-        public DbSet<VoucherItem> VoucherItems { get; set; }        
+        public DbSet<VoucherItem> VoucherItems { get; set; }
+        public DbSet<VoucherItemVariant> VoucherItemVariants { get; set; }
         public DbSet<VoucherSundryItem> VoucherSundryItems { get; set; }
         public DbSet<TransporterDetail> TransporterDetails { get; set; }
         public DbSet<ProductVariantProductAttributeOption> ProductVariantProductAttributeOptions { get; set; }
@@ -59,11 +60,13 @@ namespace Aow.Infrastructure
             builder.Entity<VoucherItem>().Property(p => p.Quantity).HasColumnType("decimal(18,4)");
             builder.Entity<VoucherSundryItem>().Property(p => p.ItemAmount).HasColumnType("decimal(18,4)");
             builder.Entity<UserPayment>().Property(p => p.Amount).HasColumnType("decimal(18,4)");
+            builder.Entity<VoucherItemVariant>().Property(p => p.ItemAmount).HasColumnType("decimal(18,4)");
+            builder.Entity<VoucherItemVariant>().Property(p => p.MRPPerUnit).HasColumnType("decimal(18,4)");
+            builder.Entity<VoucherItemVariant>().Property(p => p.DiscountRatePerUnit).HasColumnType("decimal(18,4)");
+            builder.Entity<VoucherItemVariant>().Property(p => p.UnitQuantity).HasColumnType("decimal(18,4)");
             // builder.ApplyConfiguration(new ProductCategoryConfiguration());
             base.OnModelCreating(builder);
-        }
-
-       
+        }       
         public override  Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             foreach (var entry in base.ChangeTracker.Entries<IAuditableEntity>())
