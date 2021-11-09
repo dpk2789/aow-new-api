@@ -29,10 +29,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-
                             <h3 class="card-title">
                                 Item Name
-
                             </h3>
                         </div>
 
@@ -90,7 +88,50 @@
                                     </thead>
 
                                     <tbody id="tbodyitems" class="tbodyitems bordered">
+                                         @{
+                                                if (Model.Input.Varients != null)
+                                                {
+                                                    @foreach (var item in Model.Input.Varients.OrderBy(x => x.SrNo))
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <p class='sNo'>@item.SrNo</p>
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.ItemName)
+                                                            </td>
+                                                            <td>
+                                                                <p class='batchName'>@item.Description</p>
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.MRPPerUnit)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Quantity)
+                                                            </td>
+                                                            <td>
+                                                                <p class="extendedPrice">@item.ItemAmount</p>
+                                                            </td>
+                                                            <td>
+                                                                <input type='hidden' class='hdnappendProductId' value=@item.ProductId />
+                                                                <input type='hidden' class='hdnappendProductAccountId' value=@item.Id />                                                               
+                                                                <input type="hidden" id="hdnappendAmount" class="hdnappendAmount" value="@item.ItemAmount" />
+                                                                <input type='hidden' class='hdnappendMRP' value=@item.MRPPerUnit />
+                                                                <input type="hidden" id="hdnappendItemName" class="hdnappendProductName" value="@item.ItemName" />
+                                                                <input type="hidden" id="hdnappendQuantity" class="hdnappendQuantity" value="@item.Quantity" />
+                                                                <input type="hidden" id="hdnappendMRPPerUnit" class="hdnappendMRPPerUnit" value="@item.MRPPerUnit" />
+                                                                <button class="btn btn-sm btn-outline-warning fas fa-edit addVoucherVariant" value="@item.Id" style='cursor:pointer;'></button>
+                                                                @*<button class="btn btn-sm btn-outline-light fa fa-edit edit" value="@item.Id" style='cursor:pointer;'></button>*@
+                                                                  @*<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">modal</button>*@
+                                                                <button class="btn btn-sm btn-outline-danger fas fa-trash-alt delete" value="@item.Id" style='cursor:pointer;'></button>                                                               
+                                                                 <a asp-route-id="@item.Id" asp-route-voucherId="@Model.Input.Id" asp-page="/MyBooks/VoucherWithItems/AddVoucherItemVarient" class="btn btn-sm btn-outline-primary"><i class="fas fa-cubes"></i></a> |
 
+                                                            </td>
+                                                        </tr>
+
+                                                    }
+                                                }
+                                            }
                                         <tr>
                                             <td></td>
                                             <td></td>

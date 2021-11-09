@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aow.Services.VoucherInvoice
@@ -47,7 +48,17 @@ namespace Aow.Services.VoucherInvoice
             {
                 var voucherItem = await _repoWrapper.VoucherItemRepo.GetVoucherItem(request.VoucherItemId);
                 int srnoItem = 1;
-
+                if (voucherItem.VoucherItemVariants != null)
+                {
+                    var varients = voucherItem.VoucherItemVariants.ToList();
+                    if (varients.Count != 0)
+                    {
+                        foreach (var account in varients)
+                        {
+                            _repoWrapper.VoucherItemVarientRepo.Delete(account);
+                        }
+                    }
+                }
                 if (request.data != null)
                 {
                     var deserialiseList = JsonConvert.DeserializeObject<List<AddVoucherItemVarientRequest>>(request.data);
@@ -58,6 +69,7 @@ namespace Aow.Services.VoucherInvoice
                         {
                             Id = Guid.NewGuid(),
                             SrNo = srnoItem,
+                            Name = item.Name,
                             Description = item.Description,
                             MRPPerUnit = item.MRPPerUnit,
                             UnitQuantity = item.Quantity,
@@ -69,7 +81,7 @@ namespace Aow.Services.VoucherInvoice
                         srnoItem++;
                     }
                 }
-           
+
                 int i = await _repoWrapper.SaveNew();
                 if (i > 0)
                 {
