@@ -23,6 +23,10 @@ namespace Aow.Services.ProductVariants
         public IEnumerable<GetAllProductVariantsResponse> Do(Guid productId)
         {
             var list = _repoWrapper.ProductVarientRepo.GetAllProductVarients(productId).GetAwaiter().GetResult();
+            if (list == null)
+            {
+                return null;
+            }
             var newList = list.Select(x => new GetAllProductVariantsResponse
             {
                 Id = x.Id,

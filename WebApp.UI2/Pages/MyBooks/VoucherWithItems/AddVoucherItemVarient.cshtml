@@ -14,7 +14,7 @@
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a asp-page="/MyBooks/ProductCategories/Index">Voucher</a></li>
+                        <li class="breadcrumb-item"><a asp-route-id="@Model.Input.VoucherId" asp-page="/MyBooks/VoucherWithItems/Edit" class="fa fa-edit">Edit Voucher</a></li>
                         <li class="breadcrumb-item active">Add Voucher Item Varients </li>
                     </ol>
                 </div><!-- /.col -->
@@ -39,7 +39,9 @@
                         <!-- /.card-header -->
                         <div class="card-body" id="product-main">
                             <input type="hidden" value="@userId" id="userId" />
+                            <input type="hidden" value="@Model.Input.Id" id="VoucherItemId" />
                             <input type="hidden" value="@Model.Input.ProductId" id="ProductId" />
+                            <input type="hidden" value="@Model.ApiUrl" id="apiurl" />
                             <div id="resultTable">
                                 <table class="table table-hover table-responsive table-bordered table-striped">
                                     <thead>
@@ -102,6 +104,13 @@
                             </div>
                         </div>
                         <!-- /.card-body -->
+                        <div class="card-footer">
+                            <span>
+                                <img id="loading" style="display: none;" src="~/gif/ajax-loader.gif" />
+                            </span>
+                            <button onclick="UpdateInvoice(event)" class="btn btn-info float-right" style="margin-left:20px">Save</button>
+                            <button id="SaveNext" class="btn btn-default float-right">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -169,7 +178,7 @@
             source: function (request, response) {
                 let productId = $('#ProductId').val();
                 var url = $(this.element).data("url");
-                $.getJSON(url, { term: request.term, productId}, function (data) {
+                $.getJSON(url, { term: request.term, productId }, function (data) {
                     response(data)
                 })
             },
@@ -204,21 +213,15 @@
             let golbalPreviousAmount = 0;
             let sNo = 0;
             let newcontent = "";
-            let ItemType = $('#hdnItemType').val();
-            let HeadName = $("#X option:selected").text();
             let txtStoreItem = $('#txtStoreItem').val();
             let txtDescription = $('#txtDescription').val();
-            let hdnStoreItemId = $('#hdnStoreItemId').val();
             let hdnProductId = $('#hdnProductId').val();
-            let hdnBatchId = $("#BatchId option:selected").val();
             let hdnProductAccountId = $('#hdnProductAccountId').val();
             let txtMRP = $('#txtMRP').val();
             let txtQuantity = $('#txtQuantity').val();
             let txtAmount = $('#txtAmount').val();
             let hdnAmount = $('#hdnAmount').val();
             let hdnPreviousAmount = golbalPreviousAmount;
-            let taxAmount = 0;
-            let taxPercent = txtMRP;
 
             golbalPreviousAmount = txtAmount;
             if (isNaN(txtQuantity) || txtQuantity === "") {
@@ -237,8 +240,6 @@
                 let text = $(this).find("td").eq(4).html();
                 if (text !== "Total") {
 
-                    let hdnappendhdnItemType = $(this).find(".hdnappendhdnItemType").val();
-                    let hdnAccountCategoryName = $(this).find('.hdnappendhdnAccountCategoryName').val();
                     let hdnappendProductName = $(this).find('.hdnappendProductName').val();
                     let amnt = $(this).find('.hdnappendAmount').val();
 
@@ -256,42 +257,24 @@
                     newcontent += "<td>" + $(this).find("td").eq(5).html(); + " </td >";
                     newcontent += "<td   >";
 
-
-
                     let hdnappendMRP = $(this).find('.hdnappendMRP').val();
                     let hdnappendQuantity = $(this).find('.hdnappendQuantity').val();
                     let hdnappendProductId = $(this).find(".hdnappendProductId").val();
-                    let hdnappendhdnStoreItemId = $(this).find(".hdnappendhdnStoreItemId").val();
                     let hdnappendProductAccountId = $(this).find(".hdnappendProductAccountId").val();
-                    let hdnappenItemDesc = $(this).find(".hdnappenItemDesc").val();
 
-
-                    newcontent += "<input type='hidden' class='hdnappendhdnAccountCategoryName' value=" + hdnAccountCategoryName + " />";
                     newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnappendProductId + " />";
-                    newcontent += "<input type='hidden' class='hdnappendBatchId' value=" + hdnBatchId + " />";
                     newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnappendProductAccountId + " />";
                     newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
-                    newcontent += "<input type='hidden' class='hdnappenItemDesc' value=" + hdnappenItemDesc + " />";
                     newcontent += "<input type='hidden' class='hdnappendAmount' value=" + amnt + " />";
                     newcontent += "<input type='hidden' class='hdnappendMRP' value=" + hdnappendMRP + " />";
                     newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + hdnappendQuantity + " />";
-                    newcontent += "<input type='hidden' class='hdnappendhdnStoreItemId' value=" + hdnappendhdnStoreItemId + " />";
-                    newcontent += "<input type='hidden' class='hdnappendhdnItemType' value=" + hdnappendhdnItemType + " />";
                     newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
                     newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
                     newcontent += "</td >";
                     newcontent += "</tr >";
                 }
             });
-
-
-            if (ItemType.replace(/\s/g, '') === "Discount") {
-                itemstotal = parseFloat(itemstotal) - parseFloat(txtAmount);
-            }
-            else {
-                itemstotal = parseFloat(itemstotal) + parseFloat(txtAmount);
-            }
-
+            itemstotal = parseFloat(itemstotal) + parseFloat(txtAmount);
             x = parseFloat(x) + parseFloat(1);
 
             //alert(hdnBatchId);
@@ -303,17 +286,12 @@
             newcontent += "<td  >" + txtQuantity + " </td >";
             newcontent += "<td  >" + txtAmount + " </td >";
             newcontent += "<td   >";
-            newcontent += "<input type='hidden' class='hdnappendhdnAccountCategoryName' value=" + hdnAccountCategoryName.replace(/\s/g, '') + " />";
             newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnProductId + " />";
-            newcontent += "<input type='hidden' class='hdnappendBatchId' value=" + hdnBatchId + " />";
             newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnProductAccountId + " />";
             newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
-            newcontent += "<input type='hidden' class='hdnappenItemDesc' value=" + txtDescription + " />";
             newcontent += "<input type='hidden' class='hdnappendMRP' value=" + txtMRP + " />";
             newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + txtQuantity + " />";
             newcontent += "<input type='hidden' class='hdnappendAmount' value=" + parseFloat(txtAmount) + " />";
-            newcontent += "<input type='hidden' class='hdnappendhdnStoreItemId' value=" + hdnStoreItemId + " />";
-            newcontent += "<input type='hidden' class='hdnappendhdnItemType' value=" + ItemType + " />";
             newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
             newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
             newcontent += "</td >";
@@ -342,12 +320,10 @@
                 newcontent += "<td  ></td >";
                 newcontent += "<td  class='itemstotalclass'>" + numberWithCommas(parseFloat(subTotal).toFixed(2)) + " </td >";
                 newcontent += "<td   >";
-                newcontent += "<input type='hidden' class='hdnappendhdnAccountCategoryName' value=" + hdnAccountCategoryName + " />";
                 newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
                 newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnProductId + " />";
                 newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnProductAccountId + " />";
                 newcontent += "<input type='hidden' class='hdnappendAmount' value=" + subTotal + " />";
-                newcontent += "<input type='hidden' class='hdnappendhdnStoreItemId' value=" + hdnStoreItemId + " />";
                 newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
                 newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
                 newcontent += "</td >";
@@ -368,11 +344,77 @@
 
             $('#tbodyitems').empty().append(newcontent);
             //document.getElementById("ProductsTotal").value = numberWithCommas(parseFloat(itemstotal).toFixed(2));
-          //  document.getElementById("hdnProductsTotal").value = parseFloat(itemstotal).toFixed(2);
-           // document.getElementById("Input_Total").value = parseFloat(itemstotal).toFixed(2);
+            //  document.getElementById("hdnProductsTotal").value = parseFloat(itemstotal).toFixed(2);
+            // document.getElementById("Input_Total").value = parseFloat(itemstotal).toFixed(2);
 
             //  $(".showimg").hide();
             ClearItemAdd();
         });
+
+        var addVoucherItemRequest = {
+            voucherItemId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            voucherName: "string",
+            data: "string",
+        }
+
+        function UpdateInvoice(e) {
+            // let confirmAction = confirm("Are you sure to delete this product?");
+            let url = "AddVoucherItemVarient";
+            performPostRequest(e, url);
+        }
+
+        function performPostRequest(e, url) {
+            e.preventDefault();
+            let voucherItemId = document.getElementById('VoucherItemId').value;
+            let apiUrl = document.getElementById('apiurl').value;
+            let userId = document.getElementById('userId');
+            let userAccessToken = userId.value;
+
+            let OrderDetl = [];
+            $('#tbodyitems tr').each(function () {
+                let text = $(this).find("td").eq(4).html();
+                if (text !== "Total") {
+
+                    let Name = $(this).find("td").eq(1).text().trim();
+                    //let Quantity = parseFloat($(this).find("td").eq(3).html()).toFixed(2);;
+                    let ItemAmount = $(this).find(".hdnappendAmount").val();
+                    let MRPPerUnit = $(this).find(".hdnappendMRP").val();
+                    let Quantity = $(this).find(".hdnappendQuantity").val();
+                    let ProductId = $(this).find(".hdnappendProductId").val();                    
+                    OrderDetl.push({
+                        'Name': Name,
+                        'VarientId': ProductId,
+                        // 'ProductLedgerId': productLedgerId,
+                        'MRPPerUnit': MRPPerUnit,
+                        'Quantity': Quantity,
+                        'ItemAmount': ItemAmount                       
+                    });
+                }
+            });
+
+            alert(JSON.stringify(OrderDetl) + '  ' + OrderDetl.length)
+
+            addVoucherItemRequest.voucherItemId = voucherItemId;
+            addVoucherItemRequest.data = JSON.stringify(OrderDetl);
+
+            axios.post(`${apiUrl}/api/VoucherInvoice/` + url, this.addVoucherItemRequest, {
+                headers: {
+                    Authorization: "Bearer " + userAccessToken
+                }
+            })
+                .then(function (response) {
+                    console.log(response);
+                    if (response.data.success) {
+                        toastr.success(response.data.description)
+                        window.location.href = '/MyBooks/VoucherWithItems/index?voucherName=' + voucherName
+                    } else {
+                        toastr.error(response.data.description)
+                    }
+                })
+                .catch(function (response) {
+                    console.log(response);
+                    toastr.error(response)
+                });
+        };
     </script>
 }

@@ -117,6 +117,7 @@
         {
             public const string GetVoucherInvoices = Rootlocal + "/api/VoucherInvoice/GetVoucherInvoice";
             public const string GetVoucherInvoice = Rootlocal + "/api/VoucherInvoice/GetVoucherInvoice";
+            public const string GetVoucherItem = Rootlocal + "/api/VoucherInvoice/GetVoucherItem";
             public const string Create = Rootlocal + "/api/VoucherInvoice/AddVoucherInvoice";
             public const string Update = Rootlocal + "/api/VoucherInvoice/UpdateLedger";
             public const string Delete = Rootlocal + "/VoucherInvoice/{postId}";

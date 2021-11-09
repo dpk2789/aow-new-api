@@ -13,19 +13,50 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
 {
     public class AddVoucherItemVarientModel : PageModel
     {
+        private readonly ICookieHelper _cookieHelper;
+        public string ApiUrl { get; }
+        public AddVoucherItemVarientModel(ICookieHelper cookieHelper)
+        {
+            ApiUrl = ApiUrls.Rootlocal;
+            _cookieHelper = cookieHelper;
+        }
         public class AddVoucherItemVarientViewModel
         {
-            public Guid ProductId { get; set; }
-            public string Name { get; set; }
-            public string Quantity { get; set; }
+            public Guid Id { get; set; }
+            public int? SrNo { get; set; }
+            public decimal? DiscountRatePerUnit { get; set; }
+            public decimal? MRPPerUnit { get; set; }
+            public decimal? Quantity { get; set; }
+            public decimal? ItemAmount { get; set; }
+            public string ItemName { get; set; }
+            public string Description { get; set; }
+            public decimal Price { get; set; }
+            public Guid ProductId { get; set; }         
+            public Guid VoucherId { get; set; }
+            public string Name { get; set; }        
             public string PurchasePrice { get; set; }
+            public virtual List<GetVoucherItemVarientResponse> Varients { get; set; }
         }
-     
+
+        public class GetVoucherItemVarientResponse
+        {
+            public Guid Id { get; set; }
+            public Guid ProductId { get; set; }
+            public Guid VoucherItemId { get; set; }
+            public int? SrNo { get; set; }
+            public decimal? DiscountRatePerUnit { get; set; }
+            public decimal? MRPPerUnit { get; set; }
+            public decimal? Quantity { get; set; }
+            public decimal? ItemAmount { get; set; }
+            public string ItemName { get; set; }
+            public string Description { get; set; }
+            public decimal Price { get; set; }
+        }
         [BindProperty] public AddVoucherItemVarientViewModel Input { get; set; }
-        public async Task<IActionResult> OnGet(Guid id)
+        public async Task<IActionResult> OnGet(Guid id, Guid voucherId)
         {
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.ProductVarients.GetProductAttributesAndOptions + "?productId=" + id);
+            var getProductsUri = new Uri(ApiUrls.VouchersInvoice.GetVoucherItem + "?id=" + id);
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
             var getUserInfo = await client.GetAsync(getProductsUri);
@@ -34,10 +65,10 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
             AddVoucherItemVarientViewModel inputModel = new AddVoucherItemVarientViewModel();
             if (resultuerinfo != null)
             {
-                var data = JsonConvert.DeserializeObject<IList<AddVoucherItemVarientViewModel>>(resultuerinfo);
-                //inputModel = data;
-            }
-            inputModel.ProductId = id;
+                var data = JsonConvert.DeserializeObject<AddVoucherItemVarientViewModel>(resultuerinfo);
+                inputModel = data;
+            }         
+            inputModel.VoucherId = voucherId;
             Input = inputModel;
             return Page();
         }

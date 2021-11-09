@@ -174,7 +174,7 @@
                                                                 @*<button class="btn btn-sm btn-outline-light fa fa-edit edit" value="@item.Id" style='cursor:pointer;'></button>*@
                                                                   @*<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">modal</button>*@
                                                                 <button class="btn btn-sm btn-outline-danger fas fa-trash-alt delete" value="@item.Id" style='cursor:pointer;'></button>                                                               
-                                                                 <a asp-route-id="@item.ProductId" asp-page="/MyBooks/VoucherWithItems/AddVoucherItemVarient" class="btn btn-sm btn-outline-primary"><i class="fas fa-cubes"></i></a> |
+                                                                 <a asp-route-id="@item.Id" asp-route-voucherId="@Model.Input.Id" asp-page="/MyBooks/VoucherWithItems/AddVoucherItemVarient" class="btn btn-sm btn-outline-primary"><i class="fas fa-cubes"></i></a> |
 
                                                             </td>
                                                         </tr>

@@ -65,6 +65,7 @@ function AddInvoice(e) {
     let url = "AddVoucherInvoice";
     performPostRequest(e, url);
 }
+
 function UpdateInvoice(e) {
     // let confirmAction = confirm("Are you sure to delete this product?");
     let url = "UpdateVoucherInvoice";
