@@ -16,15 +16,9 @@ namespace Aow.Services.VoucherItemVarient
 
         public class GetVoucherItemResponse
         {
-            public Guid Id { get; set; }
-            public int? SrNo { get; set; }
-            public decimal? DiscountRatePerUnit { get; set; }
-            public decimal? MRPPerUnit { get; set; }
-            public decimal? Quantity { get; set; }
-            public decimal? ItemAmount { get; set; }
-            public string ItemName { get; set; }
-            public string Description { get; set; }
-            public decimal Price { get; set; }
+            public Guid Id { get; set; }          
+            public decimal ItemsTotal { get; set; }
+            public string ItemName { get; set; }         
             public Guid ProductId { get; set; }
             public virtual List<GetVoucherItemVarientResponse> Varients { get; set; }
         }
@@ -32,7 +26,7 @@ namespace Aow.Services.VoucherItemVarient
         public class GetVoucherItemVarientResponse
         {
             public Guid Id { get; set; }
-            public Guid ProductId { get; set; }
+            public Guid VarientId { get; set; }
             public Guid VoucherItemId { get; set; }
             public int? SrNo { get; set; }
             public decimal? DiscountRatePerUnit { get; set; }
@@ -55,9 +49,9 @@ namespace Aow.Services.VoucherItemVarient
             {
                 Id = voucherItem.Id,
                 ItemName = voucherItem.Product.Name,
-                ProductId = voucherItem.Product.Id,                
+                ProductId = voucherItem.Product.Id,
             };
-
+            decimal ItemsTotal = 0;
             var varients = new List<GetVoucherItemVarientResponse>();
             if (voucherItem.VoucherItemVariants != null)
             {
@@ -71,11 +65,13 @@ namespace Aow.Services.VoucherItemVarient
                     viewModel.ItemAmount = varient.ItemAmount;
                     viewModel.MRPPerUnit = varient.MRPPerUnit;
                     viewModel.SrNo = varient.SrNo;
+                    viewModel.VarientId = varient.ProductVariantId.Value;                  
                     varients.Add(viewModel);
+                    ItemsTotal = varient.ItemAmount.Value + ItemsTotal;
                 }
                 voucherViewModel.Varients = varients;
             }
-
+            voucherViewModel.ItemsTotal = ItemsTotal;
             return voucherViewModel;
         }
     }

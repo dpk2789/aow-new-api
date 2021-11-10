@@ -63,19 +63,20 @@ var addVoucherWithItemsRequest = {
 function AddInvoice(e) {
     // let confirmAction = confirm("Are you sure to delete this product?");
     let url = "AddVoucherInvoice";
-    performPostRequest(e, url);
+    let voucherId = "3fa85f64-5717-4562-b3fc-2c963f66afa6";
+    performPostRequest(e, url, voucherId);
 }
 
 function UpdateInvoice(e) {
     // let confirmAction = confirm("Are you sure to delete this product?");
     let url = "UpdateVoucherInvoice";
-    performPostRequest(e, url);
+    let voucherId = document.getElementById('voucherId').value;
+    performPostRequest(e, url, voucherId);
 }
 
-function performPostRequest(e, url) {
+function performPostRequest(e, url, voucherId) {
     e.preventDefault();
     let buttonValue = $(this).closest("input");
-    let voucherId = document.getElementById('voucherId').value;
     let apiUrl = document.getElementById('apiurl').value;
     let date = $('#voucherDate').val();
     let userId = document.getElementById('userId');
@@ -143,7 +144,7 @@ function performPostRequest(e, url) {
 
     alert(JSON.stringify(sundryItems) + '  ' + sundryItems.length)
 
-    addVoucherWithItemsRequest.id = voucherId;   
+    addVoucherWithItemsRequest.id = voucherId;
     addVoucherWithItemsRequest.financialYearId = financialYearId;
     addVoucherWithItemsRequest.accountId = AccountId;
     addVoucherWithItemsRequest.invoice = Invoice;
