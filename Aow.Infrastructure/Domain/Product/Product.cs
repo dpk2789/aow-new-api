@@ -1,6 +1,7 @@
 ﻿
 using Aow.Infrastructure.Common;
 using System;
+using System.Collections.Generic;
 
 namespace Aow.Infrastructure.Domain
 {
@@ -32,6 +33,7 @@ namespace Aow.Infrastructure.Domain
 
         public Guid? LedgerId { get; set; }
         public virtual Ledger Ledger { get; set; }
- 
+        public List<ProductVariant> ProductVariants { get; set; }
+
     }
 }
