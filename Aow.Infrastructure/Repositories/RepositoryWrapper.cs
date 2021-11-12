@@ -33,6 +33,7 @@ namespace Aow.Infrastructure.Repositories
         private IProductVarientRepository _productVarientRepository;
         private IProductVariantAndOptionRepository _productVariantAndOptionRepository;
         private IVoucherItemVarientRepository _voucherItemVarientRepository;
+        private IStockRepository _stockRepository;
         public IUserRepository UserRepo
         {
             get
@@ -64,6 +65,17 @@ namespace Aow.Infrastructure.Repositories
                     _productVarientRepository = new ProductVarientRepository(_repoContext);
                 }
                 return _productVarientRepository;
+            }
+        }
+        public IStockRepository StockRepo
+        {
+            get
+            {
+                if (_stockRepository == null)
+                {
+                    _stockRepository = new StockRepository(_repoContext);
+                }
+                return _stockRepository;
             }
         }
         public IVoucherItemVarientRepository VoucherItemVarientRepo

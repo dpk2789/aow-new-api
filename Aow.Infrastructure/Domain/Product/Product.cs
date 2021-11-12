@@ -6,8 +6,7 @@ using System.Collections.Generic;
 namespace Aow.Infrastructure.Domain
 {
     public class Product : AuditableEntity<Guid>
-    {      
-
+    {
         public string ItemType { get; set; }
         public string TaxType { get; set; }
         public string Name { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Aow.Infrastructure.Common;
 using System;
+using System.Collections.Generic;
 
 namespace Aow.Infrastructure.Domain
 {
@@ -13,9 +14,13 @@ namespace Aow.Infrastructure.Domain
         public string ItemType { get; set; }
         public string TaxType { get; set; }
         public bool Is_Taxable { get; set; }
-
+        public decimal? MRPPerUnit { get; set; }
+        public decimal? Quantity { get; set; }
+        public decimal? ItemAmount { get; set; }
+        public string Description { get; set; }
+        public decimal Price { get; set; }
         public Guid? VoucherItemId { get; set; }
         public virtual VoucherItem VoucherItem { get; set; }
-        public List<StockProductVariant> ProductVariants { get; set; }
+        public List<StockProductVariant> StockProductVariants { get; set; }
     }
 }
