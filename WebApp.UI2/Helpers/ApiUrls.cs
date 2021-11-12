@@ -2,8 +2,8 @@
 {
     public static class ApiUrls
     {
-         public const string Rootlocal = "https://localhost:44329";
-       // public const string Rootlocal = "http://aownewapi.accountingonweb.com";
+        public const string Rootlocal = "https://localhost:44329";
+        //public const string Rootlocal = "http://aownewapi.accountingonweb.com";
         public static class Identity
         {
             public const string Login = Rootlocal + "/api/user/login";
@@ -72,7 +72,7 @@
             public const string Update = Rootlocal + "/api/ProductVarients/UpdateProductVarient";
             public const string Delete = Rootlocal + "api/ProductAttributes/DeleteProductCategory/{postId}";
         }
-    
+
         public static class SundryItem
         {
             public const string GetSundryItems = Rootlocal + "/api/SundryItem/GetSundryItems";
