@@ -46,7 +46,7 @@ namespace Aow.Services.Companies
                 StartDateUtc = DateTime.UtcNow,
                 EndDateUtc = DateTime.UtcNow,
                 Status = false,
-                NoOfDays = 0
+                NoOfDays = 14,                
             };
             _repoWrapper.CompanyRepo.Create(company);
             var appUserCompany = new AppUserCompany

@@ -1,5 +1,6 @@
 ﻿using Aow.Infrastructure.IRepositories;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aow.Services.Store
@@ -15,7 +16,7 @@ namespace Aow.Services.Store
         public class AddToStockRequest
         {
             public string Name { get; set; }
-            public string CompanyId { get; set; }
+            public Guid VoucherId { get; set; }
         }
         public class AddToStockResponse
         {
@@ -28,16 +29,32 @@ namespace Aow.Services.Store
         {
             try
             {
-                Guid ProductId = Guid.NewGuid();
-                Guid cmpId = Guid.Parse(request.CompanyId);
-                var financialYear = new Aow.Infrastructure.Domain.ProductCategory
+                var updateVoucher = await _repoWrapper.VoucherRepo.GetVoucherForDelete(request.VoucherId);
+                if (updateVoucher != null)
                 {
-                    Id = ProductId,
-                    Name = request.Name,
-                    CompanyId = cmpId,
-                };
+                    if (updateVoucher.VoucherItems != null)
+                    {
+                        var voucherItems = updateVoucher.VoucherItems.ToList();
+                        if (voucherItems.Count != 0)
+                        {
+                            foreach (var item in voucherItems)
+                            {
+                                var stock = new Aow.Infrastructure.Domain.Stock
+                                {
+                                    Id = Guid.NewGuid(),
+                                    MRPPerUnit = item.MRPPerUnit,
+                                    Price = item.MRPPerUnit.Value,
+                                    Quantity = item.Quantity,
+                                    ProductId = item.ProductId,
+                                    ItemAmount = item.ItemAmount,
+                                    VoucherItemId = item.Id
+                                };
+                                _repoWrapper.StockRepo.Create(stock);
 
-                _repoWrapper.ProductCategoryRepo.Create(financialYear);
+                            }
+                        }
+                    }
+                }
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {
@@ -50,8 +67,7 @@ namespace Aow.Services.Store
                 else
                 {
                     return new AddToStockResponse
-                    {
-                        Id = financialYear.Id,
+                    {                     
                         Name = request.Name,
                         Success = true,
                         Description = "Product Category SuccessFully Added"
