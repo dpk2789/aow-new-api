@@ -15,9 +15,7 @@ namespace Aow.Infrastructure
         public AowContext(DbContextOptions<AowContext> options)
            : base(options)
         {
-        }
-
-       
+        }       
         public DbSet<Company> Companies { get; set; }
         public DbSet<AppUserCompany> AppUserCompanies { get; set; }
         public DbSet<FinancialYear> FinancialYears { get; set; }
@@ -42,6 +40,8 @@ namespace Aow.Infrastructure
         public DbSet<VoucherSundryItem> VoucherSundryItems { get; set; }
         public DbSet<TransporterDetail> TransporterDetails { get; set; }
         public DbSet<ProductVariantProductAttributeOption> ProductVariantProductAttributeOptions { get; set; }
+        public DbSet<Stock> Stocks { get; set; }
+        public DbSet<StockProductVariant> StockProductVariants { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -64,6 +64,15 @@ namespace Aow.Infrastructure
             builder.Entity<VoucherItemVariant>().Property(p => p.MRPPerUnit).HasColumnType("decimal(18,4)");
             builder.Entity<VoucherItemVariant>().Property(p => p.DiscountRatePerUnit).HasColumnType("decimal(18,4)");
             builder.Entity<VoucherItemVariant>().Property(p => p.UnitQuantity).HasColumnType("decimal(18,4)");
+            builder.Entity<Stock>().Property(p => p.ItemAmount).HasColumnType("decimal(18,4)");
+            builder.Entity<Stock>().Property(p => p.MRPPerUnit).HasColumnType("decimal(18,4)");
+            builder.Entity<Stock>().Property(p => p.Price).HasColumnType("decimal(18,4)");
+            builder.Entity<Stock>().Property(p => p.Quantity).HasColumnType("decimal(18,4)");
+            builder.Entity<StockProductVariant>().Property(p => p.ItemAmount).HasColumnType("decimal(18,4)");
+            builder.Entity<StockProductVariant>().Property(p => p.MRPPerUnit).HasColumnType("decimal(18,4)");
+            builder.Entity<StockProductVariant>().Property(p => p.Price).HasColumnType("decimal(18,4)");
+            builder.Entity<StockProductVariant>().Property(p => p.Quantity).HasColumnType("decimal(18,4)");
+            builder.Entity<StockProductVariant>().Property(p => p.SalePrice).HasColumnType("decimal(18,4)");
             // builder.ApplyConfiguration(new ProductCategoryConfiguration());
             base.OnModelCreating(builder);
         }       

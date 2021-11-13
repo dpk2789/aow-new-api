@@ -10,9 +10,9 @@ namespace WebApp.API.Controllers
     public class StockController : ControllerBase
     {
         [HttpGet("api/Stocks/GetStocks")]
-        public IActionResult GetStocks([FromQuery] PagingParameters pagingParameters, Guid productId, [FromServices] GetCurrentStock getProductVariants)
+        public IActionResult GetStocks([FromQuery] PagingParameters pagingParameters, Guid companyId, [FromServices] GetCurrentStock getProductVariants)
         {
-            var result = getProductVariants.Do(pagingParameters, productId);
+            var result = getProductVariants.Do(pagingParameters, companyId);
             return Ok(result);
         }
     }

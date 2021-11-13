@@ -13,6 +13,13 @@ namespace WebApp.UI2.Pages.MyBooks.Stock
 {
     public class CurrentStockModel : PageModel
     {
+        public string ApiUrl { get; }
+        private readonly ICookieHelper _cookieHelper;
+        public CurrentStockModel(ICookieHelper cookieHelper)
+        {
+            ApiUrl = ApiUrls.Rootlocal;
+            _cookieHelper = cookieHelper;
+        }
         public class CurrentStockViewModel
         {
             public Guid Id { get; set; }
@@ -29,13 +36,21 @@ namespace WebApp.UI2.Pages.MyBooks.Stock
             public decimal? ItemAmount { get; set; }
             public string Description { get; set; }
             public decimal Price { get; set; }
-            public Guid? VoucherItemId { get; set; }
-           
+            public Guid? VoucherItemId { get; set; }           
         }
-        public async Task<IActionResult> OnGet(Guid id)
+
+        [BindProperty]
+        public IEnumerable<CurrentStockViewModel> CurrentStock { get; set; }
+        public async Task<IActionResult> OnGet()
         {
+            var cmpid = _cookieHelper.Get("cmpCookee");
+
+            if (string.IsNullOrEmpty(cmpid) && string.IsNullOrEmpty(cmpid))
+            {
+                return RedirectToPage("/");
+            }
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.ProductVarients.GetProductVarients + "?PageNumber=1&PageSize=10&productId=" + id);
+            var getProductsUri = new Uri(ApiUrls.Stock.GetStocks + "?PageNumber=1&PageSize=10&companyId=" + cmpid);
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
             var getUserInfo = await client.GetAsync(getProductsUri);
@@ -43,8 +58,8 @@ namespace WebApp.UI2.Pages.MyBooks.Stock
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             if (resultuerinfo != null)
             {
-                var data = JsonConvert.DeserializeObject<IEnumerable<CurrentStockViewModel>>(resultuerinfo);               
-                ViewData["ProductId"] = id;
+                var data = JsonConvert.DeserializeObject<IEnumerable<CurrentStockViewModel>>(resultuerinfo);
+                CurrentStock = data;
             }
             return Page();
         }

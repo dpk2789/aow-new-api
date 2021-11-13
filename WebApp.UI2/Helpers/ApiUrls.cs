@@ -78,6 +78,11 @@
             public const string GetSundryItems = Rootlocal + "/api/SundryItem/GetSundryItems";
         }
 
+        public static class Stock
+        {
+            public const string GetStocks = Rootlocal + "/api/Stocks/GetStocks";
+        }
+
         public static class LedgerCategories
         {
             public const string GetLedgerCategories = Rootlocal + "/api/LedgerCategory/GetLedgerCategories";
