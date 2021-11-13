@@ -16,8 +16,9 @@ namespace Aow.Services.Store
         }
         public class GetCurrentStockResponse
         {
-            public Guid Id { get; set; }        
-            public decimal? SalePrice { get; set; }       
+            public Guid Id { get; set; }
+            public string Name { get; set; }
+            public decimal? SalePrice { get; set; }
             public decimal? MRPPerUnit { get; set; }
             public decimal? Quantity { get; set; }
             public decimal? ItemAmount { get; set; }
@@ -50,6 +51,7 @@ namespace Aow.Services.Store
             {
                 Id = x.Id,
                 Quantity = x.Quantity,
+                Name = x.Product.Name
             });
 
             return newList;

@@ -101,7 +101,6 @@ function performPostRequest(e, url, voucherId) {
     $('#tbodyitems tr').each(function () {
         let text = $(this).find("td").eq(4).html();
         if (text !== "Total") {
-
             let Name = $(this).find("td").eq(1).text().trim();
             //let Quantity = parseFloat($(this).find("td").eq(3).html()).toFixed(2);;
             let ItemAmount = $(this).find(".hdnappendAmount").val();

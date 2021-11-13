@@ -34,7 +34,6 @@ namespace WebApp.API.Controllers
             return Ok(product);
         }
 
-
         [HttpPost("api/Products/AddProduct")]
         public async Task<IActionResult> AddProduct([FromBody] AddProduct.AddProductRequest request, [FromServices] AddProduct addFinancialYear)
         {

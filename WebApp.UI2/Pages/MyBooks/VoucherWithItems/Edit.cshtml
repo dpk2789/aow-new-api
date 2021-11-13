@@ -32,7 +32,7 @@
 
     <section class="content">
         <div class="container-fluid">
-            <!-- SELECT2 EXAMPLE --> 
+            <!-- SELECT2 EXAMPLE -->
             <div class="card card-info">
                 <div class="card-header">
                     <h3 class="card-title">Edit @Model.Input.VoucherName</h3>
@@ -172,9 +172,9 @@
                                                                 <input type="hidden" id="hdnappendMRPPerUnit" class="hdnappendMRPPerUnit" value="@item.MRPPerUnit" />
                                                                 <button class="btn btn-sm btn-outline-warning fas fa-edit addVoucherVariant" value="@item.Id" style='cursor:pointer;'></button>
                                                                 @*<button class="btn btn-sm btn-outline-light fa fa-edit edit" value="@item.Id" style='cursor:pointer;'></button>*@
-                                                                  @*<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">modal</button>*@
-                                                                <button class="btn btn-sm btn-outline-danger fas fa-trash-alt delete" value="@item.Id" style='cursor:pointer;'></button>                                                               
-                                                                 <a asp-route-id="@item.Id" asp-route-voucherId="@Model.Input.Id" asp-page="/MyBooks/VoucherWithItems/AddVoucherItemVarient" class="btn btn-sm btn-outline-primary"><i class="fas fa-cubes"></i></a> |
+                                                                @*<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">modal</button>*@
+                                                                <button class="btn btn-sm btn-outline-danger fas fa-trash-alt delete" value="@item.Id" style='cursor:pointer;'></button>
+                                                                <a asp-route-id="@item.Id" asp-route-voucherId="@Model.Input.Id" asp-page="/MyBooks/VoucherWithItems/AddVoucherItemVarient" class="btn btn-sm btn-outline-primary"><i class="fas fa-cubes"></i></a> |
 
                                                             </td>
                                                         </tr>
@@ -292,6 +292,8 @@
                     <span>
                         <img id="loading" style="display: none;" src="~/gif/ajax-loader.gif" />
                     </span>
+                    <button onclick="AddToStock(event)" class="btn btn-warning float-left" style="margin-left:20px"><i class="nav-icon fas fa-warehouse"></i> Add To Stock</button>
+                    <button class="btn btn-dark float-left" style="margin-left:20px"><i class="fa fa-truck" aria-hidden="true"></i>Transport Detail</button>
                     <button onclick="UpdateInvoice(event)" class="btn btn-info float-right" style="margin-left:20px">Save</button>
                     <button id="SaveNext" class="btn btn-default float-right">Cancel</button>
                 </div>
@@ -338,11 +340,41 @@
 
 @section Scripts {
 <script>
-    $('#voucherDate').datetimepicker({
-        /* format: 'L',*/
-        format: 'YYYY/MM/DD'
-    });
+          $('#voucherDate').datetimepicker({
+              /* format: 'L',*/
+              format: 'YYYY/MM/DD'
+          });
 
+          var addToStockRequest = {
+      id: "string",
+    }
+      function AddToStock(e) {
+          // let confirmAction = confirm("Are you sure to delete this product?");
+           let userId = document.getElementById('userId');
+    let userAccessToken = userId.value;
+           let apiUrl = document.getElementById('apiurl').value;
+          let url = "AddToStock";
+          let voucherId = document.getElementById('voucherId').value;
+           addToStockRequest.voucherId = voucherId;
+            axios.post(`${apiUrl}/api/Stocks/` + url, this.addToStockRequest, {
+              headers: {
+                  Authorization: "Bearer " + userAccessToken
+              }
+          })
+              .then(function (response) {
+                  console.log(response);
+                  if (response.data.success) {
+                      toastr.success(response.data.description)
+                      window.location.href = '/MyBooks/VoucherWithItems/index?voucherName=' + voucherName
+                  } else {
+                      toastr.error(response.data.description)
+                  }
+              })
+              .catch(function (response) {
+                  console.log(response);
+                  toastr.error(response)
+              });
+      }
 </script>
 <script src="~/mysite/createAddUpdateDeleteItem.js"></script>
 <script src="~/mysite/addupdatedeteteSundry.js"></script>

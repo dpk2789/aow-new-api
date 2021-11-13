@@ -13,5 +13,7 @@ namespace Aow.Infrastructure.Domain
         public decimal Price { get; set; }       
         public Guid? ProductVariantId { get; set; }
         public virtual ProductVariant ProductVariant { get; set; }
+        public Guid StockId { get; set; }
+        public virtual Stock Stock { get; set; }
     }
 }

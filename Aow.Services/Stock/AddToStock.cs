@@ -14,8 +14,7 @@ namespace Aow.Services.Store
             _repoWrapper = repoWrapper;
         }
         public class AddToStockRequest
-        {
-            public string Name { get; set; }
+        {          
             public Guid VoucherId { get; set; }
         }
         public class AddToStockResponse
@@ -29,7 +28,7 @@ namespace Aow.Services.Store
         {
             try
             {
-                var updateVoucher = await _repoWrapper.VoucherRepo.GetVoucherForDelete(request.VoucherId);
+                var updateVoucher = await _repoWrapper.VoucherRepo.GetVoucherForStock(request.VoucherId);
                 if (updateVoucher != null)
                 {
                     if (updateVoucher.VoucherItems != null)
@@ -39,9 +38,10 @@ namespace Aow.Services.Store
                         {
                             foreach (var item in voucherItems)
                             {
-                                var stock = new Aow.Infrastructure.Domain.Stock
+                                Guid stockId = Guid.NewGuid();
+                                var stockNew = new Aow.Infrastructure.Domain.Stock
                                 {
-                                    Id = Guid.NewGuid(),
+                                    Id = stockId,
                                     MRPPerUnit = item.MRPPerUnit,
                                     Price = item.MRPPerUnit.Value,
                                     Quantity = item.Quantity,
@@ -49,7 +49,21 @@ namespace Aow.Services.Store
                                     ItemAmount = item.ItemAmount,
                                     VoucherItemId = item.Id
                                 };
-                                _repoWrapper.StockRepo.Create(stock);
+                                _repoWrapper.StockRepo.Create(stockNew);
+                                foreach (var variant in item.VoucherItemVariants)
+                                {
+                                    var variantNew = new Aow.Infrastructure.Domain.StockProductVariant
+                                    {
+                                        Id = Guid.NewGuid(),
+                                        MRPPerUnit = item.MRPPerUnit,
+                                        Price = item.MRPPerUnit.Value,
+                                        Quantity = item.Quantity,
+                                        ProductVariantId = variant.ProductVariantId,
+                                        ItemAmount = item.ItemAmount,
+                                        StockId = stockId
+                                    };
+                                    _repoWrapper.StockVarientRepo.Create(variantNew);
+                                }
 
                             }
                         }
@@ -60,15 +74,14 @@ namespace Aow.Services.Store
                 {
                     return new AddToStockResponse
                     {
-                        Name = request.Name,
+                        Description = "Not Added SuccessFully",
                         Success = false
                     };
                 }
                 else
                 {
                     return new AddToStockResponse
-                    {                     
-                        Name = request.Name,
+                    {                       
                         Success = true,
                         Description = "Product Category SuccessFully Added"
                     };
@@ -77,8 +90,7 @@ namespace Aow.Services.Store
             catch (Exception ex)
             {
                 return new AddToStockResponse
-                {
-                    Name = request.Name,
+                {                 
                     Success = false,
                     Description = ex.Message
                 };

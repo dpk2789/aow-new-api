@@ -22,7 +22,7 @@ namespace Aow.Infrastructure.Repositories
 
         public Task<PagedList<Stock>> GetStocks(PagingParameters ownerParameters, Guid companyId)
         {
-            return Task.FromResult(PagedList<Stock>.ToPagedList(FindAll().Include(x => x.Product.ProductCategory).
+            return Task.FromResult(PagedList<Stock>.ToPagedList(FindAll().Include(x => x.Product.ProductCategory).Include(x =>x.StockProductVariants).
                 Where(x => x.Product.ProductCategory.CompanyId == companyId),
                                     ownerParameters.PageNumber, ownerParameters.PageSize));
         }

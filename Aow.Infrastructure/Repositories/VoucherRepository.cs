@@ -15,6 +15,11 @@ namespace Aow.Infrastructure.Repositories
         {
         }
 
+        public async Task<Voucher> GetVoucherForStock(Guid Id)
+        {
+            var result = await FindByCondition(x => x.Id == Id).Include(x => x.VoucherItems).ThenInclude(x => x.VoucherItemVariants).FirstOrDefaultAsync();
+            return result;
+        }
         public async Task<Voucher> GetVoucher(Guid Id)
         {
             var result = await FindByCondition(x => x.Id == Id).Include(x => x.JournalEntries).ThenInclude(x => x.Ledger).
