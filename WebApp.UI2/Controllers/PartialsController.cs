@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using WebApp.UI2.Helpers;
+using WebApp.UI2.Models;
 
 namespace WebApp.UI2.Controllers
 {
@@ -219,6 +220,35 @@ namespace WebApp.UI2.Controllers
 
             var data = JsonConvert.DeserializeObject<IEnumerable<WebApp.UI2.Pages.MyBooks.ProductVarients.IndexModel.ProductVarientsViewModel>>(resultuerinfo);
             return PartialView("_VarientsListPartial", data);
+        }
+
+        public async Task<IActionResult> GetCurrentStock()
+        {
+            var cmpid = _cookieHelper.Get("cmpCookee");
+
+            if (string.IsNullOrEmpty(cmpid) && string.IsNullOrEmpty(cmpid))
+            {
+                return RedirectToPage("/");
+            }
+            using var client = new HttpClient();
+            var getProductsUri = new Uri(ApiUrls.Stock.GetStocks + "?PageNumber=1&PageSize=10&companyId=" + cmpid);
+            var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+            var getUserInfo = await client.GetAsync(getProductsUri);
+            var dailyViewModelList = new List<CurrentStockViewModelJson>();
+            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            if (resultuerinfo != null)
+            {
+                var data = JsonConvert.DeserializeObject<List<CurrentStockViewModelJson>>(resultuerinfo);
+                dailyViewModelList = data;
+            }
+            var result = new
+            {
+                iTotalRecords = dailyViewModelList.Count,
+                iTotalDisplayRecords = dailyViewModelList.Count,
+                aaData = dailyViewModelList
+            };
+            return Json(result);
         }
     }
 }

@@ -24,6 +24,8 @@ namespace WebApp.UI2.Pages.MyBooks.Stock
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
+            public DateTime Date { get; set; }
+            public string VoucherNumber { get; set; }
             public string ModelNumber { get; set; }
             public string Discription { get; set; }
             public string Size { get; set; }

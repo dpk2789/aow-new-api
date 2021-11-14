@@ -14,7 +14,7 @@ namespace Aow.Services.Store
             _repoWrapper = repoWrapper;
         }
         public class AddToStockRequest
-        {          
+        {
             public Guid VoucherId { get; set; }
         }
         public class AddToStockResponse
@@ -38,6 +38,14 @@ namespace Aow.Services.Store
                         {
                             foreach (var item in voucherItems)
                             {
+                                var retriveStock = await _repoWrapper.StockRepo.GetStockByVoucherItemId(item.Id);
+                                if (retriveStock != null)
+                                {
+                                    foreach (var stock in retriveStock)
+                                    {
+                                        _repoWrapper.StockRepo.Delete(stock);
+                                    }
+                                }
                                 Guid stockId = Guid.NewGuid();
                                 var stockNew = new Aow.Infrastructure.Domain.Stock
                                 {
@@ -55,16 +63,15 @@ namespace Aow.Services.Store
                                     var variantNew = new Aow.Infrastructure.Domain.StockProductVariant
                                     {
                                         Id = Guid.NewGuid(),
-                                        MRPPerUnit = item.MRPPerUnit,
-                                        Price = item.MRPPerUnit.Value,
-                                        Quantity = item.Quantity,
+                                        MRPPerUnit = variant.MRPPerUnit,
+                                        Price = variant.MRPPerUnit.Value,
+                                        Quantity = variant.UnitQuantity,
                                         ProductVariantId = variant.ProductVariantId,
-                                        ItemAmount = item.ItemAmount,
+                                        ItemAmount = variant.ItemAmount,
                                         StockId = stockId
                                     };
                                     _repoWrapper.StockVarientRepo.Create(variantNew);
                                 }
-
                             }
                         }
                     }
@@ -81,7 +88,7 @@ namespace Aow.Services.Store
                 else
                 {
                     return new AddToStockResponse
-                    {                       
+                    {
                         Success = true,
                         Description = "Product Category SuccessFully Added"
                     };
@@ -90,7 +97,7 @@ namespace Aow.Services.Store
             catch (Exception ex)
             {
                 return new AddToStockResponse
-                {                 
+                {
                     Success = false,
                     Description = ex.Message
                 };

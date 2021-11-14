@@ -4,6 +4,16 @@
     var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
 }
 
+<style>
+    td.details-control {
+        background: url(https://www.datatables.net/examples/resources/details_open.png) no-repeat center center;
+        cursor: pointer;
+    }
+
+    tr.shown td.details-control {
+        background: url(https://www.datatables.net/examples/resources/details_close.png) no-repeat center center;
+    }
+</style>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -15,7 +25,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Cuurent Stock</li>
+                        <li class="breadcrumb-item active">Current Stock</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -39,36 +49,39 @@
                                 <table id="productList" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Category</th>
-                                            <th>Name</th>
                                             <th></th>
+                                            <th>Date</th>
+                                            <th>VoucherNumber</th>
+                                            <th>Name</th>
+                                            <th>Quantity</th>
+
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    @* <tbody>
                                         @{
-                                            if (Model != null)
-                                            {
-                                                foreach (var product in Model.CurrentStock)
-                                                {
-                                                    <tr>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => product.Id)
-                                                        </td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelItem => product.Name)
-                                                        </td>
+                                        if (Model != null)
+                                        {
+                                        foreach (var product in Model.CurrentStock)
+                                        {
+                                        <tr>
 
-                                                        <td>
-                                                            <a asp-route-id="@product.Id" asp-page="/MyBooks/Products/Update" class="fa fa-edit">Edit</a> |
-                                                            <a asp-route-id="@product.Id" asp-page="/MyBooks/ProductVarients/Index" class="btn btn-sm btn-outline-primary">Varients</a> |
-                                                            <button onclick="confirmAction(event)" data-category-id="@product.Id" type="button" class="btn-danger small">Delete</button>
-                                                        </td>
-                                                    </tr>
-                                                }
-                                            }
+                                        <td>
+                                        @Html.DisplayFor(modelItem => product.Name)
+                                        </td>
+                                        <td>
+                                        @Html.DisplayFor(modelItem => product.Quantity)
+                                        </td>
+                                        <td>
+                                        <a asp-route-id="@product.Id" asp-page="/MyBooks/Products/Update" class="fa fa-edit">Edit</a> |
+                                        <a asp-route-id="@product.Id" asp-page="/MyBooks/ProductVarients/Index" class="btn btn-sm btn-outline-primary">Varients</a> |
+                                        <button onclick="confirmAction(event)" data-category-id="@product.Id" type="button" class="btn-danger small">Delete</button>
+                                        </td>
+                                        </tr>
+                                        }
+                                        }
                                         }
 
-                                    </tbody>
+                                        </tbody>*@
 
                                 </table>
                             }
@@ -81,3 +94,75 @@
         </div>
     </section>
 </div>
+@section scripts{
+<script>
+    $(document).ready(function () {
+        var table = $('#productList').DataTable({
+            "ajax": '/Partials/GetCurrentStock',
+            "columns": [
+                {
+                    "className": 'details-control',
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": ''
+                },
+                 { "data": "date" },
+                { "data": "voucherNumber" },
+                { "data": "name" },
+                { "data": "quantity" },
+            ],
+            "order": [[1, 'asc']]
+        });
+
+        // Add event listener for opening and closing details
+        $('#productList tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
+
+        function format(d) {
+            var tbl = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;" class="table table-hover table-striped table-condensed table-bordered tbldetl">';
+            tbl += '<tr>';
+            tbl += "<td>Name</td>";
+            tbl += "<td>Quantity</td>";
+            tbl += '</tr>';
+            var flag = false;
+            $.each(d.stockProductVariants, function (i) {
+                var Name = '';
+                var Quantity = '';
+                $.each(d.stockProductVariants[i], function (key, val) {
+                    if (key == 'name') {
+                        Name = val;
+                    }
+                    if (key == 'quantity') {
+                        Quantity = val;
+                    }
+                });
+                tbl += '<tr>';
+                tbl += '<td>' + Name + ' </td>';
+                tbl += '<td>' + Quantity + ' </td>';
+                tbl += '</tr>';
+                flag = true;
+            });
+            if (flag == false) {
+                tbl += '<tr>';
+                tbl += '<td colspan="11">No record found</td>';
+                tbl += '</tr>';
+            }
+            tbl + '</table>';
+            return tbl;
+        }
+    });
+</script>
+}
