@@ -26,7 +26,7 @@ namespace Aow.Infrastructure.Repositories
             Include(x => x.VoucherSundryItems).ThenInclude(x => x.Product).ThenInclude(x => x.Ledger).
             Include(x => x.VoucherItems).ThenInclude(x => x.Product).FirstOrDefaultAsync();
             return result;
-        }
+        }       
 
         public async Task<Voucher> GetVoucherForDelete(Guid Id)
         {

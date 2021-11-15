@@ -77,7 +77,7 @@ namespace Aow.Services.VoucherInvoice
                 int srno = 1;
                 int srnoItem = 1;
                 decimal itemTotal = 0;
-                var updateVoucher = await _repoWrapper.VoucherRepo.GetVoucherForDelete(request.Id);
+                var updateVoucher = await _repoWrapper.VoucherRepo.GetVoucherForStock(request.Id);
                 updateVoucher.Date = date;
                 updateVoucher.VoucherNumber = request.Invoice;
                 updateVoucher.FinancialYearId = fyrId;
@@ -181,6 +181,35 @@ namespace Aow.Services.VoucherInvoice
                         //    }
                         //}
                         var deserialiseList = JsonConvert.DeserializeObject<List<UpdateVoucherInvoiceItemsRequest>>(request.data);
+                        foreach (var item in updateVoucher.VoucherItems)
+                        {
+                            if (!deserialiseList.Any(x => x.Id == item.Id))
+                            {
+                                var vocherRetriveItem = updateVoucher.VoucherItems.FirstOrDefault(x => x.Id == item.Id);
+                                if (vocherRetriveItem != null)
+                                {
+                                    foreach (var varient in vocherRetriveItem.VoucherItemVariants)
+                                    {
+                                        _repoWrapper.VoucherItemVarientRepo.Delete(varient);
+                                    }
+                                }
+                                var retriveStock = await _repoWrapper.StockRepo.GetStockByVoucherItemId(vocherRetriveItem.Id);
+                                _repoWrapper.VoucherItemRepo.Delete(vocherRetriveItem);
+                                var getStock = retriveStock.FirstOrDefault();
+                                if (retriveStock.Count != 0)
+                                {
+                                    if (getStock != null)
+                                    {
+                                        foreach (var varient in getStock.StockProductVariants)
+                                        {
+                                            _repoWrapper.StockVarientRepo.Delete(varient);
+                                        }
+                                    }
+                                    _repoWrapper.StockRepo.Delete(getStock);
+                                }
+
+                            }
+                        }
                         foreach (var item in deserialiseList)
                         {
                             if (updateVoucher.VoucherItems.Any(x => x.Id == item.Id))
@@ -193,6 +222,18 @@ namespace Aow.Services.VoucherInvoice
                                 vocherRetriveItem.ProductId = item.ProductId;
                                 vocherRetriveItem.ItemAmount = item.ItemAmount;
                                 _repoWrapper.VoucherItemRepo.Update(vocherRetriveItem);
+                                var retriveStock = await _repoWrapper.StockRepo.GetStockByVoucherItemId(vocherRetriveItem.Id);
+                                if (retriveStock.Count != 0)
+                                {
+                                    var getStock = retriveStock.FirstOrDefault();
+                                    getStock.MRPPerUnit = item.MRPPerUnit;
+                                    getStock.Price = item.Price;
+                                    getStock.Quantity = item.Quantity;
+                                    getStock.ProductId = item.ProductId;
+                                    getStock.ItemAmount = item.ItemAmount;
+                                    getStock.VoucherItemId = vocherRetriveItem.Id;
+                                    _repoWrapper.StockRepo.Update(getStock);
+                                }
                             }
                             else if (item.Id == Guid.Empty)
                             {
@@ -224,12 +265,6 @@ namespace Aow.Services.VoucherInvoice
                                 _repoWrapper.StockRepo.Create(stockNew);
                                 srnoItem++;
                             }
-                            else
-                            {
-                                var vocherRetriveItem = updateVoucher.VoucherItems.FirstOrDefault(x => x.Id == item.Id);
-                                _repoWrapper.VoucherItemRepo.Delete(vocherRetriveItem);
-                            }
-
                         }
                         var ledger = _repoWrapper.LedgerRepositoryRepo.GetLedgerByName(fyr.CompanyId, "Purchase Account");
                         var jEntryDebit = new Aow.Infrastructure.Domain.JournalEntry
