@@ -65,7 +65,7 @@ namespace Aow.Services.VoucherInvoice
 
                     foreach (var item in deserialiseList)
                     {
-                        Aow.Infrastructure.Domain.VoucherItemVariant varient = new Aow.Infrastructure.Domain.VoucherItemVariant
+                        var varient = new Aow.Infrastructure.Domain.VoucherItemVariant
                         {
                             Id = Guid.NewGuid(),
                             SrNo = srnoItem,
@@ -78,6 +78,26 @@ namespace Aow.Services.VoucherInvoice
                             ProductVariantId = item.VarientId
                         };
                         _repoWrapper.VoucherItemVarientRepo.Create(varient);
+                        var retriveStock = await _repoWrapper.StockRepo.GetStockByVoucherItemId(item.Id);
+                        if (retriveStock != null)
+                        {
+                            foreach (var stock in retriveStock)
+                            {
+                                _repoWrapper.StockRepo.Delete(stock);
+                            }
+                        }
+                        var getStock = retriveStock.FirstOrDefault();
+                        var stockVarient = new Aow.Infrastructure.Domain.StockProductVariant
+                        {
+                            Id = Guid.NewGuid(),
+                            MRPPerUnit = item.MRPPerUnit,
+                            Price = item.MRPPerUnit.Value,
+                            Quantity = item.Quantity,
+                            ProductVariantId = item.VarientId,
+                            ItemAmount = item.ItemAmount,
+                            StockId = getStock.Id
+                        };
+                        _repoWrapper.StockVarientRepo.Create(stockVarient);
                         srnoItem++;
                     }
                 }

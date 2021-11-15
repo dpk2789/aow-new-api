@@ -107,13 +107,16 @@ function performPostRequest(e, url, voucherId) {
             let MRPPerUnit = $(this).find(".hdnappendMRP").val();
             let Quantity = $(this).find(".hdnappendQuantity").val();
             let ProductId = $(this).find(".hdnappendProductId").val();
-            let productLedgerId = $(this).find(".hdnappendProductAccountId").val();
+            let ItemId = $(this).find(".hdnappendProductAccountId").val();
+            if (ItemId === "/") {
+                ItemId ="00000000-0000-0000-0000-000000000000"
+            }
             let hdnAccountCategoryName = $(this).find(".hdnappendhdnAccountCategoryName").val();
             let hdnappendhdnItemType = $(this).find(".hdnappendhdnItemType").val();
             OrderDetl.push({
                 'Name': Name,
                 'ProductId': ProductId,
-                // 'ProductLedgerId': productLedgerId,
+                'Id': ItemId,
                 'MRPPerUnit': MRPPerUnit,
                 'Quantity': Quantity,
                 'ItemAmount': ItemAmount,
