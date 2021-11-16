@@ -78,14 +78,14 @@ namespace Aow.Services.VoucherInvoice
                             ProductVariantId = item.VarientId
                         };
                         _repoWrapper.VoucherItemVarientRepo.Create(varient);
-                        var retriveStock = await _repoWrapper.StockRepo.GetStockByVoucherItemId(item.Id);
-                        if (retriveStock != null)
-                        {
-                            foreach (var stock in retriveStock)
-                            {
-                                _repoWrapper.StockRepo.Delete(stock);
-                            }
-                        }
+                        var retriveStock = await _repoWrapper.StockRepo.GetStockByVoucherItemId(voucherItem.Id);
+                        //if (retriveStock != null)
+                        //{
+                        //    foreach (var stock in retriveStock)
+                        //    {
+                        //        _repoWrapper.StockRepo.Delete(stock);
+                        //    }
+                        //}
                         var getStock = retriveStock.FirstOrDefault();
                         var stockVarient = new Aow.Infrastructure.Domain.StockProductVariant
                         {
