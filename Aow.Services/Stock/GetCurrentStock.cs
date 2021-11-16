@@ -2,9 +2,8 @@
 using Aow.Infrastructure.Paging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace Aow.Services.Store
+namespace Aow.Services.Stock
 {
     [Service]
     public class GetCurrentStock
@@ -56,27 +55,30 @@ namespace Aow.Services.Store
                 if (item.VoucherItemId != null)
                 {
                     var voucherItem = _repoWrapper.VoucherItemRepo.GetVoucherItem(item.VoucherItemId.Value).GetAwaiter().GetResult();
-                    var varientList = new List<GetStockProductVariantResponse>();
-                    GetCurrentStockResponse newStock = new GetCurrentStockResponse
+                    if(voucherItem != null)
                     {
-                        Id = item.Id,
-                        Quantity = item.Quantity,
-                        Name = item.Product.Name,
-                        Date = voucherItem.Voucher.Date,
-                        VoucherNumber = voucherItem.Voucher.VoucherNumber
-                    };
-                    stockList.Add(newStock);
-                    foreach (var varient in item.StockProductVariants)
-                    {
-                        var getStockProductVariantResponse = new GetStockProductVariantResponse
+                        var varientList = new List<GetStockProductVariantResponse>();
+                        GetCurrentStockResponse newStock = new GetCurrentStockResponse
                         {
-                            Id = varient.Id,
-                            Name = varient.ProductVariant.Name,
-                            Quantity = varient.Quantity
+                            Id = item.Id,
+                            Quantity = item.Quantity,
+                            Name = item.Product.Name,
+                            Date = voucherItem.Voucher.Date,
+                            VoucherNumber = voucherItem.Voucher.VoucherNumber
                         };
-                        varientList.Add(getStockProductVariantResponse);
-                    }
-                    newStock.StockProductVariants = varientList;
+                        stockList.Add(newStock);
+                        foreach (var varient in item.StockProductVariants)
+                        {
+                            var getStockProductVariantResponse = new GetStockProductVariantResponse
+                            {
+                                Id = varient.Id,
+                                Name = varient.ProductVariant.Name,
+                                Quantity = varient.Quantity
+                            };
+                            varientList.Add(getStockProductVariantResponse);
+                        }
+                        newStock.StockProductVariants = varientList;
+                    }                   
                 }               
             }
             return stockList;

@@ -20,7 +20,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Cuurent Stock </h1>
+                    <h1 class="m-0">Current Stock </h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -54,7 +54,7 @@
                                             <th>VoucherNumber</th>
                                             <th>Name</th>
                                             <th>Quantity</th>
-
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     @* <tbody>
@@ -110,6 +110,15 @@
                 { "data": "voucherNumber" },
                 { "data": "name" },
                 { "data": "quantity" },
+                {
+                    'data': 'Options',
+                    'render': function (data, type, row) {
+                          var id = '"' + row.Id + '"';
+                        var hid = " <input type='hidden' class='hdnDailyId' value='" + row.Id + "' />";
+                           var delet = "<a onclick='DeleteDaily(" + id + ")' class='btn btn-sm btn-danger'>Delete</a>";
+                        return hid + delet;
+                    }
+                },
             ],
             "order": [[1, 'asc']]
         });

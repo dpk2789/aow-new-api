@@ -158,28 +158,7 @@ namespace Aow.Services.VoucherInvoice
                     }
 
                     if (request.data != null)
-                    {
-                        //if (updateVoucher.VoucherItems != null)
-                        //{
-                        //    var voucherItems = updateVoucher.VoucherItems.ToList();
-                        //    if (voucherItems.Count != 0)
-                        //    {
-                        //        foreach (var voucherItem in voucherItems)
-                        //        {
-                        //            _repoWrapper.VoucherItemRepo.Delete(voucherItem);
-                        //            var retriveStock = await _repoWrapper.StockRepo.GetStockByVoucherItemId(voucherItem.Id);
-                        //            var getStock = retriveStock.FirstOrDefault();
-                        //            if (retriveStock != null)
-                        //            {
-                        //                foreach (var varient in getStock.StockProductVariants)
-                        //                {
-                        //                    _repoWrapper.StockVarientRepo.Delete(varient);
-                        //                }
-                        //            }
-                        //            _repoWrapper.StockRepo.Delete(getStock);
-                        //        }
-                        //    }
-                        //}
+                    {                       
                         var deserialiseList = JsonConvert.DeserializeObject<List<UpdateVoucherInvoiceItemsRequest>>(request.data);
                         foreach (var item in updateVoucher.VoucherItems)
                         {
@@ -193,21 +172,21 @@ namespace Aow.Services.VoucherInvoice
                                         _repoWrapper.VoucherItemVarientRepo.Delete(varient);
                                     }
                                 }
-                                var retriveStock = await _repoWrapper.StockRepo.GetStockByVoucherItemId(vocherRetriveItem.Id);
-                                _repoWrapper.VoucherItemRepo.Delete(vocherRetriveItem);
-                                var getStock = retriveStock.FirstOrDefault();
-                                if (retriveStock.Count != 0)
-                                {
-                                    if (getStock != null)
-                                    {
-                                        foreach (var varient in getStock.StockProductVariants)
-                                        {
-                                            _repoWrapper.StockVarientRepo.Delete(varient);
-                                        }
-                                    }
-                                    _repoWrapper.StockRepo.Delete(getStock);
-                                }
-
+                                //stock deletion after voucher item delete from ui
+                                //var retriveStock = await _repoWrapper.StockRepo.GetStockByVoucherItemId(vocherRetriveItem.Id);
+                                //_repoWrapper.VoucherItemRepo.Delete(vocherRetriveItem);
+                                //var getStock = retriveStock.FirstOrDefault();
+                                //if (retriveStock.Count != 0)
+                                //{
+                                //    if (getStock != null)
+                                //    {
+                                //        foreach (var varient in getStock.StockProductVariants)
+                                //        {
+                                //            _repoWrapper.StockVarientRepo.Delete(varient);
+                                //        }
+                                //    }
+                                //    _repoWrapper.StockRepo.Delete(getStock);
+                                //}
                             }
                         }
                         foreach (var item in deserialiseList)
@@ -222,18 +201,33 @@ namespace Aow.Services.VoucherInvoice
                                 vocherRetriveItem.ProductId = item.ProductId;
                                 vocherRetriveItem.ItemAmount = item.ItemAmount;
                                 _repoWrapper.VoucherItemRepo.Update(vocherRetriveItem);
-                                var retriveStock = await _repoWrapper.StockRepo.GetStockByVoucherItemId(vocherRetriveItem.Id);
-                                if (retriveStock.Count != 0)
-                                {
-                                    var getStock = retriveStock.FirstOrDefault();
-                                    getStock.MRPPerUnit = item.MRPPerUnit;
-                                    getStock.Price = item.Price;
-                                    getStock.Quantity = item.Quantity;
-                                    getStock.ProductId = item.ProductId;
-                                    getStock.ItemAmount = item.ItemAmount;
-                                    getStock.VoucherItemId = vocherRetriveItem.Id;
-                                    _repoWrapper.StockRepo.Update(getStock);
-                                }
+                                //var retriveStock = await _repoWrapper.StockRepo.GetStockByVoucherItemId(vocherRetriveItem.Id);
+                                //if (retriveStock.Count != 0)
+                                //{
+                                //    var getStock = retriveStock.FirstOrDefault();
+                                //    getStock.MRPPerUnit = item.MRPPerUnit;
+                                //    getStock.Price = item.Price;
+                                //    getStock.Quantity = item.Quantity;
+                                //    getStock.ProductId = item.ProductId;
+                                //    getStock.ItemAmount = item.ItemAmount;
+                                //    getStock.VoucherItemId = vocherRetriveItem.Id;
+                                //    _repoWrapper.StockRepo.Update(getStock);
+                                //}
+                                //else
+                                //{
+                                //    Guid stockId = Guid.NewGuid();
+                                //    var stockNew = new Aow.Infrastructure.Domain.Stock
+                                //    {
+                                //        Id = stockId,
+                                //        MRPPerUnit = item.MRPPerUnit,
+                                //        Price = item.Price,
+                                //        Quantity = item.Quantity,
+                                //        ProductId = item.ProductId,
+                                //        ItemAmount = item.ItemAmount,
+                                //        VoucherItemId = vocherRetriveItem.Id,
+                                //    };
+                                //    _repoWrapper.StockRepo.Create(stockNew);
+                                //}
                             }
                             else if (item.Id == Guid.Empty)
                             {
@@ -251,18 +245,18 @@ namespace Aow.Services.VoucherInvoice
                                 };
                                 itemTotal = itemTotal + item.ItemAmount.Value;
                                 _repoWrapper.VoucherItemRepo.Create(voucherItem);
-                                Guid stockId = Guid.NewGuid();
-                                var stockNew = new Aow.Infrastructure.Domain.Stock
-                                {
-                                    Id = stockId,
-                                    MRPPerUnit = item.MRPPerUnit,
-                                    Price = item.MRPPerUnit.Value,
-                                    Quantity = item.Quantity,
-                                    ProductId = item.ProductId,
-                                    ItemAmount = item.ItemAmount,
-                                    VoucherItemId = voucherItem.Id,
-                                };
-                                _repoWrapper.StockRepo.Create(stockNew);
+                                //Guid stockId = Guid.NewGuid();
+                                //var stockNew = new Aow.Infrastructure.Domain.Stock
+                                //{
+                                //    Id = stockId,
+                                //    MRPPerUnit = item.MRPPerUnit,
+                                //    Price = item.MRPPerUnit.Value,
+                                //    Quantity = item.Quantity,
+                                //    ProductId = item.ProductId,
+                                //    ItemAmount = item.ItemAmount,
+                                //    VoucherItemId = voucherItem.Id,
+                                //};
+                                //_repoWrapper.StockRepo.Create(stockNew);
                                 srnoItem++;
                             }
                         }

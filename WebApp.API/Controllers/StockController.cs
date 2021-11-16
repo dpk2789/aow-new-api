@@ -1,5 +1,5 @@
 ﻿using Aow.Infrastructure.Paging;
-using Aow.Services.Store;
+using Aow.Services.Stock;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -27,6 +27,21 @@ namespace WebApp.API.Controllers
                 return BadRequest("Failed to add to cart");
             }
             return Ok(response);
+        }
+
+        [HttpDelete("api/Stocks/DeleteStock")]
+        public async Task<IActionResult> DeleteStock(Guid id, [FromServices] DeleteStock deleteFinancialYear)
+        {
+            var result = await deleteFinancialYear.Do(id);
+            if (!result.Success)
+            {
+                return BadRequest();
+            }
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
     }
 }

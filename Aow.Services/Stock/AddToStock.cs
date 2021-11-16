@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Aow.Services.Store
+namespace Aow.Services.Stock
 {
     [Service]
     public class AddToStock
