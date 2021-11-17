@@ -51,7 +51,7 @@ namespace WebApp.UI2.Pages.MyBooks.Products
                 return RedirectToPage("/");
             }
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.Product.GetProducts + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
+            var getProductsUri = new Uri(ApiUrls.Product.GetProducts + "?PageNumber=1&PageSize=100&cmpId=" + cmpid);
 
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
 

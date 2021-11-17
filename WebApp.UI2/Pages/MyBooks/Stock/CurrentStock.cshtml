@@ -96,14 +96,13 @@
 </div>
 @section scripts{
     <script>
-
-        $(function () {
-            DataTableInit();
+        $(document).ready(function () {
+            DataTableInit();           
         });
 
         function DataTableInit() {
 
-            let table = $('#productList').DataTable({              
+            var table = $('#productList').DataTable({
                 destroy: true,
                 "ajax": '/Partials/GetCurrentStock',
                 "columns": [
@@ -129,12 +128,12 @@
                         }
                     },
                 ],                
-            }).buttons().container().appendTo('#productList_wrapper .col-md-6:eq(0)');;
+            });
 
             // Add event listener for opening and closing details
             $('#productList tbody').on('click', 'td.details-control', function () {
-                let tr = $(this).closest('tr');
-                let row = table.row(tr);
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
 
                 if (row.child.isShown()) {
                     // This row is already open - close it
@@ -149,12 +148,12 @@
             });
 
             function format(d) {
-                let tbl = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;" class="table table-hover table-striped table-condensed table-bordered tbldetl">';
+                var tbl = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;" class="table table-hover table-striped table-condensed table-bordered tbldetl">';
                 tbl += '<tr>';
                 tbl += "<td>Name</td>";
                 tbl += "<td>Quantity</td>";
                 tbl += '</tr>';
-                let flag = false;
+                var flag = false;
                 $.each(d.stockProductVariants, function (i) {
                     let Name = '';
                     let Quantity = '';
