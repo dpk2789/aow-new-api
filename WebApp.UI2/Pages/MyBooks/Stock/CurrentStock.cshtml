@@ -95,83 +95,130 @@
     </section>
 </div>
 @section scripts{
-<script>
-    $(document).ready(function () {
-        var table = $('#productList').DataTable({
-            "ajax": '/Partials/GetCurrentStock',
-            "columns": [
-                {
-                    "className": 'details-control',
-                    "orderable": false,
-                    "data": null,
-                    "defaultContent": ''
-                },
-                 { "data": "date" },
-                { "data": "voucherNumber" },
-                { "data": "name" },
-                { "data": "quantity" },
-                {
-                    'data': 'Options',
-                    'render': function (data, type, row) {
-                          var id = '"' + row.Id + '"';
-                        var hid = " <input type='hidden' class='hdnDailyId' value='" + row.Id + "' />";
-                           var delet = "<a onclick='DeleteDaily(" + id + ")' class='btn btn-sm btn-danger'>Delete</a>";
-                        return hid + delet;
-                    }
-                },
-            ],
-            "order": [[1, 'asc']]
+    <script>
+
+        $(function () {
+            DataTableInit();
         });
 
-        // Add event listener for opening and closing details
-        $('#productList tbody').on('click', 'td.details-control', function () {
-            var tr = $(this).closest('tr');
-            var row = table.row(tr);
+        function DataTableInit() {
 
-            if (row.child.isShown()) {
-                // This row is already open - close it
-                row.child.hide();
-                tr.removeClass('shown');
-            }
-            else {
-                // Open this row
-                row.child(format(row.data())).show();
-                tr.addClass('shown');
-            }
-        });
+            let table = $('#productList').DataTable({              
+                destroy: true,
+                "ajax": '/Partials/GetCurrentStock',
+                "columns": [
+                    {
+                        "className": 'details-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": ''
+                    },
+                    { "data": "date" },
+                    { "data": "voucherNumber" },
+                    { "data": "name" },
+                    { "data": "quantity" },
+                    {
+                        'data': 'Options',
+                        'render': function (data, type, row) {
+                            let id = '"' + row.id + '"';
+                            let hid = " <input type='hidden' class='hdnDailyId' value='" + row.id + "' />";
+                            /**/
+                            let delet = "<a onclick='confirmAction(event)' data-stock-id=" + row.id + " type='button' class='btn btn-danger btn-sm' >Delete</a>";
+                            /**/
+                            return hid + delet;
+                        }
+                    },
+                ],                
+            }).buttons().container().appendTo('#productList_wrapper .col-md-6:eq(0)');;
 
-        function format(d) {
-            var tbl = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;" class="table table-hover table-striped table-condensed table-bordered tbldetl">';
-            tbl += '<tr>';
-            tbl += "<td>Name</td>";
-            tbl += "<td>Quantity</td>";
-            tbl += '</tr>';
-            var flag = false;
-            $.each(d.stockProductVariants, function (i) {
-                var Name = '';
-                var Quantity = '';
-                $.each(d.stockProductVariants[i], function (key, val) {
-                    if (key == 'name') {
-                        Name = val;
-                    }
-                    if (key == 'quantity') {
-                        Quantity = val;
-                    }
-                });
-                tbl += '<tr>';
-                tbl += '<td>' + Name + ' </td>';
-                tbl += '<td>' + Quantity + ' </td>';
-                tbl += '</tr>';
-                flag = true;
+            // Add event listener for opening and closing details
+            $('#productList tbody').on('click', 'td.details-control', function () {
+                let tr = $(this).closest('tr');
+                let row = table.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child(format(row.data())).show();
+                    tr.addClass('shown');
+                }
             });
-            if (flag == false) {
+
+            function format(d) {
+                let tbl = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;" class="table table-hover table-striped table-condensed table-bordered tbldetl">';
                 tbl += '<tr>';
-                tbl += '<td colspan="11">No record found</td>';
+                tbl += "<td>Name</td>";
+                tbl += "<td>Quantity</td>";
                 tbl += '</tr>';
+                let flag = false;
+                $.each(d.stockProductVariants, function (i) {
+                    let Name = '';
+                    let Quantity = '';
+                    $.each(d.stockProductVariants[i], function (key, val) {
+                        if (key == 'name') {
+                            Name = val;
+                        }
+                        if (key == 'quantity') {
+                            Quantity = val;
+                        }
+                    });
+                    tbl += '<tr>';
+                    tbl += '<td>' + Name + ' </td>';
+                    tbl += '<td>' + Quantity + ' </td>';
+                    tbl += '</tr>';
+                    flag = true;
+                });
+                if (flag == false) {
+                    tbl += '<tr>';
+                    tbl += '<td colspan="11">No record found</td>';
+                    tbl += '</tr>';
+                }
+                tbl + '</table>';
+                return tbl;
             }
-            tbl + '</table>';
-            return tbl;
         }
-    });
-</script>
+
+        function confirmAction(e) {
+            let confirmAction = confirm("Are you sure to delete this product?");
+            if (confirmAction) {
+                //  alert("Action successfully executed");
+                removeProduct(e);
+            } else {
+                alert("Action canceled");
+            }
+        };
+        var apiUrl = '@Model.ApiUrl';
+
+        var removeProduct = function (e) {            
+            let fyrId = e.target.dataset.stockId;
+            let el = document.getElementById('userId');
+            let userAccessToken = el.value;
+            console.log(fyrId);
+
+            axios.delete(apiUrl + "/api/Stocks/DeleteStock?id=" + fyrId, {
+                headers: {
+                    Authorization: "Bearer " + userAccessToken
+                }
+            }).then(res => {
+                console.log(res);
+                if (res.data.success) {
+                    // alert(res.data.message)
+                    toastr.success(res.data.message)
+                }
+                else {
+                    toastr.error(res.data.message)
+                }
+                DataTableInit();
+            })
+                .catch(err => {
+                    alert(err.error);
+                })
+
+        }
+
+    </script>
 }

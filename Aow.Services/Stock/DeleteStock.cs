@@ -22,12 +22,12 @@ namespace Aow.Services.Stock
         {
             try
             {
-                var product = _repoWrapper.ProductRepo.GetProduct(id);
-                if (product == null)
+                var stock = _repoWrapper.StockRepo.GetStock(id);
+                if (stock == null)
                 {
                     return null;
                 }
-                _repoWrapper.ProductRepo.Delete(product);
+                _repoWrapper.StockRepo.Delete(stock);
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {
@@ -51,7 +51,7 @@ namespace Aow.Services.Stock
                 return new DeleteStockResponse
                 {
                     Success = false,
-                    Message = ex.Message
+                    Message = ex.InnerException.Message
                 };
             }
 

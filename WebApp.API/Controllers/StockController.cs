@@ -32,11 +32,7 @@ namespace WebApp.API.Controllers
         [HttpDelete("api/Stocks/DeleteStock")]
         public async Task<IActionResult> DeleteStock(Guid id, [FromServices] DeleteStock deleteFinancialYear)
         {
-            var result = await deleteFinancialYear.Do(id);
-            if (!result.Success)
-            {
-                return BadRequest();
-            }
+            var result = await deleteFinancialYear.Do(id);           
             if (result == null)
             {
                 return NotFound();
