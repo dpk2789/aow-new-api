@@ -29,7 +29,7 @@ namespace WebApp.UI2.Controllers
                 return RedirectToPage("/");
             }
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.Company.GetCompanies + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
+            var getProductsUri = new Uri(ApiUrls.Company.GetCompanies + "?PageNumber=1&PageSize=100&cmpId=" + cmpid);
 
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
@@ -51,7 +51,7 @@ namespace WebApp.UI2.Controllers
                 return RedirectToPage("/");
             }
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.FinancialYear.GetFinancialYears + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
+            var getProductsUri = new Uri(ApiUrls.FinancialYear.GetFinancialYears + "?PageNumber=1&PageSize=100&cmpId=" + cmpid);
 
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
@@ -73,7 +73,7 @@ namespace WebApp.UI2.Controllers
                 return RedirectToPage("/");
             }
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.ProductCategories.GetProductCategories + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
+            var getProductsUri = new Uri(ApiUrls.ProductCategories.GetProductCategories + "?PageNumber=1&PageSize=100&cmpId=" + cmpid);
 
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
@@ -98,7 +98,7 @@ namespace WebApp.UI2.Controllers
                 return RedirectToPage("/");
             }
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.Product.GetProducts + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
+            var getProductsUri = new Uri(ApiUrls.Product.GetProducts + "?PageNumber=1&PageSize=100&cmpId=" + cmpid);
 
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
@@ -123,7 +123,7 @@ namespace WebApp.UI2.Controllers
                 return RedirectToPage("/");
             }
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.LedgerCategories.GetLedgerCategories + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
+            var getProductsUri = new Uri(ApiUrls.LedgerCategories.GetLedgerCategories + "?PageNumber=1&PageSize=100&cmpId=" + cmpid);
 
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
@@ -148,7 +148,7 @@ namespace WebApp.UI2.Controllers
                 return RedirectToPage("/");
             }
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.Ledger.GetLedgers + "?PageNumber=1&PageSize=10&cmpId=" + cmpid);
+            var getProductsUri = new Uri(ApiUrls.Ledger.GetLedgers + "?PageNumber=1&PageSize=100&cmpId=" + cmpid);
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
             var getUserInfo = await client.GetAsync(getProductsUri);
@@ -164,7 +164,7 @@ namespace WebApp.UI2.Controllers
             var fyrId = _cookieHelper.Get("fYrCookee");
             var cmpid = _cookieHelper.Get("cmpCookee");            
             using var client = new HttpClient();
-            var getVouchersUri = new Uri(ApiUrls.Vouchers.GetVouchers + "?PageNumber=1&PageSize=50&voucherName=" + voucherName + "&fyrId=" + fyrId);
+            var getVouchersUri = new Uri(ApiUrls.Vouchers.GetVouchers + "?PageNumber=1&PageSize=100&voucherName=" + voucherName + "&fyrId=" + fyrId);
 
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
@@ -181,7 +181,7 @@ namespace WebApp.UI2.Controllers
             var fyrId = _cookieHelper.Get("fYrCookee");
             var cmpid = _cookieHelper.Get("cmpCookee");
             using var client = new HttpClient();
-            var getVouchersUri = new Uri(ApiUrls.Vouchers.GetVouchers + "?PageNumber=1&PageSize=50&voucherName=" + voucherName + "&fyrId=" + fyrId);
+            var getVouchersUri = new Uri(ApiUrls.Vouchers.GetVouchers + "?PageNumber=1&PageSize=100&voucherName=" + voucherName + "&fyrId=" + fyrId);
 
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
@@ -196,7 +196,7 @@ namespace WebApp.UI2.Controllers
         public async Task<IActionResult> GetAttributeListPartialView(Guid id)
         {
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.ProductAttributes.GetProductAttributes + "?PageNumber=1&PageSize=10&categoryId=" + id);
+            var getProductsUri = new Uri(ApiUrls.ProductAttributes.GetProductAttributes + "?PageNumber=1&PageSize=100&categoryId=" + id);
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
             var getUserInfo = await client.GetAsync(getProductsUri);
@@ -211,7 +211,7 @@ namespace WebApp.UI2.Controllers
         public async Task<IActionResult> GetVarientsListPartialView(Guid id)
         {
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.ProductVarients.GetProductVarients + "?PageNumber=1&PageSize=10&productId=" + id);
+            var getProductsUri = new Uri(ApiUrls.ProductVarients.GetProductVarients + "?PageNumber=1&PageSize=100&productId=" + id);
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
             var getUserInfo = await client.GetAsync(getProductsUri);
@@ -231,7 +231,7 @@ namespace WebApp.UI2.Controllers
                 return RedirectToPage("/");
             }
             using var client = new HttpClient();
-            var getProductsUri = new Uri(ApiUrls.Stock.GetStocks + "?PageNumber=1&PageSize=10&companyId=" + cmpid);
+            var getProductsUri = new Uri(ApiUrls.Stock.GetStocks + "?PageNumber=1&PageSize=100&companyId=" + cmpid);
             var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
             var getUserInfo = await client.GetAsync(getProductsUri);
