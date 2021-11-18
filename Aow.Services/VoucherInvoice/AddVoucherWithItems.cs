@@ -54,7 +54,7 @@ namespace Aow.Services.VoucherInvoice
             public string Type { get; set; }
             public string Percent { get; set; }
             public string Description { get; set; }
-            public decimal? ItemAmount { get; set; }          
+            public decimal? ItemAmount { get; set; }
             public Guid ProductId { get; set; }
         }
         public class AddVoucherWithItemsResponse
@@ -89,89 +89,189 @@ namespace Aow.Services.VoucherInvoice
                     FinancialYearId = fyrId
                 };
                 _repoWrapper.VoucherRepo.Create(voucher);
-                Aow.Infrastructure.Domain.JournalEntry jEntryDebit = new Aow.Infrastructure.Domain.JournalEntry
+                if (voucher.VoucherName == "Sale Bill")
                 {
-                    Id = Guid.NewGuid(),
-                    VoucherId = voucherId,
-                    VoucherName = request.voucherName,
-                    VoucherNumber = request.Invoice,
-                    Date = date,
-                    SrNo = srno,
-                    LedgerId = Guid.Parse(request.AccountId),
-                    CrDrType = "Dr",
-                    DebitAmount = Convert.ToDecimal(request.Total)
-                };
-                _repoWrapper.JournalEntryRepo.Create(jEntryDebit);
-                if (request.data != null)
-                {
-                    var deserialiseList = JsonConvert.DeserializeObject<List<AddVoucherInvoiceItemsRequest>>(request.data);
-
-                    foreach (var item in deserialiseList)
+                    Aow.Infrastructure.Domain.JournalEntry jEntryDebit = new Aow.Infrastructure.Domain.JournalEntry
                     {
-                        Aow.Infrastructure.Domain.VoucherItem voucherItem = new Aow.Infrastructure.Domain.VoucherItem();
-                        voucherItem.Id = Guid.NewGuid();
-                        voucherItem.SrNo = srnoItem;
-                        voucherItem.Description = item.Description;
-                        voucherItem.MRPPerUnit = item.MRPPerUnit;
-                        voucherItem.Price = item.MRPPerUnit.Value;
-                        voucherItem.Quantity = item.Quantity;
-                        voucherItem.ProductId = item.ProductId;
-                        voucherItem.ItemAmount = item.ItemAmount;
-                        itemTotal = itemTotal + item.ItemAmount.Value;
-                        voucherItem.VoucherId = voucherId;
-                        _repoWrapper.VoucherItemRepo.Create(voucherItem);
-                        srnoItem++;
+                        Id = Guid.NewGuid(),
+                        VoucherId = voucherId,
+                        VoucherName = request.voucherName,
+                        VoucherNumber = request.Invoice,
+                        Date = date,
+                        SrNo = srno,
+                        LedgerId = Guid.Parse(request.AccountId),
+                        CrDrType = "Dr",
+                        DebitAmount = Convert.ToDecimal(request.Total)
+                    };
+                    _repoWrapper.JournalEntryRepo.Create(jEntryDebit);
+                    if (request.data != null)
+                    {
+                        var deserialiseList = JsonConvert.DeserializeObject<List<AddVoucherInvoiceItemsRequest>>(request.data);
 
-                        var ledger = _repoWrapper.LedgerRepositoryRepo.GetLedgerByName(fyr.CompanyId, "Sales Account");
+                        foreach (var item in deserialiseList)
+                        {
+                            Aow.Infrastructure.Domain.VoucherItem voucherItem = new Aow.Infrastructure.Domain.VoucherItem();
+                            voucherItem.Id = Guid.NewGuid();
+                            voucherItem.SrNo = srnoItem;
+                            voucherItem.Description = item.Description;
+                            voucherItem.MRPPerUnit = item.MRPPerUnit;
+                            voucherItem.Price = item.MRPPerUnit.Value;
+                            voucherItem.Quantity = item.Quantity;
+                            voucherItem.ProductId = item.ProductId;
+                            voucherItem.ItemAmount = item.ItemAmount;
+                            itemTotal = itemTotal + item.ItemAmount.Value;
+                            voucherItem.VoucherId = voucherId;
+                            _repoWrapper.VoucherItemRepo.Create(voucherItem);
+                            srnoItem++;
 
-                        Aow.Infrastructure.Domain.JournalEntry jEntryCredit = new Aow.Infrastructure.Domain.JournalEntry
+                            var ledger = _repoWrapper.LedgerRepositoryRepo.GetLedgerByName(fyr.CompanyId, "Sales Account");
+
+                            Aow.Infrastructure.Domain.JournalEntry jEntryCredit = new Aow.Infrastructure.Domain.JournalEntry
+                            {
+                                Id = Guid.NewGuid(),
+                                VoucherId = voucherId,
+                                VoucherName = request.voucherName,
+                                Date = date,
+                                SrNo = srno + 1,
+                                LedgerId = ledger.Id,
+                                CrDrType = "Cr",
+                                VoucherNumber = request.Invoice,
+                                CreditAmount = itemTotal
+                            };
+                            _repoWrapper.JournalEntryRepo.Create(jEntryCredit);
+                            SrNo++;
+                        }
+                    }
+
+                    if (request.data2 != null)
+                    {
+                        var deserialiseList = JsonConvert.DeserializeObject<List<AddVoucherInvoiceSundryItems>>(request.data2);
+                        foreach (var sundryItem in deserialiseList)
+                        {
+                            var product = _repoWrapper.ProductRepo.GetProduct(sundryItem.ProductId);
+                            Aow.Infrastructure.Domain.VoucherSundryItem voucherSundryItem = new Aow.Infrastructure.Domain.VoucherSundryItem();
+                            voucherSundryItem.Id = Guid.NewGuid();
+                            voucherSundryItem.SrNo = srno;
+                            voucherSundryItem.ProductId = sundryItem.ProductId;
+                            voucherSundryItem.Percent = sundryItem.Percent;
+                            voucherSundryItem.ItemAmount = sundryItem.ItemAmount;
+                            voucherSundryItem.VoucherId = voucherId;
+                            _repoWrapper.VoucherSundryItemRepo.Create(voucherSundryItem);
+                            srno++;
+                            Aow.Infrastructure.Domain.JournalEntry jEntryCreditTax = new Aow.Infrastructure.Domain.JournalEntry
+                            {
+                                Id = Guid.NewGuid(),
+                                VoucherId = voucherId,
+                                VoucherName = request.voucherName,
+                                Date = date,
+                                SrNo = srno + 1,
+                                LedgerId = product.LedgerId.Value,
+                                CrDrType = "Cr",
+                                VoucherNumber = request.Invoice,
+                                CreditAmount = sundryItem.ItemAmount
+                            };
+                            _repoWrapper.JournalEntryRepo.Create(jEntryCreditTax);
+                        }
+                    }
+                }
+
+                if (request.voucherName == "Purchase Bill")
+                {
+                    var jEntryCredit = new Aow.Infrastructure.Domain.JournalEntry
+                    {
+                        Id = Guid.NewGuid(),
+                        VoucherId = voucher.Id,
+                        VoucherName = request.voucherName,
+                        VoucherNumber = request.Invoice,
+                        Date = date,
+                        SrNo = srno,
+                        LedgerId = Guid.Parse(request.AccountId),
+                        CrDrType = "Cr",
+                        DebitAmount = Convert.ToDecimal(request.Total)
+                    };
+                    _repoWrapper.JournalEntryRepo.Create(jEntryCredit);
+                    if (request.data2 != null)
+                    {
+                        var deserialiseList = JsonConvert.DeserializeObject<List<AddVoucherInvoiceSundryItems>>(request.data2);
+                        foreach (var sundryItem in deserialiseList)
+                        {
+                            var product = _repoWrapper.ProductRepo.GetProduct(sundryItem.ProductId);
+                            var voucherSundryItem = new Aow.Infrastructure.Domain.VoucherSundryItem
+                            {
+                                Id = Guid.NewGuid(),
+                                SrNo = srno,
+                                ProductId = sundryItem.ProductId,
+                                Percent = sundryItem.Percent,
+                                ItemAmount = sundryItem.ItemAmount,
+                                VoucherId = voucher.Id
+                            };
+                            _repoWrapper.VoucherSundryItemRepo.Create(voucherSundryItem);
+                            srno++;
+                            var jEntryDebitTax = new Aow.Infrastructure.Domain.JournalEntry
+                            {
+                                Id = Guid.NewGuid(),
+                                VoucherId = voucher.Id,
+                                VoucherName = request.voucherName,
+                                Date = date,
+                                SrNo = srno + 1,
+                                LedgerId = product.LedgerId.Value,
+                                CrDrType = "Dr",
+                                VoucherNumber = request.Invoice,
+                                DebitAmount = sundryItem.ItemAmount
+                            };
+                            _repoWrapper.JournalEntryRepo.Create(jEntryDebitTax);
+                        }
+                    }
+
+                    if (request.data != null)
+                    {
+                        var deserialiseList = JsonConvert.DeserializeObject<List<AddVoucherInvoiceItemsRequest>>(request.data);
+
+                        foreach (var item in deserialiseList)
+                        {
+                            Aow.Infrastructure.Domain.VoucherItem voucherItem = new Aow.Infrastructure.Domain.VoucherItem();
+                            var itemId = Guid.NewGuid();
+                            voucherItem.Id = itemId;
+                            voucherItem.SrNo = srnoItem;
+                            voucherItem.Description = item.Description;
+                            voucherItem.MRPPerUnit = item.MRPPerUnit;
+                            voucherItem.Price = item.MRPPerUnit.Value;
+                            voucherItem.Quantity = item.Quantity;
+                            voucherItem.ProductId = item.ProductId;
+                            voucherItem.ItemAmount = item.ItemAmount;
+                            itemTotal = itemTotal + item.ItemAmount.Value;
+                            voucherItem.VoucherId = voucherId;
+                            _repoWrapper.VoucherItemRepo.Create(voucherItem);
+                            srnoItem++;
+                            Guid stockId = Guid.NewGuid();
+                            var stockNew = new Aow.Infrastructure.Domain.Stock
+                            {
+                                Id = stockId,
+                                MRPPerUnit = item.MRPPerUnit,
+                                Price = item.Price,
+                                Quantity = item.Quantity,
+                                ProductId = item.ProductId,
+                                ItemAmount = item.ItemAmount,
+                                VoucherItemId = itemId,
+                            };
+                            _repoWrapper.StockRepo.Create(stockNew);
+                        }
+                        var ledger = _repoWrapper.LedgerRepositoryRepo.GetLedgerByName(fyr.CompanyId, "Purchase Account");
+                        var jEntryDebit = new Aow.Infrastructure.Domain.JournalEntry
                         {
                             Id = Guid.NewGuid(),
-                            VoucherId = voucherId,
+                            VoucherId = voucher.Id,
                             VoucherName = request.voucherName,
                             Date = date,
                             SrNo = srno + 1,
                             LedgerId = ledger.Id,
-                            CrDrType = "Cr",
+                            CrDrType = "Dr",
                             VoucherNumber = request.Invoice,
-                            CreditAmount = itemTotal
+                            DebitAmount = itemTotal
                         };
-                        _repoWrapper.JournalEntryRepo.Create(jEntryCredit);
-                        SrNo++;
+                        _repoWrapper.JournalEntryRepo.Create(jEntryDebit);
                     }
                 }
-
-                if (request.data2 != null)
-                {
-                    var deserialiseList = JsonConvert.DeserializeObject<List<AddVoucherInvoiceSundryItems>>(request.data2);
-                    foreach (var sundryItem in deserialiseList)
-                    {
-                        var product = _repoWrapper.ProductRepo.GetProduct(sundryItem.ProductId);
-                        Aow.Infrastructure.Domain.VoucherSundryItem voucherSundryItem = new Aow.Infrastructure.Domain.VoucherSundryItem();
-                        voucherSundryItem.Id = Guid.NewGuid();
-                        voucherSundryItem.SrNo = srno;
-                        voucherSundryItem.ProductId = sundryItem.ProductId;
-                        voucherSundryItem.Percent = sundryItem.Percent;
-                        voucherSundryItem.ItemAmount = sundryItem.ItemAmount;
-                        voucherSundryItem.VoucherId = voucherId;
-                        _repoWrapper.VoucherSundryItemRepo.Create(voucherSundryItem);
-                        srno++;
-                        Aow.Infrastructure.Domain.JournalEntry jEntryCreditTax = new Aow.Infrastructure.Domain.JournalEntry
-                        {
-                            Id = Guid.NewGuid(),
-                            VoucherId = voucherId,
-                            VoucherName = request.voucherName,
-                            Date = date,
-                            SrNo = srno + 1,
-                            LedgerId = product.LedgerId.Value,
-                            CrDrType = "Cr",
-                            VoucherNumber = request.Invoice,
-                            CreditAmount = sundryItem.ItemAmount
-                        };
-                        _repoWrapper.JournalEntryRepo.Create(jEntryCreditTax);
-                    }
-                }
-
                 int i = await _repoWrapper.SaveNew();
                 if (i > 0)
                 {

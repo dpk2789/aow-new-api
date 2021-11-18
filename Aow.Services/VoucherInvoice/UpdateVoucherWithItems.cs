@@ -200,6 +200,7 @@ namespace Aow.Services.VoucherInvoice
                                 vocherRetriveItem.Quantity = item.Quantity;
                                 vocherRetriveItem.ProductId = item.ProductId;
                                 vocherRetriveItem.ItemAmount = item.ItemAmount;
+                                itemTotal = itemTotal + item.ItemAmount.Value;
                                 _repoWrapper.VoucherItemRepo.Update(vocherRetriveItem);
                                 var retriveStock = await _repoWrapper.StockRepo.GetStockByVoucherItemId(vocherRetriveItem.Id);
                                 if (retriveStock.Count != 0)
