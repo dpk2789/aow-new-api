@@ -121,7 +121,7 @@ namespace Aow.Services.VoucherInvoice
                         SrNo = srno,
                         LedgerId = Guid.Parse(request.AccountId),
                         CrDrType = "Cr",
-                        DebitAmount = Convert.ToDecimal(request.Total)
+                        CreditAmount = Convert.ToDecimal(request.Total)
                     };
                     _repoWrapper.JournalEntryRepo.Create(jEntryCredit);
                     if (request.data2 != null)
