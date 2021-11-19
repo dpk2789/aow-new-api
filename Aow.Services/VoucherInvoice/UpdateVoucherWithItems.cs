@@ -364,6 +364,7 @@ namespace Aow.Services.VoucherInvoice
                     }
 
                 }
+
                 _repoWrapper.VoucherRepo.Update(updateVoucher);
                 int i = await _repoWrapper.SaveNew();
                 if (i > 0)

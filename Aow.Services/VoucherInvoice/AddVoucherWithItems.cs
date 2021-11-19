@@ -280,7 +280,7 @@ namespace Aow.Services.VoucherInvoice
                         Id = voucher.Id,
                         Name = request.voucherName,
                         Success = true,
-                        Description = "Journal Entry Added SuccessFully Added"
+                        Description = string.Format(request.voucherName + " SuccessFully Added")
                     };
                 }
                 //}
@@ -288,7 +288,7 @@ namespace Aow.Services.VoucherInvoice
                 {
                     Name = request.voucherName,
                     Success = false,
-                    Description = "Journal Entry Not Added"
+                    Description = string.Format(request.voucherName + " Some Error!!")
                 };
 
             }

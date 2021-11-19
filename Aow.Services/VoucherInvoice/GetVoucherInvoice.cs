@@ -126,6 +126,7 @@ namespace Aow.Services.VoucherInvoice
                     viewModel.Id = jentry.Id;
                     viewModel.SrNo = jentry.SrNo;
                     viewModel.ItemName = jentry.Product.Name;
+                    viewModel.Description = jentry.Description;
                     viewModel.Quantity = jentry.Quantity;
                     viewModel.ItemAmount = jentry.ItemAmount;
                     viewModel.MRPPerUnit = jentry.MRPPerUnit;

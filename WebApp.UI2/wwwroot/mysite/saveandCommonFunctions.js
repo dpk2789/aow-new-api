@@ -76,7 +76,9 @@ function UpdateInvoice(e) {
 
 function performPostRequest(e, url, voucherId) {
     e.preventDefault();
-    let buttonValue = $(this).closest("input");
+    $('#loadingmessage').show();
+    let saveVoucherBtn = document.getElementById('saveVoucherBtn');
+    saveVoucherBtn.disabled = true;
     let apiUrl = document.getElementById('apiurl').value;
     let date = $('#voucherDate').val();
     let userId = document.getElementById('userId');
@@ -104,6 +106,7 @@ function performPostRequest(e, url, voucherId) {
             let Name = $(this).find("td").eq(1).text().trim();
             //let Quantity = parseFloat($(this).find("td").eq(3).html()).toFixed(2);;
             let ItemAmount = $(this).find(".hdnappendAmount").val();
+            let Description = $(this).find(".hdnappenItemDesc").val();
             let MRPPerUnit = $(this).find(".hdnappendMRP").val();
             let Quantity = $(this).find(".hdnappendQuantity").val();
             let ProductId = $(this).find(".hdnappendProductId").val();
@@ -118,6 +121,7 @@ function performPostRequest(e, url, voucherId) {
                 'ProductId': ProductId,
                 'Id': ItemId,
                 'MRPPerUnit': MRPPerUnit,
+                'Description': Description,
                 'Quantity': Quantity,
                 'ItemAmount': ItemAmount,
                 'AccountCategoryName': hdnAccountCategoryName,
@@ -170,9 +174,13 @@ function performPostRequest(e, url, voucherId) {
             } else {
                 toastr.error(response.data.description)
             }
+            $('#loadingmessage').hide();
+            saveVoucherBtn.disabled = false;
         })
         .catch(function (response) {
             console.log(response);
             toastr.error(response)
+            $('#loadingmessage').hide();
+            saveVoucherBtn.disabled = false;
         });
 };

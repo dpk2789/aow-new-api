@@ -18,6 +18,9 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>@Model.Input.VoucherName Edit Form</h1>
+                    <div id='loadingmessage' style='display:none'>
+                        <img src="~/gif/ajax-loader.gif" />
+                    </div>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -81,7 +84,7 @@
                                     <div class="col-md-3">
                                         <div class='input-group datetimepicker6'>
                                             <input type="text" class="form-control" name="Date" id="voucherDate" placeholder="Date" value="@Model.Input.Date"
-                                                   data-toggle="datetimepicker" data-target="#voucherDate" autocomplete="off">
+                                                   data-toggle="datetimepicker" data-target="#voucherDate" autocomplete="off" data-date-format="DD-mm-yyyy">
                                             @Html.ValidationMessageFor(model => model.Input.Date, "", new { @class = "text-danger" })
                                         </div>
                                         @*@Html.EditorFor(model => model.Date, "EditorDateJqueryDateTimePicker")*@
@@ -293,7 +296,7 @@
                     </span>
                     <button onclick="AddToStock(event)" class="btn btn-warning float-left" style="margin-left:20px"><i class="nav-icon fas fa-warehouse"></i> Add To Stock</button>
                     <button class="btn btn-dark float-left" style="margin-left:20px"><i class="fa fa-truck" aria-hidden="true"></i>Transport Detail</button>
-                    <button onclick="UpdateInvoice(event)" class="btn btn-info float-right" style="margin-left:20px">Save</button>
+                    <button onclick="UpdateInvoice(event)" class="btn btn-info float-right" style="margin-left:20px" id="saveVoucherBtn">Save</button>
                     <button id="SaveNext" class="btn btn-default float-right">Cancel</button>
                 </div>
             </div>
@@ -338,45 +341,46 @@
 </div>
 
 @section Scripts {
-<script>
-          $('#voucherDate').datetimepicker({
-              /* format: 'L',*/
-              format: 'YYYY/MM/DD'
-          });
+    <script>
+        $('#voucherDate').datetimepicker({
+            /* format: 'L',*/
+            format: 'YYYY/MM/DD',
+            // format: 'd.m.Y'
+        });
 
-          var addToStockRequest = {
-      id: "string",
-    }
-      function AddToStock(e) {
-          // let confirmAction = confirm("Are you sure to delete this product?");
-           let userId = document.getElementById('userId');
-    let userAccessToken = userId.value;
-           let apiUrl = document.getElementById('apiurl').value;
-          let url = "AddToStock";
-          let voucherId = document.getElementById('voucherId').value;
-           addToStockRequest.voucherId = voucherId;
+        var addToStockRequest = {
+            id: "string",
+        }
+        function AddToStock(e) {
+            // let confirmAction = confirm("Are you sure to delete this product?");
+            let userId = document.getElementById('userId');
+            let userAccessToken = userId.value;
+            let apiUrl = document.getElementById('apiurl').value;
+            let url = "AddToStock";
+            let voucherId = document.getElementById('voucherId').value;
+            addToStockRequest.voucherId = voucherId;
             axios.post(`${apiUrl}/api/Stocks/` + url, this.addToStockRequest, {
-              headers: {
-                  Authorization: "Bearer " + userAccessToken
-              }
-          })
-              .then(function (response) {
-                  console.log(response);
-                  if (response.data.success) {
-                      toastr.success(response.data.description)
-                      window.location.href = '/MyBooks/VoucherWithItems/index?voucherName=' + voucherName
-                  } else {
-                      toastr.error(response.data.description)
-                  }
-              })
-              .catch(function (response) {
-                  console.log(response);
-                  toastr.error(response)
-              });
-      }
-</script>
-<script src="~/mysite/createAddUpdateDeleteItem.js"></script>
-<script src="~/mysite/addupdatedeteteSundry.js"></script>
-<script src="~/mysite/saveandCommonFunctions.js"></script>
+                headers: {
+                    Authorization: "Bearer " + userAccessToken
+                }
+            })
+                .then(function (response) {
+                    console.log(response);
+                    if (response.data.success) {
+                        toastr.success(response.data.description)
+                        window.location.href = '/MyBooks/VoucherWithItems/index?voucherName=' + voucherName
+                    } else {
+                        toastr.error(response.data.description)
+                    }
+                })
+                .catch(function (response) {
+                    console.log(response);
+                    toastr.error(response)
+                });
+        }
+    </script>
+    <script src="~/mysite/createAddUpdateDeleteItem.js"></script>
+    <script src="~/mysite/addupdatedeteteSundry.js"></script>
+    <script src="~/mysite/saveandCommonFunctions.js"></script>
 
 }

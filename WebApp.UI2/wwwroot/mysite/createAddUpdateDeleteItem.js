@@ -123,7 +123,7 @@ $('.btnadd').on("click", function (e) {
     $('#tbodyitems tr').each(function () {
         let text = $(this).find("td").eq(4).html();
         if (text !== "Total") {
-          
+
             let hdnappendhdnItemType = $(this).find(".hdnappendhdnItemType").val();
             let hdnAccountCategoryName = $(this).find('.hdnappendhdnAccountCategoryName').val();
             let hdnappendProductName = $(this).find('.hdnappendProductName').val();
@@ -143,22 +143,20 @@ $('.btnadd').on("click", function (e) {
             newcontent += "<td>" + $(this).find("td").eq(5).html(); + " </td >";
             newcontent += "<td   >";
 
-          
-          
             let hdnappendMRP = $(this).find('.hdnappendMRP').val();
             let hdnappendQuantity = $(this).find('.hdnappendQuantity').val();
             let hdnappendProductId = $(this).find(".hdnappendProductId").val();
             let hdnappendhdnStoreItemId = $(this).find(".hdnappendhdnStoreItemId").val();
             let hdnappendProductAccountId = $(this).find(".hdnappendProductAccountId").val();
-            let hdnappenItemDesc = $(this).find(".hdnappenItemDesc").val();
-
+            // let hdnappenItemDesc = $(this).find(".hdnappenItemDesc").val();
+            let hdnappenItemDesc = $(this).find("td").eq(2).html().replace(/(\s+&\s+|\s+)/g,'-');
 
             newcontent += "<input type='hidden' class='hdnappendhdnAccountCategoryName' value=" + hdnAccountCategoryName + " />";
             newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnappendProductId + " />";
             newcontent += "<input type='hidden' class='hdnappendBatchId' value=" + hdnBatchId + " />";
             newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnappendProductAccountId + " />";
             newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
-            newcontent += "<input type='hidden' class='hdnappenItemDesc' value=" + hdnappenItemDesc + " />";
+            newcontent += '<input type=hidden class=hdnappenItemDesc value=' + hdnappenItemDesc + ' />';
             newcontent += "<input type='hidden' class='hdnappendAmount' value=" + amnt + " />";
             newcontent += "<input type='hidden' class='hdnappendMRP' value=" + hdnappendMRP + " />";
             newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + hdnappendQuantity + " />";
@@ -178,7 +176,7 @@ $('.btnadd').on("click", function (e) {
     else {
         itemstotal = parseFloat(itemstotal) + parseFloat(txtAmount);
     }
-   
+
     x = parseFloat(x) + parseFloat(1);
 
     //alert(hdnBatchId);
@@ -195,7 +193,7 @@ $('.btnadd').on("click", function (e) {
     newcontent += "<input type='hidden' class='hdnappendBatchId' value=" + hdnBatchId + " />";
     newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnProductAccountId + " />";
     newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
-    newcontent += "<input type='hidden' class='hdnappenItemDesc' value=" + txtDescription + " />";
+    newcontent += "<input type='hidden' class='hdnappenItemDesc' value=" + txtDescription.replace(/(\s+&\s+|\s+)/g, '-') + " />";
     newcontent += "<input type='hidden' class='hdnappendMRP' value=" + txtMRP + " />";
     newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + txtQuantity + " />";
     newcontent += "<input type='hidden' class='hdnappendAmount' value=" + parseFloat(txtAmount) + " />";
@@ -470,9 +468,9 @@ function yoCalculateItemsTotal() {
             var hdnappendMRP = $(this).find('.hdnappendMRP').val();
             var hdnappendQuantity = $(this).find('.hdnappendQuantity').val();
             var hdnappendAmount = $(this).find(".hdnappendAmount").val();
-            var hdnappendProductId = $(this).find(".hdnappendProductId").val();          
+            var hdnappendProductId = $(this).find(".hdnappendProductId").val();
             var hdnappendProductAccountId = $(this).find(".hdnappendProductAccountId").val();
-         
+
 
             newcontent += "<input type='hidden' class='hdnappendhdnAccountCategoryName' value=" + hdnAccountCategoryName + " />";
             newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnappendProductId + " />";
