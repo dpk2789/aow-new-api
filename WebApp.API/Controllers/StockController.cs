@@ -17,6 +17,13 @@ namespace WebApp.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("api/Stocks/GetStock")]
+        public IActionResult GetStock([FromQuery] Guid id, [FromServices] GetStock getStock)
+        {
+            var result = getStock.Do(id);
+            return Ok(result);
+        }
+
         [HttpPost("api/Stocks/AddToStock")]
         public async Task<IActionResult> AddToStock([FromBody] AddToStock.AddToStockRequest request, [FromServices] AddToStock addFinancialYear)
         {
@@ -32,7 +39,7 @@ namespace WebApp.API.Controllers
         [HttpDelete("api/Stocks/DeleteStock")]
         public async Task<IActionResult> DeleteStock(Guid id, [FromServices] DeleteStock deleteFinancialYear)
         {
-            var result = await deleteFinancialYear.Do(id);           
+            var result = await deleteFinancialYear.Do(id);
             if (result == null)
             {
                 return NotFound();

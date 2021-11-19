@@ -122,9 +122,10 @@
                             let id = '"' + row.id + '"';
                             let hid = " <input type='hidden' class='hdnDailyId' value='" + row.id + "' />";
                             /**/
-                            let delet = "<a onclick='confirmAction(event)' data-stock-id=" + row.id + " type='button' class='btn btn-danger btn-sm' >Delete</a>";
+                            let update = "<a onclick='confirmAction(event)' data-stock-id=" + row.id + " type='button' class='btn btn-warning btn-sm' >Update</a>";
+                            let delet = "<a onclick='confirmAction(event)' data-stock-id=" + row.id + " type='button' class='btn btn-danger btn-sm' style='margin-left: 10px'>Delete</a>";
                             /**/
-                            return hid + delet;
+                            return hid + update+ delet;
                         }
                     },
                 ],                

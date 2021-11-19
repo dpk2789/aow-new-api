@@ -144,7 +144,7 @@ function performPostRequest(e, url, voucherId) {
         }
     });
 
-    alert(JSON.stringify(sundryItems) + '  ' + sundryItems.length)
+   // alert(JSON.stringify(sundryItems) + '  ' + sundryItems.length)
 
     addVoucherWithItemsRequest.id = voucherId;
     addVoucherWithItemsRequest.financialYearId = financialYearId;
