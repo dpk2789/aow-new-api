@@ -91,9 +91,9 @@
                                             <td>S.No</td>
                                             <td>Item Name</td>
                                             <td>Description</td>
-                                            <td>Amount</td>
                                             <td>Quantity</td>
-                                            <td>Total</td>
+                                            <td>Rate</td>
+                                            <td>Amount</td>
                                         </tr>
                                         <tr>
                                             <td>
@@ -108,13 +108,13 @@
                                             </td>
                                             <td>
                                                 <input type="text" id="txtDescription" class="form-control" placeholder="Description" />
-
                                             </td>
                                             <td>
-                                                <input type="text" id="txtMRP" class="form-control" maxlength="7" placeholder="MRP" />
+                                                <input type="text" id="txtQuantity" class="form-control"  placeholder="Quantity" />
                                             </td>
                                             <td>
-                                                <input type="text" id="txtQuantity" class="form-control" onchange="recalculateExtendedPrice()" placeholder="Quantity" />
+                                                <input type="text" id="txtMRP" class="form-control" maxlength="7" placeholder="MRP" onchange="recalculateExtendedPrice()"/>
+                                                
                                             </td>
                                             <td>
                                                 <input type="text" id="txtAmount" class="form-control  txtAmount" placeholder="Amount" value="0" />

@@ -187,8 +187,8 @@ $('.btnadd').on("click", function (e) {
     newcontent += "<td  >" + x + " </td >";
     newcontent += "<td  class='txtStoreItem'>" + txtStoreItem + " </td >";
     newcontent += "<td  class='txtDescription'>" + txtDescription + " </td >";
-    newcontent += "<td  >" + txtMRP + " </td >";
     newcontent += "<td  >" + txtQuantity + " </td >";
+    newcontent += "<td  >" + txtMRP + " </td >";    
     newcontent += "<td  >" + txtAmount + " </td >";
     newcontent += "<td   >";
     newcontent += "<input type='hidden' class='hdnappendhdnAccountCategoryName' value=" + hdnAccountCategoryName.replace(/\s/g, '') + " />";

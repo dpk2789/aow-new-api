@@ -99,10 +99,10 @@
                                                 <td class="col-md-1">S.No</td>
                                                 <td class="col-md-2">Item Name</td>
                                                 <td class="col-md-2">Description</td>
-                                                <td class="col-md-2">Amount</td>
-                                                <td class="col-md-2">Quantity</td>
-                                                <td class="col-md-2">Total</td>
-                                                <td></td>
+                                                <td class="col-md-1">Quantity</td>
+                                                <td class="col-md-1">Rate</td>
+                                                <td class="col-md-1">Amount</td>
+                                                <td class="col-md-1"></td>
                                             </tr>
 
                                             <tr>
@@ -121,10 +121,10 @@
 
                                                 </td>
                                                 <td>
-                                                    <input type="text" id="txtMRP" class="form-control" maxlength="7" placeholder="MRP" />
+                                                    <input type="text" id="txtQuantity" class="form-control" placeholder="Quantity" />
                                                 </td>
                                                 <td>
-                                                    <input type="text" id="txtQuantity" class="form-control" onchange="recalculateExtendedPrice()" placeholder="Quantity" />
+                                                    <input type="text" id="txtMRP" class="form-control" maxlength="7" placeholder="MRP" onchange="recalculateExtendedPrice()" />
                                                 </td>
                                                 <td>
                                                     <input type="text" id="txtAmount" class="form-control  txtAmount" placeholder="Amount" value="0" />
@@ -156,10 +156,10 @@
                                                                 <p class='batchName'>@item.Description</p>
                                                             </td>
                                                             <td>
-                                                                @Html.DisplayFor(modelItem => item.MRPPerUnit)
+                                                                @Html.DisplayFor(modelItem => item.Quantity)                                                               
                                                             </td>
                                                             <td>
-                                                                @Html.DisplayFor(modelItem => item.Quantity)
+                                                                @Html.DisplayFor(modelItem => item.MRPPerUnit)
                                                             </td>
                                                             <td>
                                                                 <p class="extendedPrice">@item.ItemAmount</p>
@@ -173,11 +173,12 @@
                                                                 <input type="hidden" id="hdnappendItemName" class="hdnappendProductName" value="@item.ItemName" />
                                                                 <input type="hidden" id="hdnappendQuantity" class="hdnappendQuantity" value="@item.Quantity" />
                                                                 <input type="hidden" id="hdnappendMRPPerUnit" class="hdnappendMRPPerUnit" value="@item.MRPPerUnit" />
+                                                                <input type="hidden" id="hdnappenItemDesc" class="hdnappenItemDesc" value="@item.Description" />
                                                                 <button class="btn btn-sm btn-outline-warning fas fa-edit addVoucherVariant" value="@item.Id" style='cursor:pointer;'></button>
                                                                 @*<button class="btn btn-sm btn-outline-light fa fa-edit edit" value="@item.Id" style='cursor:pointer;'></button>*@
                                                                 @*<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">modal</button>*@
                                                                 <button class="btn btn-sm btn-outline-danger fas fa-trash-alt delete" value="@item.Id" style='cursor:pointer;'></button>
-                                                                <a asp-route-id="@item.Id" asp-route-voucherId="@Model.Input.Id" asp-page="/MyBooks/VoucherWithItems/AddVoucherItemVarient" class="btn btn-sm btn-outline-primary"><i class="fas fa-cubes"></i></a> |
+                                                                <a asp-route-id="@item.Id" asp-route-voucherId="@Model.Input.Id" asp-page="/MyBooks/VoucherWithItems/AddVoucherItemVarient" class="btn btn-sm btn-outline-primary"><i class="fas fa-cubes"></i></a>
 
                                                             </td>
                                                         </tr>

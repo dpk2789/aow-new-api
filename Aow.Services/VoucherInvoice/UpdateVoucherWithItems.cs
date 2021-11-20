@@ -257,9 +257,9 @@ namespace Aow.Services.VoucherInvoice
                                     ItemAmount = item.ItemAmount,
                                     VoucherItemId = voucherItem.Id,
                                 };
-                                _repoWrapper.StockRepo.Create(stockNew);
-                                srnoItem++;
+                                _repoWrapper.StockRepo.Create(stockNew);                               
                             }
+                            srnoItem++;
                         }
                         var ledger = _repoWrapper.LedgerRepositoryRepo.GetLedgerByName(fyr.CompanyId, "Purchase Account");
                         var jEntryDebit = new Aow.Infrastructure.Domain.JournalEntry
