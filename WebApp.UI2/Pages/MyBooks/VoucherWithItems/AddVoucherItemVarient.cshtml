@@ -163,236 +163,236 @@
 
 
 @section Scripts {
-<script>
+    <script>
 
-            function numberWithCommas(n) {
-                return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        function numberWithCommas(n) {
+            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function ClearItemAdd() {
+            $('#txtDescription').val('');
+            $('#txtStoreItem').val('');
+            $('#hdnStoreItemId').val('');
+            $('#hdnProductId').val('');
+            $('#txtMRP').val('');
+            $('#txtQuantity').val('');
+            $('#txtAmount').val('');
+            $('#btnupdate').hide();
+            $('#btnnew').hide();
+            $('#btnadd').show();
+        }
+
+        function ClearOthers() {
+            $('#Head').val('');
+            $('#Invoice').val('');
+            $('#Date').val('');
+            $('#Particular').val('');
+            $('#ParticularId').val('');
+            $('#CustomerName').val('');
+            $('#Total').val('');
+            $('#MembershipId').val('');
+            //  $('#Net').val('');
+        };
+
+        function recalculateExtendedPrice() {
+            var quantity = parseFloat(document.getElementById("txtQuantity").value).toFixed(0);
+            var unitPrice = parseFloat(document.getElementById("txtMRP").value).toFixed(2);
+
+            if (isNaN(quantity)) {
+                quantity = 1;
             }
 
-            function ClearItemAdd() {
-                $('#txtDescription').val('');
-                $('#txtStoreItem').val('');
-                $('#hdnStoreItemId').val('');
-                $('#hdnProductId').val('');
-                $('#txtMRP').val('');
-                $('#txtQuantity').val('');
-                $('#txtAmount').val('');
-                $('#btnupdate').hide();
-                $('#btnnew').hide();
-                $('#btnadd').show();
+            if (isNaN(unitPrice)) {
+                unitPrice = 0;
             }
 
-            function ClearOthers() {
-                $('#Head').val('');
-                $('#Invoice').val('');
-                $('#Date').val('');
-                $('#Particular').val('');
-                $('#ParticularId').val('');
-                $('#CustomerName').val('');
-                $('#Total').val('');
-                $('#MembershipId').val('');
-                //  $('#Net').val('');
-            };
+            document.getElementById("txtQuantity").value = quantity;
+            document.getElementById("txtMRP").value = unitPrice;
 
-            function recalculateExtendedPrice() {
-                var quantity = parseFloat(document.getElementById("txtQuantity").value).toFixed(0);
-                var unitPrice = parseFloat(document.getElementById("txtMRP").value).toFixed(2);
-
-                if (isNaN(quantity)) {
-                    quantity = 1;
-                }
-
-                if (isNaN(unitPrice)) {
-                    unitPrice = 0;
-                }
-
-                document.getElementById("txtQuantity").value = quantity;
-                document.getElementById("txtMRP").value = unitPrice;
-
-                document.getElementById("txtAmount").value = (quantity * unitPrice).toFixed(2);
-                //document.getElementById("hdnAmount").value = (quantity * unitPrice).toFixed(2);
-            };
+            document.getElementById("txtAmount").value = (quantity * unitPrice).toFixed(2);
+            //document.getElementById("hdnAmount").value = (quantity * unitPrice).toFixed(2);
+        };
 
 
-            $("#txtStoreItem").autocomplete({
-                minLength: 1,
-                source: function (request, response) {
-                    let productId = $('#ProductId').val();
-                    var url = $(this.element).data("url");
-                    $.getJSON(url, { term: request.term, productId }, function (data) {
-                        response(data)
-                    })
-                },
-                appendTo: $(".modal-body ui-autocomplete-input"),
-                select: function (event, ui) {
-                    let hdnProductId = $('#hdnProductId').val();
-                    $("#hdnProductId").val(ui.item.id);
-                    $("#txtDescription").val(ui.item.autoGenerateName);
-                    $('#txtDescription').focus()
-                    if (ui.item.Itemtype === "Taxation") {
-                        $("#txtMRP").val(ui.item.percent);
-                    } else {
-                        $("#txtMRP").val(ui.item.mRPPerUnit);
-                    }
-
-                    $("#hdnAccountCategoryName").val(ui.item.accountCategoryName);
-                    $("#hdnProductAccountId").val(ui.item.productAccountId);
-                    //if (ui.item.ProductAccountId === null) {
-                    //    alert("Please Set Item Accounts first")
-                    //    return false;
-                    //}
-                    $("#hdnItemType").val(ui.item.itemtype);
-                },
-                change: function (event, ui) {
-                    if (!ui.item) {
-                        $(event.target).val("");
-                    }
-                }
-            });
-
-            $('.btnadd').on("click", function (e) {
-                let golbalPreviousAmount = 0;
-                let sNo = 0;
-                let newcontent = "";
-                let txtStoreItem = $('#txtStoreItem').val();
-                let txtDescription = $('#txtDescription').val();
+        $("#txtStoreItem").autocomplete({
+            minLength: 1,
+            source: function (request, response) {
+                let productId = $('#ProductId').val();
+                var url = $(this.element).data("url");
+                $.getJSON(url, { term: request.term, productId }, function (data) {
+                    response(data)
+                })
+            },
+            appendTo: $(".modal-body ui-autocomplete-input"),
+            select: function (event, ui) {
                 let hdnProductId = $('#hdnProductId').val();
-                let hdnProductAccountId = $('#hdnProductAccountId').val();
-                let txtMRP = $('#txtMRP').val();
-                let txtQuantity = $('#txtQuantity').val();
-                let txtAmount = $('#txtAmount').val();
-                let hdnAmount = $('#hdnAmount').val();
-                let hdnPreviousAmount = golbalPreviousAmount;
-
-                golbalPreviousAmount = txtAmount;
-                if (isNaN(txtQuantity) || txtQuantity === "") {
-                    txtQuantity = 0;
+                $("#hdnProductId").val(ui.item.id);
+                $("#txtDescription").val(ui.item.autoGenerateName);
+                $('#txtDescription').focus()
+                if (ui.item.Itemtype === "Taxation") {
+                    $("#txtMRP").val(ui.item.percent);
+                } else {
+                    $("#txtMRP").val(ui.item.mRPPerUnit);
                 }
-                var hdnAccountCategoryName = $('#hdnAccountCategoryName').val();
-                //  alert(hdnAccountCategoryName)
-                $('.dvitemexistmsg').html("");
-                newcontent = "";
-                let itemstotal = 0;
-                let itemstotalWithOutTax = 0;
-                let dueMoney = 0;
-                let x = 0;
 
-                $('#tbodyitems tr').each(function () {
-                    let text = $(this).find("td").eq(4).html();
-                    if (text !== "Total") {
+                $("#hdnAccountCategoryName").val(ui.item.accountCategoryName);
+                $("#hdnProductAccountId").val(ui.item.productAccountId);
+                //if (ui.item.ProductAccountId === null) {
+                //    alert("Please Set Item Accounts first")
+                //    return false;
+                //}
+                $("#hdnItemType").val(ui.item.itemtype);
+            },
+            change: function (event, ui) {
+                if (!ui.item) {
+                    $(event.target).val("");
+                }
+            }
+        });
 
-                        let hdnappendProductName = $(this).find('.hdnappendProductName').val();
-                        let amnt = $(this).find('.hdnappendAmount').val();
+        $('.btnadd').on("click", function (e) {
+            let golbalPreviousAmount = 0;
+            let sNo = 0;
+            let newcontent = "";
+            let txtStoreItem = $('#txtStoreItem').val();
+            let txtDescription = $('#txtDescription').val();
+            let hdnProductId = $('#hdnProductId').val();
+            let hdnProductAccountId = $('#hdnProductAccountId').val();
+            let txtMRP = $('#txtMRP').val();
+            let txtQuantity = $('#txtQuantity').val();
+            let txtAmount = $('#txtAmount').val();
+            let hdnAmount = $('#hdnAmount').val();
+            let hdnPreviousAmount = golbalPreviousAmount;
 
-                        itemstotal = parseFloat(itemstotal) + parseFloat(amnt);
-                        itemstotalWithOutTax = parseFloat(itemstotalWithOutTax) + parseFloat(amnt);
-                        dueMoney = parseFloat(dueMoney) + parseFloat(amnt);
-                        x = parseFloat(x) + parseFloat(1);
+            golbalPreviousAmount = txtAmount;
+            if (isNaN(txtQuantity) || txtQuantity === "") {
+                txtQuantity = 0;
+            }
+            var hdnAccountCategoryName = $('#hdnAccountCategoryName').val();
+            //  alert(hdnAccountCategoryName)
+            $('.dvitemexistmsg').html("");
+            newcontent = "";
+            let itemstotal = 0;
+            let itemstotalWithOutTax = 0;
+            let dueMoney = 0;
+            let x = 0;
 
-                        newcontent += "<tr >";
-                        newcontent += "<td>" + x + " </td >";
-                        newcontent += "<td>" + $(this).find("td").eq(1).html(); + " </td >";
-                        newcontent += "<td>" + $(this).find("td").eq(2).html(); + " </td >";
-                        newcontent += "<td>" + $(this).find("td").eq(3).html(); + " </td >";
-                        newcontent += "<td>" + $(this).find("td").eq(4).html(); + " </td >";
-                        newcontent += "<td>" + $(this).find("td").eq(5).html(); + " </td >";
-                        newcontent += "<td   >";
+            $('#tbodyitems tr').each(function () {
+                let text = $(this).find("td").eq(4).html();
+                if (text !== "Total") {
 
-                        let hdnappendMRP = $(this).find('.hdnappendMRP').val();
-                        let hdnappendQuantity = $(this).find('.hdnappendQuantity').val();
-                        let hdnappendProductId = $(this).find(".hdnappendProductId").val();
-                        let hdnappendProductAccountId = $(this).find(".hdnappendProductAccountId").val();
+                    let hdnappendProductName = $(this).find('.hdnappendProductName').val();
+                    let amnt = $(this).find('.hdnappendAmount').val();
 
-                        newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnappendProductId + " />";
-                        newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnappendProductAccountId + " />";
-                        newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
-                        newcontent += "<input type='hidden' class='hdnappendAmount' value=" + amnt + " />";
-                        newcontent += "<input type='hidden' class='hdnappendMRP' value=" + hdnappendMRP + " />";
-                        newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + hdnappendQuantity + " />";
-                        newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
-                        newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
-                        newcontent += "</td >";
-                        newcontent += "</tr >";
-                    }
-                });
-                itemstotal = parseFloat(itemstotal) + parseFloat(txtAmount);
-                x = parseFloat(x) + parseFloat(1);
-
-                //alert(hdnBatchId);
-                newcontent += "<tr >";
-                newcontent += "<td  >" + x + " </td >";
-                newcontent += "<td  class='txtStoreItem'>" + txtStoreItem + " </td >";
-                newcontent += "<td  class='txtDescription'>" + txtDescription + " </td >";
-                newcontent += "<td  >" + txtMRP + " </td >";
-                newcontent += "<td  >" + txtQuantity + " </td >";
-                newcontent += "<td  >" + txtAmount + " </td >";
-                newcontent += "<td   >";
-                newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnProductId + " />";
-                newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnProductAccountId + " />";
-                newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
-                newcontent += "<input type='hidden' class='hdnappendMRP' value=" + txtMRP + " />";
-                newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + txtQuantity + " />";
-                newcontent += "<input type='hidden' class='hdnappendAmount' value=" + parseFloat(txtAmount) + " />";
-                newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
-                newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
-                newcontent += "</td >";
-                newcontent += "</tr >";
-
-
-                if (txtStoreItem === "SubTotal") {
-                    var subTotal = 0;
-                    $('#tbodyitems tr').each(function () {
-                        var text = $(this).find("td").eq(3).html();
-                        if (text !== "Total") {
-                            var amnt = $(this).find('.hdnappendAmount').val();
-                            if (hdnAccountCategoryName === "SalesDiscount") {
-                                subTotal = parseFloat(subTotal) - parseFloat(amnt);
-                            }
-                            else {
-                                subTotal = parseFloat(subTotal) + parseFloat(amnt);
-                            }
-                        }
-                    });
+                    itemstotal = parseFloat(itemstotal) + parseFloat(amnt);
+                    itemstotalWithOutTax = parseFloat(itemstotalWithOutTax) + parseFloat(amnt);
+                    dueMoney = parseFloat(dueMoney) + parseFloat(amnt);
+                    x = parseFloat(x) + parseFloat(1);
 
                     newcontent += "<tr >";
-                    newcontent += "<td  class='txtStoreItem'>" + txtStoreItem + " </td >";
-                    newcontent += "<td  ></td >";
-                    newcontent += "<td  ><input type='hidden' class='itemstotalhdnclass' value=" + subTotal + " /></td >";
-                    newcontent += "<td  ></td >";
-                    newcontent += "<td  class='itemstotalclass'>" + numberWithCommas(parseFloat(subTotal).toFixed(2)) + " </td >";
+                    newcontent += "<td>" + x + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(1).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(2).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(3).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(4).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(5).html(); + " </td >";
                     newcontent += "<td   >";
+
+                    let hdnappendMRP = $(this).find('.hdnappendMRP').val();
+                    let hdnappendQuantity = $(this).find('.hdnappendQuantity').val();
+                    let hdnappendProductId = $(this).find(".hdnappendProductId").val();
+                    let hdnappendProductAccountId = $(this).find(".hdnappendProductAccountId").val();
+
+                    newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnappendProductId + " />";
+                    newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnappendProductAccountId + " />";
                     newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
-                    newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnProductId + " />";
-                    newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnProductAccountId + " />";
-                    newcontent += "<input type='hidden' class='hdnappendAmount' value=" + subTotal + " />";
+                    newcontent += "<input type='hidden' class='hdnappendAmount' value=" + amnt + " />";
+                    newcontent += "<input type='hidden' class='hdnappendMRP' value=" + hdnappendMRP + " />";
+                    newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + hdnappendQuantity + " />";
                     newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
                     newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
                     newcontent += "</td >";
                     newcontent += "</tr >";
-                    itemstotal = subTotal;
                 }
-
-                //calculate total
-                newcontent += "<tr >";
-                newcontent += "<td ></td >";
-                newcontent += "<td ></td >";
-                newcontent += "<td  ></td >";
-                newcontent += "<td  ><input type='hidden' id='hdnItemTotal' class='itemstotalhdnclass' value=" + itemstotal + " /></td >";
-                newcontent += "<td  >Total</td >";
-                newcontent += "<td  class='itemstotalclass'>" + numberWithCommas(parseFloat(itemstotal).toFixed(2)) + " </td >";
-                newcontent += "</tr >";
-
-
-                $('#tbodyitems').empty().append(newcontent);
-                //document.getElementById("ProductsTotal").value = numberWithCommas(parseFloat(itemstotal).toFixed(2));
-                //  document.getElementById("hdnProductsTotal").value = parseFloat(itemstotal).toFixed(2);
-                // document.getElementById("Input_Total").value = parseFloat(itemstotal).toFixed(2);
-
-                //  $(".showimg").hide();
-                ClearItemAdd();
             });
+            itemstotal = parseFloat(itemstotal) + parseFloat(txtAmount);
+            x = parseFloat(x) + parseFloat(1);
 
-            $("#tbodyitems").on('click', '.delete', function (e) {
+            //alert(hdnBatchId);
+            newcontent += "<tr >";
+            newcontent += "<td  >" + x + " </td >";
+            newcontent += "<td  class='txtStoreItem'>" + txtStoreItem + " </td >";
+            newcontent += "<td  class='txtDescription'>" + txtDescription + " </td >";
+            newcontent += "<td  >" + txtMRP + " </td >";
+            newcontent += "<td  >" + txtQuantity + " </td >";
+            newcontent += "<td  >" + txtAmount + " </td >";
+            newcontent += "<td   >";
+            newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnProductId + " />";
+            newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnProductAccountId + " />";
+            newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
+            newcontent += "<input type='hidden' class='hdnappendMRP' value=" + txtMRP + " />";
+            newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + txtQuantity + " />";
+            newcontent += "<input type='hidden' class='hdnappendAmount' value=" + parseFloat(txtAmount) + " />";
+            newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
+            newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
+            newcontent += "</td >";
+            newcontent += "</tr >";
+
+
+            if (txtStoreItem === "SubTotal") {
+                var subTotal = 0;
+                $('#tbodyitems tr').each(function () {
+                    var text = $(this).find("td").eq(3).html();
+                    if (text !== "Total") {
+                        var amnt = $(this).find('.hdnappendAmount').val();
+                        if (hdnAccountCategoryName === "SalesDiscount") {
+                            subTotal = parseFloat(subTotal) - parseFloat(amnt);
+                        }
+                        else {
+                            subTotal = parseFloat(subTotal) + parseFloat(amnt);
+                        }
+                    }
+                });
+
+                newcontent += "<tr >";
+                newcontent += "<td  class='txtStoreItem'>" + txtStoreItem + " </td >";
+                newcontent += "<td  ></td >";
+                newcontent += "<td  ><input type='hidden' class='itemstotalhdnclass' value=" + subTotal + " /></td >";
+                newcontent += "<td  ></td >";
+                newcontent += "<td  class='itemstotalclass'>" + numberWithCommas(parseFloat(subTotal).toFixed(2)) + " </td >";
+                newcontent += "<td   >";
+                newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
+                newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnProductId + " />";
+                newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnProductAccountId + " />";
+                newcontent += "<input type='hidden' class='hdnappendAmount' value=" + subTotal + " />";
+                newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
+                newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
+                newcontent += "</td >";
+                newcontent += "</tr >";
+                itemstotal = subTotal;
+            }
+
+            //calculate total
+            newcontent += "<tr >";
+            newcontent += "<td ></td >";
+            newcontent += "<td ></td >";
+            newcontent += "<td  ></td >";
+            newcontent += "<td  ><input type='hidden' id='hdnItemTotal' class='itemstotalhdnclass' value=" + itemstotal + " /></td >";
+            newcontent += "<td  >Total</td >";
+            newcontent += "<td  class='itemstotalclass'>" + numberWithCommas(parseFloat(itemstotal).toFixed(2)) + " </td >";
+            newcontent += "</tr >";
+
+
+            $('#tbodyitems').empty().append(newcontent);
+            //document.getElementById("ProductsTotal").value = numberWithCommas(parseFloat(itemstotal).toFixed(2));
+            //  document.getElementById("hdnProductsTotal").value = parseFloat(itemstotal).toFixed(2);
+            // document.getElementById("Input_Total").value = parseFloat(itemstotal).toFixed(2);
+
+            //  $(".showimg").hide();
+            ClearItemAdd();
+        });
+
+        $("#tbodyitems").on('click', '.delete', function (e) {
             e.preventDefault();
             var tr = $(this).closest('tr');
             tr.css("background-color", "#FF3700");
@@ -402,150 +402,153 @@
         });
 
         function yoCalculateItemsTotal() {
-        //var BatchId = $('#BatchId').val();
-        //var BatchIdName = $("#BatchId option:selected").text();
-        //var txtStoreItem = $('#txtStoreItem').val();
-        //var hdnStoreItemId = $('#hdnStoreItemId').val();
-        //var txtMRP = $('#txtMRP').val();
-        //var txtQuantity = $('#txtQuantity').val();
-        //var txtAmount = $('#txtAmount').val();
-        //var hdnAmount = $('#hdnAmount').val();
+            //var BatchId = $('#BatchId').val();
+            //var BatchIdName = $("#BatchId option:selected").text();
+            //var txtStoreItem = $('#txtStoreItem').val();
+            //var hdnStoreItemId = $('#hdnStoreItemId').val();
+            //var txtMRP = $('#txtMRP').val();
+            //var txtQuantity = $('#txtQuantity').val();
+            //var txtAmount = $('#txtAmount').val();
+            //var hdnAmount = $('#hdnAmount').val();
 
-        $('.dvitemexistmsg').html("");
-        var newcontent = "";
-        newcontent = "";
-        var itemstotal = 0;
-        $('#tbodyitems tr').each(function () {
-            var text = $(this).find("td").eq(4).html();
-            if (text !== "Total") {
-                var amnt = $(this).find('.hdnappendAmount').val();
+            $('.dvitemexistmsg').html("");
+            var newcontent = "";
+            newcontent = "";
+            var itemstotal = 0;
+            $('#tbodyitems tr').each(function () {
+                var text = $(this).find("td").eq(4).html();
+                if (text !== "Total") {
+                    var amnt = $(this).find('.hdnappendAmount').val();
 
-                var hdnappendhdnItemType = $(this).find(".hdnappendhdnItemType").val();
-                if (hdnappendhdnItemType.replace(/\s/g, '') === "Discount") {
-                    itemstotal = parseFloat(itemstotal) - parseFloat(amnt);
-                }
-                else if (hdnappendhdnItemType.replace(/\s/g, '') === "PayMentReceived") {
-                    // itemstotal = parseFloat(itemstotal) - parseFloat(amnt);
-                }
-                else {
-                    itemstotal = parseFloat(itemstotal) + parseFloat(amnt);
-                }
-
-                newcontent += "<tr >";
-                newcontent += "<td>" + $(this).find("td").eq(0).html(); + " </td >";
-                newcontent += "<td>" + $(this).find("td").eq(1).html(); + " </td >";
-                newcontent += "<td>" + $(this).find("td").eq(2).html(); + " </td >";
-                newcontent += "<td>" + $(this).find("td").eq(3).html(); + " </td >";
-                newcontent += "<td>" + $(this).find("td").eq(4).html(); + " </td >";
-                newcontent += "<td>" + $(this).find("td").eq(5).html(); + " </td >";
-                newcontent += "<td   >";
-
-                var amnt = $(this).find('.hdnappendAmount').val();
-                var hdnAccountCategoryName = $(this).find('.hdnappendhdnAccountCategoryName').val();
-                var hdnappendProductName = $(this).find('.hdnappendProductName').val();
-                var hdnappendMRP = $(this).find('.hdnappendMRP').val();
-                var hdnappendQuantity = $(this).find('.hdnappendQuantity').val();
-                var hdnappendAmount = $(this).find(".hdnappendAmount").val();
-                var hdnappendProductId = $(this).find(".hdnappendProductId").val();
-                var hdnappendProductAccountId = $(this).find(".hdnappendProductAccountId").val();
-
-
-                newcontent += "<input type='hidden' class='hdnappendhdnAccountCategoryName' value=" + hdnAccountCategoryName + " />";
-                newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnappendProductId + " />";
-                newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnappendProductAccountId + " />";
-                newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
-                newcontent += "<input type='hidden' class='hdnappendAmount' value=" + amnt + " />";
-                newcontent += "<input type='hidden' class='hdnappendMRP' value=" + hdnappendMRP + " />";
-                newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + hdnappendQuantity + " />";
-                newcontent += "<input type='hidden' class='hdnappendhdnItemType' value=" + hdnappendhdnItemType + " />";
-                newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
-                newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
-                newcontent += "</td >";
-                newcontent += "</tr >";
-            }
-        });
-
-        //calculate total
-        newcontent += "<tr >";
-        newcontent += "<td ></td >";
-        newcontent += "<td  ></td >";
-        newcontent += "<td  ></td >";
-        newcontent += "<td  ><input type='hidden' id='hdnItemTotal' class='itemstotalhdnclass' value=" + itemstotal + " /></td >";
-        newcontent += "<td  >Total</td >";
-        newcontent += "<td  class='itemstotalclass'>" + numberWithCommas(parseFloat(itemstotal).toFixed(2)) + " </td >";
-        newcontent += "</tr >";
-
-        $('#tbodyitems').empty().append(newcontent);
-        //document.getElementById("ProductsTotal").value = numberWithCommas(parseFloat(itemstotal).toFixed(2));
-        document.getElementById("hdnProductsTotal").value = parseFloat(itemstotal).toFixed(2);
-        document.getElementById("Total").value = parseFloat(itemstotal).toFixed(2);
-    };
-
-            var addVoucherItemRequest = {
-                voucherItemId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                voucherName: "string",
-                data: "string",
-            }
-
-            function UpdateInvoice(e) {
-                // let confirmAction = confirm("Are you sure to delete this product?");
-                let url = "AddVoucherItemVarient";
-                performPostRequest(e, url);
-            }
-
-            function performPostRequest(e, url) {
-                e.preventDefault();
-                let voucherItemId = document.getElementById('VoucherItemId').value;
-                let apiUrl = document.getElementById('apiurl').value;
-                let userId = document.getElementById('userId');
-                let userAccessToken = userId.value;
-
-                let OrderDetl = [];
-                $('#tbodyitems tr').each(function () {
-                    let text = $(this).find("td").eq(4).html();
-                    if (text !== "Total") {
-
-                        let Name = $(this).find("td").eq(1).text().trim();
-                        //let Quantity = parseFloat($(this).find("td").eq(3).html()).toFixed(2);;
-                        let ItemAmount = $(this).find(".hdnappendAmount").val();
-                        let MRPPerUnit = $(this).find(".hdnappendMRP").val();
-                        let Quantity = $(this).find(".hdnappendQuantity").val();
-                        let ProductId = $(this).find(".hdnappendProductId").val();
-                        OrderDetl.push({
-                            'Name': Name,
-                            'VarientId': ProductId,
-                            // 'ProductLedgerId': productLedgerId,
-                            'MRPPerUnit': MRPPerUnit,
-                            'Quantity': Quantity,
-                            'ItemAmount': ItemAmount
-                        });
+                    var hdnappendhdnItemType = $(this).find(".hdnappendhdnItemType").val();
+                    if (hdnappendhdnItemType.replace(/\s/g, '') === "Discount") {
+                        itemstotal = parseFloat(itemstotal) - parseFloat(amnt);
                     }
-                });
+                    else if (hdnappendhdnItemType.replace(/\s/g, '') === "PayMentReceived") {
+                        // itemstotal = parseFloat(itemstotal) - parseFloat(amnt);
+                    }
+                    else {
+                        itemstotal = parseFloat(itemstotal) + parseFloat(amnt);
+                    }
 
-                alert(JSON.stringify(OrderDetl) + '  ' + OrderDetl.length)
+                    newcontent += "<tr >";
+                    newcontent += "<td>" + $(this).find("td").eq(0).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(1).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(2).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(3).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(4).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(5).html(); + " </td >";
+                    newcontent += "<td   >";
 
-                addVoucherItemRequest.voucherItemId = voucherItemId;
-                addVoucherItemRequest.data = JSON.stringify(OrderDetl);
+                    var amnt = $(this).find('.hdnappendAmount').val();
+                    var hdnAccountCategoryName = $(this).find('.hdnappendhdnAccountCategoryName').val();
+                    var hdnappendProductName = $(this).find('.hdnappendProductName').val();
+                    var hdnappendMRP = $(this).find('.hdnappendMRP').val();
+                    var hdnappendQuantity = $(this).find('.hdnappendQuantity').val();
+                    var hdnappendAmount = $(this).find(".hdnappendAmount").val();
+                    var hdnappendProductId = $(this).find(".hdnappendProductId").val();
+                    var hdnappendProductAccountId = $(this).find(".hdnappendProductAccountId").val();
 
-                axios.post(`${apiUrl}/api/VoucherInvoice/` + url, this.addVoucherItemRequest, {
-                    headers: {
-                        Authorization: "Bearer " + userAccessToken
+
+                    newcontent += "<input type='hidden' class='hdnappendhdnAccountCategoryName' value=" + hdnAccountCategoryName + " />";
+                    newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnappendProductId + " />";
+                    newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnappendProductAccountId + " />";
+                    newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
+                    newcontent += "<input type='hidden' class='hdnappendAmount' value=" + amnt + " />";
+                    newcontent += "<input type='hidden' class='hdnappendMRP' value=" + hdnappendMRP + " />";
+                    newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + hdnappendQuantity + " />";
+                    newcontent += "<input type='hidden' class='hdnappendhdnItemType' value=" + hdnappendhdnItemType + " />";
+                    newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
+                    newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
+                    newcontent += "</td >";
+                    newcontent += "</tr >";
+                }
+            });
+
+            //calculate total
+            newcontent += "<tr >";
+            newcontent += "<td ></td >";
+            newcontent += "<td  ></td >";
+            newcontent += "<td  ></td >";
+            newcontent += "<td  ><input type='hidden' id='hdnItemTotal' class='itemstotalhdnclass' value=" + itemstotal + " /></td >";
+            newcontent += "<td  >Total</td >";
+            newcontent += "<td  class='itemstotalclass'>" + numberWithCommas(parseFloat(itemstotal).toFixed(2)) + " </td >";
+            newcontent += "</tr >";
+
+            $('#tbodyitems').empty().append(newcontent);
+            //document.getElementById("ProductsTotal").value = numberWithCommas(parseFloat(itemstotal).toFixed(2));
+            document.getElementById("hdnProductsTotal").value = parseFloat(itemstotal).toFixed(2);
+            document.getElementById("Total").value = parseFloat(itemstotal).toFixed(2);
+        };
+
+        var addVoucherItemRequest = {
+            voucherItemId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            voucherName: "string",
+            data: "string",
+        }
+
+        function UpdateInvoice(e) {
+            // let confirmAction = confirm("Are you sure to delete this product?");
+            let url = "AddVoucherItemVarient";
+            performPostRequest(e, url);
+        }
+
+        function performPostRequest(e, url) {
+            e.preventDefault();
+            let voucherItemId = document.getElementById('VoucherItemId').value;
+            let apiUrl = document.getElementById('apiurl').value;
+            let userId = document.getElementById('userId');
+            let userAccessToken = userId.value;
+
+            let OrderDetl = [];
+            $('#tbodyitems tr').each(function () {
+                let text = $(this).find("td").eq(4).html();
+                if (text !== "Total") {
+
+                    let Name = $(this).find("td").eq(1).text().trim();
+                    let id = $(this).find(".hdnappendProductAccountId").val();
+                    let ItemAmount = $(this).find(".hdnappendAmount").val();
+                    let MRPPerUnit = $(this).find(".hdnappendMRP").val();
+                    let Quantity = $(this).find(".hdnappendQuantity").val();
+                    let ProductId = $(this).find(".hdnappendProductId").val();
+                    if (id === "/") {
+                        id = "00000000-0000-0000-0000-000000000000"
+                    }
+                    OrderDetl.push({
+                        'Name': Name,
+                        'VarientId': ProductId,
+                        'Id': id,
+                        'MRPPerUnit': MRPPerUnit,
+                        'Quantity': Quantity,
+                        'ItemAmount': ItemAmount
+                    });
+                }
+            });
+
+            alert(JSON.stringify(OrderDetl) + '  ' + OrderDetl.length)
+
+            addVoucherItemRequest.voucherItemId = voucherItemId;
+            addVoucherItemRequest.data = JSON.stringify(OrderDetl);
+
+            axios.post(`${apiUrl}/api/VoucherInvoice/` + url, this.addVoucherItemRequest, {
+                headers: {
+                    Authorization: "Bearer " + userAccessToken
+                }
+            })
+                .then(function (response) {
+                    console.log(response);
+                    if (response.data.success) {
+                        toastr.success(response.data.description)
+                        window.location.href = '/MyBooks/VoucherWithItems/index?voucherName=' + voucherName
+                    } else {
+                        toastr.error(response.data.description)
                     }
                 })
-                    .then(function (response) {
-                        console.log(response);
-                        if (response.data.success) {
-                            toastr.success(response.data.description)
-                            window.location.href = '/MyBooks/VoucherWithItems/index?voucherName=' + voucherName
-                        } else {
-                            toastr.error(response.data.description)
-                        }
-                    })
-                    .catch(function (response) {
-                        console.log(response);
-                        toastr.error(response)
-                    });
-            };
+                .catch(function (response) {
+                    console.log(response);
+                    toastr.error(response)
+                });
+        };
 
-</script>
+    </script>
 }

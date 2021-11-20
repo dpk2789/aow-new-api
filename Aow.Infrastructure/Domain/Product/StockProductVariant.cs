@@ -5,6 +5,7 @@ namespace Aow.Infrastructure.Domain
 {
     public class StockProductVariant : Entity<Guid>
     {
+        public Guid? VoucherItemVarientId { get; set; }
         public string UniqueNumber { get; set; }
         public decimal? SalePrice { get; set; }
         public decimal? MRPPerUnit { get; set; }

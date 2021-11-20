@@ -82,9 +82,6 @@ function CalulateCurrentDueVarient() {
     document.getElementById("HdnDue").value = (total - amountTaken).toFixed(2);
 }
 
-
-
-
 function yoCalculateItemsTotalVarient() {
     //var BatchId = $('#BatchId').val();
     //var BatchIdName = $("#BatchId option:selected").text();
