@@ -78,16 +78,17 @@ namespace Aow.Services.VoucherInvoice
                             ProductVariantId = item.VarientId
                         };
                         _repoWrapper.VoucherItemVarientRepo.Create(varient);
-                        var retriveStock = await _repoWrapper.StockRepo.GetStockByVoucherItemId(voucherItem.Id);
-                        //if (retriveStock != null)
-                        //{
-                        //    foreach (var stock in retriveStock)
-                        //    {
-                        //        _repoWrapper.StockRepo.Delete(stock);
-                        //    }
-                        //}
-                        var getStock = retriveStock.FirstOrDefault();
-                        var stockVarient = new Aow.Infrastructure.Domain.StockProductVariant
+                        var retriveStocks = await _repoWrapper.StockRepo.GetStockByVoucherItemId(voucherItem.Id);
+                        var getStock = retriveStocks.FirstOrDefault();
+                        if (retriveStocks != null)
+                        {                            
+                            foreach (var stockVarient in getStock.StockProductVariants)
+                            {
+                                _repoWrapper.StockVarientRepo.Delete(stockVarient);
+                            }
+                        }
+                      
+                        var stockVarientNew = new Aow.Infrastructure.Domain.StockProductVariant
                         {
                             Id = Guid.NewGuid(),
                             MRPPerUnit = item.MRPPerUnit,
@@ -97,7 +98,7 @@ namespace Aow.Services.VoucherInvoice
                             ItemAmount = item.ItemAmount,
                             StockId = getStock.Id
                         };
-                        _repoWrapper.StockVarientRepo.Create(stockVarient);
+                        _repoWrapper.StockVarientRepo.Create(stockVarientNew);
                         srnoItem++;
                     }
                 }
