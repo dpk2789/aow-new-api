@@ -36,6 +36,18 @@ namespace WebApp.API.Controllers
             return Ok(response);
         }
 
+        [HttpPut("api/Stocks/UpdateStock")]
+        public async Task<IActionResult> UpdateStock([FromBody] UpdateStock.UpdateStockRequest request, [FromServices] UpdateStock updateFinancialYear)
+        {
+            var response = await updateFinancialYear.Do(request);
+
+            if (response == null)
+            {
+                return BadRequest("Failed to update");
+            }
+            return Ok(response);
+        }
+
         [HttpDelete("api/Stocks/DeleteStock")]
         public async Task<IActionResult> DeleteStock(Guid id, [FromServices] DeleteStock deleteFinancialYear)
         {

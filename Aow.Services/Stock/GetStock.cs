@@ -16,8 +16,11 @@ namespace Aow.Services.Stock
             public Guid Id { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
-            public decimal Value { get; set; }
-            public Guid ProductCategoryId { get; set; }         
+            public decimal? MRPPerUnit { get; set; }
+            public decimal? Quantity { get; set; }
+            public decimal? ItemAmount { get; set; }
+            public decimal Price { get; set; }
+            public Guid ProductCategoryId { get; set; }
         }
         public GetStockResponse Do(Guid Id)
         {
@@ -28,8 +31,9 @@ namespace Aow.Services.Stock
             }
             GetStockResponse getProductViewModel = new GetStockResponse
             {
-                Id = stock.Id,                
-                Name = stock.Product.Name
+                Id = stock.Id,
+                Name = stock.Product.Name,
+                Quantity = stock.Quantity
             };
             return getProductViewModel;
         }

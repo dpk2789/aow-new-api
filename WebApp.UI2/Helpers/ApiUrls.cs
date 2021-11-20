@@ -81,6 +81,7 @@
         public static class Stock
         {
             public const string GetStocks = Rootlocal + "/api/Stocks/GetStocks";
+            public const string GetStock = Rootlocal + "/api/Stocks/GetStock";
         }
 
         public static class LedgerCategories

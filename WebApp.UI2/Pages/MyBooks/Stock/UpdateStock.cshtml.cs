@@ -40,7 +40,7 @@ namespace WebApp.UI2.Pages.MyBooks.Stock
             public decimal Price { get; set; }
             public Guid? VoucherItemId { get; set; }
         }
-        public IEnumerable<UpdateStockViewModel> UpdateStock { get; set; }
+        [BindProperty] public UpdateStockViewModel Input { get; set; }
         public async Task<IActionResult> OnGet(Guid Id)
         {
             var cmpid = _cookieHelper.Get("cmpCookee");
@@ -58,8 +58,8 @@ namespace WebApp.UI2.Pages.MyBooks.Stock
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             if (resultuerinfo != null)
             {
-                var data = JsonConvert.DeserializeObject<IEnumerable<UpdateStockViewModel>>(resultuerinfo);
-                UpdateStock = data;
+                var data = JsonConvert.DeserializeObject<UpdateStockViewModel>(resultuerinfo);
+                Input = data;
             }
             return Page();
         }

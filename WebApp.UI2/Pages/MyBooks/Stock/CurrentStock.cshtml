@@ -97,7 +97,7 @@
 @section scripts{
     <script>
         $(document).ready(function () {
-            DataTableInit();           
+            DataTableInit();
         });
 
         function DataTableInit() {
@@ -119,16 +119,16 @@
                     {
                         'data': 'Options',
                         'render': function (data, type, row) {
-                            let id = '"' + row.id + '"';
-                            let hid = " <input type='hidden' class='hdnDailyId' value='" + row.id + "' />";
+                            let id =  row.id ;
+                            var url = '/MyBooks/Stock/UpdateStock/?Id=' + id;
                             /**/
-                            let update = "<a onclick='confirmAction(event)' data-stock-id=" + row.id + " type='button' class='btn btn-warning btn-sm' >Update</a>";
+                            let update = '<a class="btn btn-warning btn-sm" href=' + url + '>Update </a>';
                             let delet = "<a onclick='confirmAction(event)' data-stock-id=" + row.id + " type='button' class='btn btn-danger btn-sm' style='margin-left: 10px'>Delete</a>";
                             /**/
-                            return hid + update+ delet;
+                            return  update+ delet;
                         }
                     },
-                ],                
+                ],
             });
 
             // Add event listener for opening and closing details
@@ -193,7 +193,7 @@
         };
         var apiUrl = '@Model.ApiUrl';
 
-        var removeProduct = function (e) {            
+        var removeProduct = function (e) {
             let fyrId = e.target.dataset.stockId;
             let el = document.getElementById('userId');
             let userAccessToken = el.value;

@@ -18,7 +18,7 @@ namespace Aow.Infrastructure.Repositories
 
         public Stock GetStock(Guid Id)
         {
-            return FindByCondition(x => x.Id == Id).FirstOrDefault();
+            return FindByCondition(x => x.Id == Id).Include(x => x.Product).FirstOrDefault();
         }
         public async Task<List<Stock>> GetStockByVoucherItemId(Guid VoucherItemId)
         {
