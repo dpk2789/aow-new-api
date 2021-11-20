@@ -148,15 +148,18 @@ $('.btnadd').on("click", function (e) {
             let hdnappendProductId = $(this).find(".hdnappendProductId").val();
             let hdnappendhdnStoreItemId = $(this).find(".hdnappendhdnStoreItemId").val();
             let hdnappendProductAccountId = $(this).find(".hdnappendProductAccountId").val();
-            // let hdnappenItemDesc = $(this).find(".hdnappenItemDesc").val();
-            let hdnappenItemDesc = $(this).find("td").eq(2).html().replace(/(\s+&\s+|\s+)/g,'-');
+            let hdnappenItemDesc = $(this).find(".hdnappenItemDesc").val();
+            if (hdnappenItemDesc != undefined  ) {
+                hdnappenItemDesc.replace(/(\s+&\s+|\s+)/g, '-');
+            }
+            //  let hdnappenItemDesc = $(this).find("td").eq(2).html().replace(/(\s+&\s+|\s+)/g,'-');
 
             newcontent += "<input type='hidden' class='hdnappendhdnAccountCategoryName' value=" + hdnAccountCategoryName + " />";
             newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnappendProductId + " />";
             newcontent += "<input type='hidden' class='hdnappendBatchId' value=" + hdnBatchId + " />";
             newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnappendProductAccountId + " />";
             newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
-            newcontent += '<input type=hidden class=hdnappenItemDesc value=' + hdnappenItemDesc + ' />';
+            newcontent += "<input type='hidden' class='hdnappenItemDesc' value=" + hdnappenItemDesc + " />";
             newcontent += "<input type='hidden' class='hdnappendAmount' value=" + amnt + " />";
             newcontent += "<input type='hidden' class='hdnappendMRP' value=" + hdnappendMRP + " />";
             newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + hdnappendQuantity + " />";
