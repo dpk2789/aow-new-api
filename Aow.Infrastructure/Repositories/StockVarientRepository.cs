@@ -20,6 +20,10 @@ namespace Aow.Infrastructure.Repositories
             return FindByCondition(x => x.Id == Id).FirstOrDefault();
         }
 
+        public StockProductVariant GetStockVarientByVoucherVarient(Guid Id)
+        {
+            return FindByCondition(x => x.VoucherItemVarientId == Id).FirstOrDefault();
+        }
         public Task<PagedList<StockProductVariant>> GetStockVarients(PagingParameters ownerParameters, Guid stockId)
         {
             return Task.FromResult(PagedList<StockProductVariant>.ToPagedList(FindAll().Include(x => x.Stock).

@@ -106,7 +106,7 @@ namespace Aow.Services.VoucherInvoice
                             voucherItemVrient.ItemAmount = item.ItemAmount;
                             _repoWrapper.VoucherItemVarientRepo.Update(voucherItemVrient);
 
-                            var stockVarient = _repoWrapper.StockVarientRepo.GetStockVarient(voucherItemVrient.Id);
+                            var stockVarient = _repoWrapper.StockVarientRepo.GetStockVarientByVoucherVarient(voucherItemVrient.Id);
                             if (stockVarient != null)
                             {
                                 stockVarient.MRPPerUnit = item.MRPPerUnit;
@@ -131,13 +131,13 @@ namespace Aow.Services.VoucherInvoice
                             }
 
                         }
-                        if (retriveStocks != null)
-                        {
-                            foreach (var stockVarient in getStock.StockProductVariants)
-                            {
-                                _repoWrapper.StockVarientRepo.Delete(stockVarient);
-                            }
-                        }
+                        //if (retriveStocks != null)
+                        //{
+                        //    foreach (var stockVarient in getStock.StockProductVariants)
+                        //    {
+                        //        _repoWrapper.StockVarientRepo.Delete(stockVarient);
+                        //    }
+                        //}
 
                         srnoItem++;
                     }

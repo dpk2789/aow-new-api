@@ -10,5 +10,6 @@ namespace Aow.Infrastructure.IRepositories
     {
         Task<PagedList<StockProductVariant>> GetStockVarients(PagingParameters ownerParameters, Guid stockId);
         StockProductVariant GetStockVarient(Guid Id);
+        StockProductVariant GetStockVarientByVoucherVarient(Guid Id);
     }
 }
