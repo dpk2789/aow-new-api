@@ -62,7 +62,20 @@ namespace Aow.Services.VoucherInvoice
                 if (request.data != null)
                 {
                     var deserialiseList = JsonConvert.DeserializeObject<List<AddVoucherItemVarientRequest>>(request.data);
-
+                    foreach (var item in voucherItem.VoucherItemVariants)
+                    {
+                        if (!deserialiseList.Any(x => x.Id == item.Id))
+                        {
+                            var voucherItemVarient = voucherItem.VoucherItemVariants.FirstOrDefault(x => x.Id == item.Id);
+                            if (voucherItemVarient != null)
+                            {
+                                _repoWrapper.VoucherItemVarientRepo.Delete(voucherItemVarient);
+                            }
+                            //stock deletion after voucher item delete from ui
+                            var retriveStockVarient =  _repoWrapper.StockVarientRepo.GetStockVarientByVoucherVarient(voucherItemVarient.Id);                         
+                            _repoWrapper.StockVarientRepo.Delete(retriveStockVarient);
+                        }
+                    }
                     foreach (var item in deserialiseList)
                     {
                         var retriveStocks = await _repoWrapper.StockRepo.GetStockByVoucherItemId(voucherItem.Id);

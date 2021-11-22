@@ -24,6 +24,13 @@ namespace WebApp.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("api/VoucherInvoice/GetAllVoucherVarients")]
+        public async Task<IActionResult> GetAllVoucherVarients([FromQuery] Guid id, [FromServices] GetAllVoucherVarients getVoucher)
+        {
+            var result = await getVoucher.Do(id);
+            return Ok(result);
+        }
+
         [HttpPost("api/VoucherInvoice/AddVoucherInvoice")]
         public async Task<ActionResult> Add([FromBody] AddVoucherWithItems.AddVoucherInvoiceRequest request, [FromServices] AddVoucherWithItems addFinancialYear)
         {

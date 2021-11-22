@@ -48,7 +48,7 @@ namespace Aow.Services.ProductAttributeOptions
                     Id = attribute.Id,
                     Name = attribute.Name,
                     IsChecked = false,
-                    AttributesOptionsViewModels = attribute.ProductAttributeOptions.Select(x => new AttributesOptionsByProductResponse
+                    AttributesOptionsViewModels = attribute.ProductAttributeOptions.OrderBy(x => x.Name).Select(x => new AttributesOptionsByProductResponse
                     {
                         Id = x.Id,
                         Name = x.Name,
