@@ -2,8 +2,8 @@
 {
     public static class ApiUrls
     {
-        public const string Rootlocal = "https://localhost:44329";
-        //public const string Rootlocal = "http://aownewapi.accountingonweb.com";
+      // public const string Rootlocal = "https://localhost:44329";
+        public const string Rootlocal = "http://aownewapi.accountingonweb.com";
         public static class Identity
         {
             public const string Login = Rootlocal + "/api/user/login";

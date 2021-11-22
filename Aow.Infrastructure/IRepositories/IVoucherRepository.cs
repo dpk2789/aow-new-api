@@ -10,6 +10,7 @@ namespace Aow.Infrastructure.IRepositories
     {
         Task<Voucher> GetVoucherForStock(Guid Id);
         Task<PagedList<Voucher>> GetVouchers(PagingParameters ownerParameters, string voucherName, Guid companyId);
+        Task<Voucher> GetVoucherVairents(Guid Id);
         Task<Voucher> GetVoucher(Guid Id);
         Task<Voucher> GetVoucherForDelete(Guid Id);
     }

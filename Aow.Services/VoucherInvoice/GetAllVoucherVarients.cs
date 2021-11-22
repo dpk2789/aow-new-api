@@ -13,42 +13,60 @@ namespace Aow.Services.VoucherInvoice
         {
             _repoWrapper = repoWrapper;
         }
+        public class VoucherAllVarientResponse
+        {
+            public Guid? Id { get; set; }
+            public string VoucherName { get; set; }
+            public string VoucherNumber { get; set; }
+            public DateTime? Date { get; set; }
+            public decimal? ItemsTotal { get; set; }
+            public virtual List<GetAllVoucherVarientsResponse> VoucherItemVarients { get; set; }
+        }
         public class GetAllVoucherVarientsResponse
         {
             public Guid Id { get; set; }
-            public Guid? FinancialYearId { get; set; }
-            public string VoucherNumber { get; set; }
-            public int VoucherTypeId { get; set; }
-            public string VoucherName { get; set; }
-            public DateTime Date { get; set; }
-            public Guid LedgerId { get; set; }
-            public string LedgerName { get; set; }
-            public string RefId { get; set; }
-            public string Note { get; set; }
-            public decimal Total { get; set; }
-            public decimal ItemsTotal { get; set; }
-            public decimal SundryTotal { get; set; }
-            public bool? Type { get; set; }
+            public Guid? ItemId { get; set; }
+            public int? SrNo { get; set; }
+            public decimal? DiscountRatePerUnit { get; set; }
+            public decimal? MRPPerUnit { get; set; }
+            public decimal? Rate { get; set; }
+            public decimal? Quantity { get; set; }
+            public decimal? ItemAmount { get; set; }
+            public string ItemName { get; set; }
+            public string VarientName { get; set; }
+            public string Description { get; set; }
+            public decimal Price { get; set; }
+            public Guid ProductId { get; set; }
         }
 
-        public async Task<IEnumerable<GetAllVoucherVarientsResponse>> Do(Guid id)
+        public async Task<VoucherAllVarientResponse> Do(Guid id)
         {
-            var voucher = await _repoWrapper.VoucherRepo.GetVoucher(id);
+            var voucher = await _repoWrapper.VoucherRepo.GetVoucherVairents(id);
             var varientList = new List<GetAllVoucherVarientsResponse>();
-
+            VoucherAllVarientResponse voucherAllVarientResponse = new VoucherAllVarientResponse();
+            voucherAllVarientResponse.Id = voucher.Id;
+            voucherAllVarientResponse.VoucherName = voucher.VoucherName;
+            voucherAllVarientResponse.VoucherNumber = voucher.VoucherNumber;
             foreach (var item in voucher.VoucherItems)
             {
                 foreach (var varient in item.VoucherItemVariants)
                 {
-                    GetAllVoucherVarientsResponse getAllVoucherVarientsResponse = new GetAllVoucherVarientsResponse();
-                    getAllVoucherVarientsResponse.Id = varient.Id;
-
+                    GetAllVoucherVarientsResponse getAllVoucherVarientsResponse = new GetAllVoucherVarientsResponse
+                    {
+                        Id = varient.Id,
+                        ItemId = item.Id,
+                        VarientName = varient.ProductVariant.Name,
+                        ItemName = varient.ProductVariant.Products.Name,
+                        Rate = item.MRPPerUnit,
+                        Quantity = varient.UnitQuantity,
+                        ItemAmount = varient.ItemAmount,
+                        Description = item.Description
+                    };
                     varientList.Add(getAllVoucherVarientsResponse);
-
                 }
             }
-
-            return varientList;
+            voucherAllVarientResponse.VoucherItemVarients = varientList;
+            return voucherAllVarientResponse;
         }
     }
 }

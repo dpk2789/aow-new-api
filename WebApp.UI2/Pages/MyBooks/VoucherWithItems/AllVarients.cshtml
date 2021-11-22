@@ -1,4 +1,163 @@
 ﻿@page
 @model WebApp.UI2.Pages.MyBooks.VoucherWithItems.AllVarientsModel
 @{
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0"><i class="fa fa-2x fa-cubes"></i>Varients </h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-page="/MyBooks/Products/Index">Products</a></li>
+                        <li class="breadcrumb-item active">Varients </li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+
+                            <h3 class="card-title">
+                                @Model.Input.VoucherName-@Model.Input.VoucherNumber
+                            </h3>
+                        </div>
+
+                        <!-- /.card-header -->
+                        <div class="card-body" id="product-main">
+                            <input type="hidden" value="@userId" id="userId" />
+                            <input type="hidden" value="@ViewBag.ProductId" id="ProductId" />
+                            <div class="card-body" id="product-main">
+                                @if (Model.Input.VoucherItemVarients != null)
+                                {
+                                    <div id="resultTable">
+                                        <table id="VarientsTable" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Product</th>
+                                                    <th>Varient</th>
+                                                    <th>Description</th>
+                                                    <th>Quantity</th>
+                                                    <th>Rate</th>
+                                                    <th>Amount</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var varient in Model.Input.VoucherItemVarients)
+                                                {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => varient.ItemName)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => varient.VarientName)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => varient.Description)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => varient.Quantity)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => varient.Rate)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => varient.ItemAmount)
+                                                    </td>
+                                                    <td>
+                                                        <a asp-route-id="@varient.ItemId" asp-route-voucherId="@Model.Input.Id"
+                                                           asp-page="/MyBooks/VoucherWithItems/AddVoucherItemVarient" class="btn btn-sm btn-outline-primary"><i class="fas fa-cubes"></i></a>
+
+                                                        <button onclick="confirmAction(event)" data-varient-id="@varient.Id" type="button" class="btn-danger small">Delete</button>
+                                                    </td>
+                                                </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section scripts{
+    <script>
+    var apiUrl = '@Model.ApiUrl';
+    $(function () {
+        DataTableInit();
+    });
+
+    function DataTableInit() {
+        $("#VarientsTable").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#VarientsTable_wrapper .col-md-6:eq(0)');
+    }
+
+    function confirmAction(e) {
+        let confirmAction = confirm("Are you sure to delete this varient?");
+        if (confirmAction) {
+            //  alert("Action successfully executed");
+            removeProduct(e);
+        } else {
+            alert("Action canceled");
+        }
+    };
+
+    var getVarients = function () {
+        let productId = document.getElementById('ProductId').value;
+         axios.get('/Partials/GetVarientsListPartialView?id=' + productId)
+            .then(res => {
+                var html = res.data;
+                var el = document.getElementById('resultTable');
+                el.outerHTML = html;
+                DataTableInit();
+                console.log(res);
+            })
+    }
+
+    var removeProduct = function (e) {
+        let varientId = e.target.dataset.varientId;
+        let el = document.getElementById('userId');
+        let userAccessToken = el.value;
+        console.log(varientId);
+
+        axios.delete(apiUrl + "/api/ProductVarients/DeleteProductVarient?id=" + varientId, {
+            headers: {
+                Authorization: "Bearer " + userAccessToken
+            }
+        }).then(res => {
+            console.log(res);
+            if (res.data.success) {
+                toastr.success(res.data.message)
+            }
+            getVarients();
+        })
+            .catch(err => {
+                alert(err.error);
+            })
+
+    }
+
+    </script>
 }

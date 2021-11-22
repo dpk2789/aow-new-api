@@ -27,12 +27,18 @@ namespace Aow.Infrastructure.Repositories
             Include(x => x.VoucherSundryItems).ThenInclude(x => x.Product).ThenInclude(x => x.Ledger).
             Include(x => x.VoucherItems).ThenInclude(x => x.Product).FirstOrDefaultAsync();
             return result;
-        }       
+        }
 
         public async Task<Voucher> GetVoucherForDelete(Guid Id)
         {
             var result = await FindByCondition(x => x.Id == Id).Include(x => x.JournalEntries).Include(x => x.VoucherSundryItems).
             Include(x => x.VoucherItems).FirstOrDefaultAsync();
+            return result;
+        }
+        public async Task<Voucher> GetVoucherVairents(Guid Id)
+        {
+            var result = await FindByCondition(x => x.Id == Id).Include(x => x.VoucherItems).
+                ThenInclude(x => x.VoucherItemVariants).ThenInclude(x => x.ProductVariant).ThenInclude(x => x.Products).FirstOrDefaultAsync();
             return result;
         }
 

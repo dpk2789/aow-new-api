@@ -13,18 +13,40 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
 {
     public class AllVarientsModel : PageModel
     {
+        public string ApiUrl { get; }
+        private readonly ICookieHelper _cookieHelper;
+        public AllVarientsModel(ICookieHelper cookieHelper)
+        {
+            ApiUrl = ApiUrls.Rootlocal;
+            _cookieHelper = cookieHelper;
+        }
+        public class VoucherViewModel
+        {
+            public Guid? Id { get; set; }         
+            public string VoucherName { get; set; }
+            public string VoucherNumber { get; set; }
+            public DateTime? Date { get; set; }
+            public decimal? ItemsTotal { get; set; }
+            public virtual List<AllVarientsViewModel> VoucherItemVarients { get; set; }        
+        }
         public class AllVarientsViewModel
         {
             public Guid Id { get; set; }
+            public Guid? ItemId { get; set; }
             public int? SrNo { get; set; }
-            public decimal ItemsTotal { get; set; }
+            public decimal? DiscountRatePerUnit { get; set; }
+            public decimal? MRPPerUnit { get; set; }
+            public decimal? Rate { get; set; }
+            public decimal? Quantity { get; set; }
+            public decimal? ItemAmount { get; set; }
             public string ItemName { get; set; }
+            public string VarientName { get; set; }
+            public string Description { get; set; }
+            public decimal Price { get; set; }
             public Guid ProductId { get; set; }
-            public Guid VoucherId { get; set; }
-            public string PurchasePrice { get; set; }          
         }
         [BindProperty]
-        public IEnumerable<AllVarientsViewModel> CurrentStock { get; set; }
+        public VoucherViewModel Input { get; set; }
         public async Task<IActionResult> OnGet(Guid Id)
         {
             using var client = new HttpClient();
@@ -36,8 +58,8 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             if (resultuerinfo != null)
             {
-                var data = JsonConvert.DeserializeObject<IEnumerable<AllVarientsViewModel>>(resultuerinfo);
-                CurrentStock = data;
+                var data = JsonConvert.DeserializeObject<VoucherViewModel>(resultuerinfo);
+                Input = data;
             }
             return Page();          
         }

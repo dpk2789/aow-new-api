@@ -18,7 +18,7 @@ namespace Aow.Infrastructure.Repositories
         {
             return FindByCondition(x => x.Id == Id).FirstOrDefault();
         }
-
+       
         public Task<PagedList<VoucherItemVariant>> GetVoucherItemVarients(PagingParameters ownerParameters, Guid voucherItemId)
         {
             return Task.FromResult(PagedList<VoucherItemVariant>.ToPagedList(FindAll().Where(x => x.VoucherItem.Id == voucherItemId),
