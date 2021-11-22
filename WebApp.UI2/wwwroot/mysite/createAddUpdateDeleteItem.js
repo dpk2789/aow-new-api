@@ -473,11 +473,15 @@ function yoCalculateItemsTotal() {
             var hdnappendAmount = $(this).find(".hdnappendAmount").val();
             var hdnappendProductId = $(this).find(".hdnappendProductId").val();
             var hdnappendProductAccountId = $(this).find(".hdnappendProductAccountId").val();
-
+            let hdnappenItemDesc = $(this).find(".hdnappenItemDesc").val();
+            if (hdnappenItemDesc != undefined) {
+                hdnappenItemDesc.replace(/(\s+&\s+|\s+)/g, '-');
+            }
 
             newcontent += "<input type='hidden' class='hdnappendhdnAccountCategoryName' value=" + hdnAccountCategoryName + " />";
             newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnappendProductId + " />";
             newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnappendProductAccountId + " />";
+            newcontent += "<input type='hidden' class='hdnappenItemDesc' value=" + hdnappenItemDesc + " />";
             newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
             newcontent += "<input type='hidden' class='hdnappendAmount' value=" + amnt + " />";
             newcontent += "<input type='hidden' class='hdnappendMRP' value=" + hdnappendMRP + " />";
@@ -503,7 +507,7 @@ function yoCalculateItemsTotal() {
     $('#tbodyitems').empty().append(newcontent);
     //document.getElementById("ProductsTotal").value = numberWithCommas(parseFloat(itemstotal).toFixed(2));
     document.getElementById("hdnProductsTotal").value = parseFloat(itemstotal).toFixed(2);
-    document.getElementById("Total").value = parseFloat(itemstotal).toFixed(2);
+    document.getElementById("Input_Total").value = parseFloat(itemstotal).toFixed(2);
 };
 
 $("#tbodyitems").on('click', '.edit', function (e) {

@@ -129,6 +129,7 @@ namespace Aow.Services.VoucherInvoice
                         var deserialiseList = JsonConvert.DeserializeObject<List<UpdateVoucherInvoiceSundryItems>>(request.data2);
                         foreach (var sundryItem in deserialiseList)
                         {
+                            srno++;
                             var product = _repoWrapper.ProductRepo.GetProduct(sundryItem.ProductId);
                             var voucherSundryItem = new Aow.Infrastructure.Domain.VoucherSundryItem
                             {
@@ -140,20 +141,21 @@ namespace Aow.Services.VoucherInvoice
                                 VoucherId = updateVoucher.Id
                             };
                             _repoWrapper.VoucherSundryItemRepo.Create(voucherSundryItem);
-                            srno++;
+                          
                             var jEntryDebitTax = new Aow.Infrastructure.Domain.JournalEntry
                             {
                                 Id = Guid.NewGuid(),
                                 VoucherId = updateVoucher.Id,
                                 VoucherName = request.voucherName,
                                 Date = date,
-                                SrNo = srno + 1,
+                                SrNo = srno,
                                 LedgerId = product.LedgerId.Value,
                                 CrDrType = "Dr",
                                 VoucherNumber = request.Invoice,
                                 DebitAmount = sundryItem.ItemAmount
                             };
                             _repoWrapper.JournalEntryRepo.Create(jEntryDebitTax);
+                     
                         }
                     }
 
