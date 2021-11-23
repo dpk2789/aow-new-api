@@ -7,6 +7,7 @@ namespace Aow.Infrastructure.Domain
     {
         public Guid? VoucherItemVarientId { get; set; }
         public string UniqueNumber { get; set; }
+        public string Status { get; set; }
         public decimal? SalePrice { get; set; }
         public decimal? MRPPerUnit { get; set; }
         public decimal? Quantity { get; set; }
