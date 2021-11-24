@@ -90,7 +90,7 @@
                                                     <input type="text" id="txtStoreItem" class="ui-autocomplete-input form-control" data-url="@Url.Action("GetVarientsForManufacturing", "Vouchers")" 
                                                            placeholder="Enter Product" />
                                                     <input type="hidden" id="hdnStoreItemId" class="form-control" />
-                                                    <input type="hidden" id="hdnProductId" class="form-control" />
+                                                    <input type="hidden" id="hdnVarientId" class="form-control" />
                                                     <input type="hidden" id="hdnProductAccountId" class="form-control" />
                                                     <input type="hidden" id="hdnAccountCategoryName" class="form-control  hdnAccountCategoryName" />
                                                     <input type="hidden" id="hdnItemType" class="form-control  hdnItemType" />
@@ -270,7 +270,7 @@
             },
             appendTo: $(".modal-body ui-autocomplete-input"),
             select: function (event, ui) {
-                $("#hdnProductId").val(ui.item.id);
+                $("#hdnVarientId").val(ui.item.id);
                 $("#txtDescription").val(ui.item.autoGenerateName);
                 $('#txtDescription').focus()
                 if (ui.item.Itemtype === "Taxation") {
