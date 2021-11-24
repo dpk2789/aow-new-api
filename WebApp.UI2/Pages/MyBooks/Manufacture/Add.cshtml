@@ -1,0 +1,598 @@
+﻿@page
+@model WebApp.UI2.Pages.MyBooks.Manufacture.AddModel
+@{
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Manufacture Form</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/MyBooks/Manufacture/index">Manufacture</a></li>
+                        <li class="breadcrumb-item active">Add Manufacture</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content-header -->
+
+    <section class="content">
+        <div class="container-fluid">
+            <!-- SELECT2 EXAMPLE -->
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title">Add Manufacture</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <form method="post" enctype="multipart/form-data" id="questionForm">
+                                <input type="hidden" value="@Model.Input.FinancialYearId" id="financialYearId" />
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <input type="hidden" value="@userId" id="userId" />
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-horizontal">
+
+                                    <div class="form-row">
+                                        @*<div class="form-group col-md-6">
+                                                <label for="inputEmail4">Name</label>
+                                                @Html.EditorFor(model => model.VoucherName, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.VoucherName, "", new { @class = "text-danger" })
+                                            </div>*@
+                                        <div class="form-group col-md-6">
+                                            <label for="inputPassword4">Date </label>
+                                            <input type="text" class="form-control" name="Date" id="Date"
+                                                   data-toggle="datetimepicker" data-target="#Date" autocomplete="off">
+                                            <span asp-validation-for="Input.Date" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label asp-for="Input.VoucherNumber" class="control-label"></label>
+                                            <input asp-for="Input.VoucherNumber" class="form-control" />
+                                            <span asp-validation-for="Input.VoucherNumber" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                    <div id="resultTable">
+                                        <h2>Input</h2>
+                                        <table class="table table-hover table-bordered table-responsive table-striped">
+                                            <tr>
+                                                <td>S.No</td>
+                                                <td>Item Name</td>
+                                                <td>Description</td>
+                                                <td>Quantity</td>
+                                                <td>Rate</td>
+                                                <td>Amount</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtStoreItem" class="ui-autocomplete-input form-control" data-url="@Url.Action("GetVarientsForManufacturing", "Vouchers")" 
+                                                           placeholder="Enter Product" />
+                                                    <input type="hidden" id="hdnStoreItemId" class="form-control" />
+                                                    <input type="hidden" id="hdnProductId" class="form-control" />
+                                                    <input type="hidden" id="hdnProductAccountId" class="form-control" />
+                                                    <input type="hidden" id="hdnAccountCategoryName" class="form-control  hdnAccountCategoryName" />
+                                                    <input type="hidden" id="hdnItemType" class="form-control  hdnItemType" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtDescription" class="form-control" placeholder="Description" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtQuantity" class="form-control" placeholder="Quantity" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtMRP" class="form-control" maxlength="7" placeholder="MRP" onchange="recalculateExtendedPrice()" />
+
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtAmount" class="form-control  txtAmount" placeholder="Amount" value="0" />
+                                                    <input type="hidden" id="hdnAmount" class="form-control  hdnAmount" />
+                                                </td>
+                                                <td>
+                                                    <input id="btnAdd" type="button" value="Add" class="btn btn-primary btn-sm btnadd" />
+                                                    @*<a href="#" class="glyphicon glyphicon-pencil btnadd" id="btnadd" title="Add"></a>*@
+                                                    <a href="#" class="glyphicon glyphicon-edit btnupdate" id="btnupdate" title="Edit" style="display:none;"></a>
+                                                    <a href="#" class="glyphicon glyphicon-erase btnnew" id="btnnew" title="New" style="display:none;"></a>
+                                                </td>
+                                            </tr>
+                                            <tbody id="tbodyitems" class="tbodyitems bordered"></tbody>
+                                        </table>
+                                    </div>
+                                    <div id="resultTableOutput">
+                                        <h2>Output</h2>
+                                        <table class="table table-hover table-responsive table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <td class="col-md-1">S.No</td>
+                                                    <td class="col-md-2">Varient Name</td>
+                                                    <td class="col-md-2">Description</td>
+                                                    <td class="col-md-2">Amount</td>
+                                                    <td class="col-md-2">Unit Quantity</td>
+                                                    <td class="col-md-2">Total</td>
+                                                    <td></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" id="txtStoreItem" class="ui-autocomplete-input form-control" data-url="@Url.Action("GetVarientsForInvoice", "Vouchers")" placeholder="Enter Product" />
+                                                        <input type="hidden" id="hdnStoreItemId" class="form-control" />
+                                                        <input type="hidden" id="hdnProductId" class="form-control" />
+                                                        <input type="hidden" id="hdnProductAccountId" class="form-control" />
+                                                        <input type="hidden" id="hdnAccountCategoryName" class="form-control  hdnAccountCategoryName" />
+                                                        <input type="hidden" id="hdnItemType" class="form-control  hdnItemType" />
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" id="txtDescription" class="form-control" placeholder="Description" />
+
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" id="txtMRP" class="form-control" maxlength="7" placeholder="MRP" />
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" id="txtQuantity" class="form-control" onchange="recalculateExtendedPrice()" placeholder="Quantity" />
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" id="txtAmount" class="form-control  txtAmount" placeholder="Amount" value="0" />
+                                                        <input type="hidden" id="hdnAmount" class="form-control  hdnAmount" />
+                                                    </td>
+                                                    <td>
+                                                        <input id="btnAdd" type="button" value="Add" class="btn btn-primary btn-sm btnadd" />
+                                                        @*<a href="#" class="glyphicon glyphicon-pencil btnadd" id="btnadd" title="Add"></a>*@
+                                                        <a href="#" class="fa fa-edit btnupdate" id="btnupdate" title="Edit" style="display:none;"></a>
+                                                        <a href="#" class="fa fa-erase btnnew" id="btnnew" title="New" style="display:none;"></a>
+                                                    </td>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id="tbodyitems" class="tbodyitems bordered">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            @Html.TextAreaFor(model => model.Input.Note, new { id = "editor1", @class = "form-control", @placeholder = "Enter Note", style = "padding-left: 0px;" })
+                                            @*@Html.TextAreaFor(model => model.Note, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter Note" } })*@
+                                            @Html.ValidationMessageFor(model => model.Input.Note, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                    <!-- /.row -->
+
+
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <span>
+                        <img id="loading" style="display: none;" src="~/gif/ajax-loader.gif" />
+                    </span>
+                    <button onclick="AddJournalEntries(event)" id="SaveClose" class="btn btn-info float-right" style="margin-left:20px">Save</button>
+                    <button id="SaveNext" class="btn btn-default float-right">Cancel</button>
+                </div>
+            </div>
+            <!-- /.card -->
+
+        </div>
+        <!-- /.container-fluid -->
+
+
+    </section>
+
+</div>
+
+@section Scripts {
+    <script>
+
+        function numberWithCommas(n) {
+            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function ClearItemAdd() {
+            $('#txtDescription').val('');
+            $('#txtStoreItem').val('');
+            $('#hdnStoreItemId').val('');
+            $('#hdnProductId').val('');
+            $('#txtMRP').val('');
+            $('#txtQuantity').val('');
+            $('#txtAmount').val('');
+            $('#btnupdate').hide();
+            $('#btnnew').hide();
+            $('#btnadd').show();
+        }
+
+        function ClearOthers() {
+            $('#Head').val('');
+            $('#Invoice').val('');
+            $('#Date').val('');
+            $('#Particular').val('');
+            $('#ParticularId').val('');
+            $('#CustomerName').val('');
+            $('#Total').val('');
+            $('#MembershipId').val('');
+            //  $('#Net').val('');
+        };
+
+        function recalculateExtendedPrice() {
+            var quantity = parseFloat(document.getElementById("txtQuantity").value).toFixed(0);
+            var unitPrice = parseFloat(document.getElementById("txtMRP").value).toFixed(2);
+
+            if (isNaN(quantity)) {
+                quantity = 1;
+            }
+
+            if (isNaN(unitPrice)) {
+                unitPrice = 0;
+            }
+
+            document.getElementById("txtQuantity").value = quantity;
+            document.getElementById("txtMRP").value = unitPrice;
+
+            document.getElementById("txtAmount").value = (quantity * unitPrice).toFixed(2);
+            //document.getElementById("hdnAmount").value = (quantity * unitPrice).toFixed(2);
+        };
+
+
+        $("#txtStoreItem").autocomplete({
+            minLength: 1,
+            source: function (request, response) {
+                var url = $(this.element).data("url");
+                $.getJSON(url, { term: request.term }, function (data) {
+                    response(data)
+                })
+            },
+            appendTo: $(".modal-body ui-autocomplete-input"),
+            select: function (event, ui) {
+                $("#hdnProductId").val(ui.item.id);
+                $("#txtDescription").val(ui.item.autoGenerateName);
+                $('#txtDescription').focus()
+                if (ui.item.Itemtype === "Taxation") {
+                    $("#txtMRP").val(ui.item.percent);
+                } else {
+                    $("#txtMRP").val(ui.item.mRPPerUnit);
+                }
+
+                $("#hdnAccountCategoryName").val(ui.item.accountCategoryName);
+                $("#hdnProductAccountId").val(ui.item.productAccountId);
+                //if (ui.item.ProductAccountId === null) {
+                //    alert("Please Set Item Accounts first")
+                //    return false;
+                //}
+                $("#hdnItemType").val(ui.item.itemtype);
+            },
+            change: function (event, ui) {
+                if (!ui.item) {
+                    $(event.target).val("");
+                }
+            }
+        });
+
+        $('.btnadd').on("click", function (e) {
+            let golbalPreviousAmount = 0;
+            let sNo = 0;
+            let newcontent = "";
+            let txtStoreItem = $('#txtStoreItem').val();
+            let txtDescription = $('#txtDescription').val();
+            let hdnProductId = $('#hdnProductId').val();
+            let hdnProductAccountId = $('#hdnProductAccountId').val();
+            let txtMRP = $('#txtMRP').val();
+            let txtQuantity = $('#txtQuantity').val();
+            let txtAmount = $('#txtAmount').val();
+            let hdnAmount = $('#hdnAmount').val();
+            let hdnPreviousAmount = golbalPreviousAmount;
+
+            golbalPreviousAmount = txtAmount;
+            if (isNaN(txtQuantity) || txtQuantity === "") {
+                txtQuantity = 0;
+            }
+            var hdnAccountCategoryName = $('#hdnAccountCategoryName').val();
+            //  alert(hdnAccountCategoryName)
+            $('.dvitemexistmsg').html("");
+            newcontent = "";
+            let itemstotal = 0;
+            let itemstotalWithOutTax = 0;
+            let dueMoney = 0;
+            let x = 0;
+
+            $('#tbodyitems tr').each(function () {
+                let text = $(this).find("td").eq(4).html();
+                if (text !== "Total") {
+
+                    let hdnappendProductName = $(this).find('.hdnappendProductName').val();
+                    let amnt = $(this).find('.hdnappendAmount').val();
+
+                    itemstotal = parseFloat(itemstotal) + parseFloat(amnt);
+                    itemstotalWithOutTax = parseFloat(itemstotalWithOutTax) + parseFloat(amnt);
+                    dueMoney = parseFloat(dueMoney) + parseFloat(amnt);
+                    x = parseFloat(x) + parseFloat(1);
+
+                    newcontent += "<tr >";
+                    newcontent += "<td>" + x + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(1).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(2).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(3).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(4).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(5).html(); + " </td >";
+                    newcontent += "<td   >";
+
+                    let hdnappendMRP = $(this).find('.hdnappendMRP').val();
+                    let hdnappendQuantity = $(this).find('.hdnappendQuantity').val();
+                    let hdnappendProductId = $(this).find(".hdnappendProductId").val();
+                    let hdnappendProductAccountId = $(this).find(".hdnappendProductAccountId").val();
+
+                    newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnappendProductId + " />";
+                    newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnappendProductAccountId + " />";
+                    newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
+                    newcontent += "<input type='hidden' class='hdnappendAmount' value=" + amnt + " />";
+                    newcontent += "<input type='hidden' class='hdnappendMRP' value=" + hdnappendMRP + " />";
+                    newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + hdnappendQuantity + " />";
+                    newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
+                    newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
+                    newcontent += "</td >";
+                    newcontent += "</tr >";
+                }
+            });
+            itemstotal = parseFloat(itemstotal) + parseFloat(txtAmount);
+            x = parseFloat(x) + parseFloat(1);
+
+            //alert(hdnBatchId);
+            newcontent += "<tr >";
+            newcontent += "<td  >" + x + " </td >";
+            newcontent += "<td  class='txtStoreItem'>" + txtStoreItem + " </td >";
+            newcontent += "<td  class='txtDescription'>" + txtDescription + " </td >";
+            newcontent += "<td  >" + txtMRP + " </td >";
+            newcontent += "<td  >" + txtQuantity + " </td >";
+            newcontent += "<td  >" + txtAmount + " </td >";
+            newcontent += "<td   >";
+            newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnProductId + " />";
+            newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnProductAccountId + " />";
+            newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
+            newcontent += "<input type='hidden' class='hdnappendMRP' value=" + txtMRP + " />";
+            newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + txtQuantity + " />";
+            newcontent += "<input type='hidden' class='hdnappendAmount' value=" + parseFloat(txtAmount) + " />";
+            newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
+            newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
+            newcontent += "</td >";
+            newcontent += "</tr >";
+
+
+            if (txtStoreItem === "SubTotal") {
+                var subTotal = 0;
+                $('#tbodyitems tr').each(function () {
+                    var text = $(this).find("td").eq(3).html();
+                    if (text !== "Total") {
+                        var amnt = $(this).find('.hdnappendAmount').val();
+                        if (hdnAccountCategoryName === "SalesDiscount") {
+                            subTotal = parseFloat(subTotal) - parseFloat(amnt);
+                        }
+                        else {
+                            subTotal = parseFloat(subTotal) + parseFloat(amnt);
+                        }
+                    }
+                });
+
+                newcontent += "<tr >";
+                newcontent += "<td  class='txtStoreItem'>" + txtStoreItem + " </td >";
+                newcontent += "<td  ></td >";
+                newcontent += "<td  ><input type='hidden' class='itemstotalhdnclass' value=" + subTotal + " /></td >";
+                newcontent += "<td  ></td >";
+                newcontent += "<td  class='itemstotalclass'>" + numberWithCommas(parseFloat(subTotal).toFixed(2)) + " </td >";
+                newcontent += "<td   >";
+                newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
+                newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnProductId + " />";
+                newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnProductAccountId + " />";
+                newcontent += "<input type='hidden' class='hdnappendAmount' value=" + subTotal + " />";
+                newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
+                newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
+                newcontent += "</td >";
+                newcontent += "</tr >";
+                itemstotal = subTotal;
+            }
+
+            //calculate total
+            newcontent += "<tr >";
+            newcontent += "<td ></td >";
+            newcontent += "<td ></td >";
+            newcontent += "<td  ></td >";
+            newcontent += "<td  ><input type='hidden' id='hdnItemTotal' class='itemstotalhdnclass' value=" + itemstotal + " /></td >";
+            newcontent += "<td  >Total</td >";
+            newcontent += "<td  class='itemstotalclass'>" + numberWithCommas(parseFloat(itemstotal).toFixed(2)) + " </td >";
+            newcontent += "</tr >";
+
+
+            $('#tbodyitems').empty().append(newcontent);
+            //document.getElementById("ProductsTotal").value = numberWithCommas(parseFloat(itemstotal).toFixed(2));
+            //  document.getElementById("hdnProductsTotal").value = parseFloat(itemstotal).toFixed(2);
+            // document.getElementById("Input_Total").value = parseFloat(itemstotal).toFixed(2);
+
+            //  $(".showimg").hide();
+            ClearItemAdd();
+        });
+
+        $("#tbodyitems").on('click', '.delete', function (e) {
+            e.preventDefault();
+            var tr = $(this).closest('tr');
+            tr.css("background-color", "#FF3700");
+            tr.remove();
+            yoCalculateItemsTotal();
+            ClearItemAdd();
+        });
+
+        function yoCalculateItemsTotal() {
+            //var BatchId = $('#BatchId').val();
+            //var BatchIdName = $("#BatchId option:selected").text();
+            //var txtStoreItem = $('#txtStoreItem').val();
+            //var hdnStoreItemId = $('#hdnStoreItemId').val();
+            //var txtMRP = $('#txtMRP').val();
+            //var txtQuantity = $('#txtQuantity').val();
+            //var txtAmount = $('#txtAmount').val();
+            //var hdnAmount = $('#hdnAmount').val();
+
+            $('.dvitemexistmsg').html("");
+            var newcontent = "";
+            newcontent = "";
+            var itemstotal = 0;
+            $('#tbodyitems tr').each(function () {
+                var text = $(this).find("td").eq(4).html();
+                if (text !== "Total") {
+                    var amnt = $(this).find('.hdnappendAmount').val();
+
+                    var hdnappendhdnItemType = $(this).find(".hdnappendhdnItemType").val();
+                    if (hdnappendhdnItemType.replace(/\s/g, '') === "Discount") {
+                        itemstotal = parseFloat(itemstotal) - parseFloat(amnt);
+                    }
+                    else if (hdnappendhdnItemType.replace(/\s/g, '') === "PayMentReceived") {
+                        // itemstotal = parseFloat(itemstotal) - parseFloat(amnt);
+                    }
+                    else {
+                        itemstotal = parseFloat(itemstotal) + parseFloat(amnt);
+                    }
+
+                    newcontent += "<tr >";
+                    newcontent += "<td>" + $(this).find("td").eq(0).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(1).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(2).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(3).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(4).html(); + " </td >";
+                    newcontent += "<td>" + $(this).find("td").eq(5).html(); + " </td >";
+                    newcontent += "<td   >";
+
+                    var amnt = $(this).find('.hdnappendAmount').val();
+                    var hdnAccountCategoryName = $(this).find('.hdnappendhdnAccountCategoryName').val();
+                    var hdnappendProductName = $(this).find('.hdnappendProductName').val();
+                    var hdnappendMRP = $(this).find('.hdnappendMRP').val();
+                    var hdnappendQuantity = $(this).find('.hdnappendQuantity').val();
+                    var hdnappendAmount = $(this).find(".hdnappendAmount").val();
+                    var hdnappendProductId = $(this).find(".hdnappendProductId").val();
+                    var hdnappendProductAccountId = $(this).find(".hdnappendProductAccountId").val();
+
+
+                    newcontent += "<input type='hidden' class='hdnappendhdnAccountCategoryName' value=" + hdnAccountCategoryName + " />";
+                    newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnappendProductId + " />";
+                    newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnappendProductAccountId + " />";
+                    newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
+                    newcontent += "<input type='hidden' class='hdnappendAmount' value=" + amnt + " />";
+                    newcontent += "<input type='hidden' class='hdnappendMRP' value=" + hdnappendMRP + " />";
+                    newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + hdnappendQuantity + " />";
+                    newcontent += "<input type='hidden' class='hdnappendhdnItemType' value=" + hdnappendhdnItemType + " />";
+                    newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
+                    newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
+                    newcontent += "</td >";
+                    newcontent += "</tr >";
+                }
+            });
+
+            //calculate total
+            newcontent += "<tr >";
+            newcontent += "<td ></td >";
+            newcontent += "<td  ></td >";
+            newcontent += "<td  ></td >";
+            newcontent += "<td  ><input type='hidden' id='hdnItemTotal' class='itemstotalhdnclass' value=" + itemstotal + " /></td >";
+            newcontent += "<td  >Total</td >";
+            newcontent += "<td  class='itemstotalclass'>" + numberWithCommas(parseFloat(itemstotal).toFixed(2)) + " </td >";
+            newcontent += "</tr >";
+
+            $('#tbodyitems').empty().append(newcontent);
+            //document.getElementById("ProductsTotal").value = numberWithCommas(parseFloat(itemstotal).toFixed(2));
+            document.getElementById("hdnProductsTotal").value = parseFloat(itemstotal).toFixed(2);
+            document.getElementById("Total").value = parseFloat(itemstotal).toFixed(2);
+        };
+
+        var addVoucherItemRequest = {
+            voucherItemId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            voucherName: "string",
+            data: "string",
+        }
+
+        function UpdateInvoice(e) {
+            // let confirmAction = confirm("Are you sure to delete this product?");
+            let url = "AddVoucherItemVarient";
+            performPostRequest(e, url);
+        }
+
+        function performPostRequest(e, url) {
+            e.preventDefault();
+            let voucherItemId = document.getElementById('VoucherItemId').value;
+            let apiUrl = document.getElementById('apiurl').value;
+            let userId = document.getElementById('userId');
+            let userAccessToken = userId.value;
+
+            let OrderDetl = [];
+            $('#tbodyitems tr').each(function () {
+                let text = $(this).find("td").eq(4).html();
+                if (text !== "Total") {
+
+                    let Name = $(this).find("td").eq(1).text().trim();
+                    let id = $(this).find(".hdnappendProductAccountId").val();
+                    let ItemAmount = $(this).find(".hdnappendAmount").val();
+                    let MRPPerUnit = $(this).find(".hdnappendMRP").val();
+                    let Quantity = $(this).find(".hdnappendQuantity").val();
+                    let ProductId = $(this).find(".hdnappendProductId").val();
+                    if (id === "/") {
+                        id = "00000000-0000-0000-0000-000000000000"
+                    }
+                    OrderDetl.push({
+                        'Name': Name,
+                        'VarientId': ProductId,
+                        'Id': id,
+                        'MRPPerUnit': MRPPerUnit,
+                        'Quantity': Quantity,
+                        'ItemAmount': ItemAmount
+                    });
+                }
+            });
+
+            alert(JSON.stringify(OrderDetl) + '  ' + OrderDetl.length)
+
+            addVoucherItemRequest.voucherItemId = voucherItemId;
+            addVoucherItemRequest.data = JSON.stringify(OrderDetl);
+
+            axios.post(`${apiUrl}/api/VoucherInvoice/` + url, this.addVoucherItemRequest, {
+                headers: {
+                    Authorization: "Bearer " + userAccessToken
+                }
+            })
+                .then(function (response) {
+                    console.log(response);
+                    if (response.data.success) {
+                        toastr.success(response.data.description)
+                        window.location.href = '/MyBooks/VoucherWithItems/index?voucherName=' + voucherName
+                    } else {
+                        toastr.error(response.data.description)
+                    }
+                })
+                .catch(function (response) {
+                    console.log(response);
+                    toastr.error(response)
+                });
+        };
+
+    </script>
+}

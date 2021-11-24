@@ -32,6 +32,13 @@ namespace WebApp.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("api/ProductVarients/GetAllVarientsByCompany")]
+        public IActionResult GetAllVarientsByCompany(Guid companyId, [FromServices] GetAllVarientsByCompany getProductVariants)
+        {
+            var result = getProductVariants.Do(companyId);
+            return Ok(result);
+        }
+
         [HttpGet("api/ProductVarients/GetProductVarient")]
         public async Task<IActionResult> GetProductVarient([FromQuery] Guid id, [FromServices] GetProductVariant getProduct)
         {

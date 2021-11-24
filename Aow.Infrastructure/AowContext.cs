@@ -42,7 +42,9 @@ namespace Aow.Infrastructure
         public DbSet<ProductVariantProductAttributeOption> ProductVariantProductAttributeOptions { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<StockProductVariant> StockProductVariants { get; set; }
-
+        public DbSet<Manufacture> Manufactures { get; set; }
+        public DbSet<InputVarients> InputVarients { get; set; }
+        public DbSet<OutputVarients> OutputVarients { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<ItemUnit>().Property(p => p.RelationalUnit).HasColumnType("decimal(18,4)");
@@ -73,6 +75,8 @@ namespace Aow.Infrastructure
             builder.Entity<StockProductVariant>().Property(p => p.Price).HasColumnType("decimal(18,4)");
             builder.Entity<StockProductVariant>().Property(p => p.Quantity).HasColumnType("decimal(18,4)");
             builder.Entity<StockProductVariant>().Property(p => p.SalePrice).HasColumnType("decimal(18,4)");
+            builder.Entity<InputVarients>().Property(p => p.Quantity).HasColumnType("decimal(18,4)");
+            builder.Entity<OutputVarients>().Property(p => p.Quantity).HasColumnType("decimal(18,4)");
             // builder.ApplyConfiguration(new ProductCategoryConfiguration());
             base.OnModelCreating(builder);
         }       

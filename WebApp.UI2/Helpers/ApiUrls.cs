@@ -67,6 +67,7 @@
             public const string GetProductAttributesAndOptions = Rootlocal + "/api/ProductVarients/GetProductAttributeOptionsByProduct";
             public const string GetProductVarients = Rootlocal + "/api/ProductVarients/GetProductVarients";
             public const string GetAllVarientsByProduct = Rootlocal + "/api/ProductVarients/GetAllVarientsByProduct";
+            public const string GetAllVarientsByCompany = Rootlocal + "/api/ProductVarients/GetAllVarientsByCompany";
             public const string GetProductVarient = Rootlocal + "/api/ProductVarients/GetProductVarient";
             public const string Create = Rootlocal + "/api/ProductVarients/AddProductVarient";
             public const string Update = Rootlocal + "/api/ProductVarients/UpdateProductVarient";
