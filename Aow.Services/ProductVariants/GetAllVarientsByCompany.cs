@@ -21,7 +21,7 @@ namespace Aow.Services.ProductVariants
         }
         public IEnumerable<GetAllVarientsByCompanyResponse> Do(Guid companyId)
         {
-            var list = _repoWrapper.ProductVarientRepo.GetAllProductVarients(companyId).GetAwaiter().GetResult();
+            var list = _repoWrapper.ProductVarientRepo.GetAllProductVarientsByCompany(companyId).GetAwaiter().GetResult();
             if (list == null)
             {
                 return null;
