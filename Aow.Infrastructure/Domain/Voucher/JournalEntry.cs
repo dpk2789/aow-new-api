@@ -2,8 +2,6 @@
 using Aow.Infrastructure.Common;
 using System;
 
-
-
 namespace Aow.Infrastructure.Domain
 {
     public class JournalEntry : AuditableEntity<Guid>

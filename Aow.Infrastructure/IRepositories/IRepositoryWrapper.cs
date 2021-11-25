@@ -25,9 +25,8 @@ namespace Aow.Infrastructure.IRepositories
         IVoucherItemVarientRepository VoucherItemVarientRepo { get; }
         IStockRepository StockRepo { get; }
         IStockVarientRepository StockVarientRepo { get; }
-        IInputRepository InputRepo { get; }
-        IOutputRepository OutputRepo { get; }
-        IManufactureRepository ManufactureRepo { get; }
+        IManufacturingRepository ManufacturingRepo { get; }      
+        IManufacturingVarientsRepository ManufactureVarientsRepo { get; }
         Task<int> SaveNew();
         int Save();
     }

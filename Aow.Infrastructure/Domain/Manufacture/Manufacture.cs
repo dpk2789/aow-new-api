@@ -7,7 +7,9 @@ namespace Aow.Infrastructure.Domain
     public class Manufacture : AuditableEntity<Guid>
     {
         public DateTime Date { get; set; }
-        public List<InputVarients> InputVarients { get; set; }
-        public List<OutputVarients> OutputVarients { get; set; }
+        public List<ManufacturingVarients> ManufacturingVarients { get; set; }
+        public Guid? FinancialYearId { get; set; }
+        public virtual FinancialYear FinancialYear { get; set; }
+
     }
 }

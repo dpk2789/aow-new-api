@@ -24,7 +24,5 @@ namespace Aow.Infrastructure.Repositories
             return Task.FromResult(PagedList<Company>.ToPagedList(FindAll().OrderBy(on => on.Name),
                                     ownerParameters.PageNumber, ownerParameters.PageSize));
         }
-
-
     }
 }

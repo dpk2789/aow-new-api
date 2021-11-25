@@ -16,8 +16,7 @@ namespace Aow.Services.ProductVariants
         {
             public string Name { get; set; }
             public Guid ProductId { get; set; }
-            public Guid[] OptionsSelectedOnView { get; set; }
-            
+            public Guid[] OptionsSelectedOnView { get; set; }            
         }
         public class AddProductVariantResponse
         {
