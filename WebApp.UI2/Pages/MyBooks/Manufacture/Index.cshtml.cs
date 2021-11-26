@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Threading.Tasks;
 using WebApp.UI2.Helpers;
 
 namespace WebApp.UI2.Pages.MyBooks.Manufacture

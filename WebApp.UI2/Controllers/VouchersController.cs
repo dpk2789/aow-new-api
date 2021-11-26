@@ -149,6 +149,39 @@ namespace WebApp.UI2.Controllers
                 productId = m.ProductId,
             }));
         }
+        public async Task<JsonResult> GetStockVarientsForManufacturing(string term)
+        {
+            var cmpid = _cookieHelper.Get("cmpCookee");
+            if (string.IsNullOrEmpty(cmpid) && string.IsNullOrEmpty(cmpid))
+            {
+                return null;
+            }
+            List<StockVariantViewModel> ProductViewModelList = null;
+            using var client = new HttpClient();
+            var getProductsUri = new Uri(ApiUrls.StockVarients.GetAllStoreVarientsByCompany + "?companyId=" + cmpid);
+
+            var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+            var getUserInfo = await client.GetAsync(getProductsUri);
+
+            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            if (resultuerinfo != null)
+            {
+                var data = JsonConvert.DeserializeObject<IList<StockVariantViewModel>>(resultuerinfo);
+                ProductViewModelList = data.Where(c => c.Name.IndexOf(term, StringComparison.CurrentCultureIgnoreCase) != -1).ToList();
+                // LedgerCategories = data.Where(ii => ii.Name.IndexOf(term)>-1).ToList();
+            }
+            return Json(ProductViewModelList.Select(m => new
+            {
+                id = m.Id,
+                value = m.Name,
+                label = String.Format("{0}/{1}-{2}", m.UniqueNumber, m.Name, m.Quantity),
+                mRPPerUnit = m.SalePrice,
+                name = m.Name,
+                varientId = m.ProductVarientId,
+            }));
+        }
 
         public async Task<JsonResult> GetProductsForSundryItems(string term, string HeadName, string crdr)
         {

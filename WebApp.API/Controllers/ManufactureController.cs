@@ -1,5 +1,7 @@
-﻿using Aow.Services.Manufacture;
+﻿using Aow.Infrastructure.Paging;
+using Aow.Services.Manufacture;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace WebApp.API.Controllers
@@ -8,6 +10,11 @@ namespace WebApp.API.Controllers
     [ApiController]
     public class ManufactureController : ControllerBase
     {
+        [HttpGet("api/Manufacture/GetManufactureVouchers")]
+        public IActionResult GetManufactureVouchers([FromQuery] PagingParameters pagingParameters, Guid fyrId, [FromServices] GetManufactureVouchers getVouchers)
+        {
+            return Ok(getVouchers.Do(pagingParameters, fyrId));
+        }
 
         [HttpPost("api/Manufacture/AddManufactureVoucher")]
         public async Task<IActionResult> AddManufactureVoucher([FromBody] AddManufacture.AddManufactureRequest request, [FromServices] AddManufacture addFinancialYear)

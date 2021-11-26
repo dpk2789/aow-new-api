@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Aow.Services.StoreVarient
 {
@@ -18,11 +17,12 @@ namespace Aow.Services.StoreVarient
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
-            public Guid? ProductId { get; set; }
+            public decimal Quantity { get; set; }
+            public Guid? ProductVarientId { get; set; }
         }
         public IEnumerable<GetAllStoreVarientsResponse> Do(Guid companyId)
         {
-            var list = _repoWrapper.ProductVarientRepo.GetAllProductVarientsByCompany(companyId).GetAwaiter().GetResult();
+            var list = _repoWrapper.StockVarientRepo.GetStockVarientByCompany(companyId).GetAwaiter().GetResult();
             if (list == null)
             {
                 return null;
@@ -30,8 +30,9 @@ namespace Aow.Services.StoreVarient
             var newList = list.Select(x => new GetAllStoreVarientsResponse
             {
                 Id = x.Id,
-                ProductId = x.ProductId,
-                Name = x.Name,
+                ProductVarientId = x.ProductVariant.Id,
+                Name = x.ProductVariant.Name,
+                Quantity = x.Quantity.Value
             });
 
             return newList;

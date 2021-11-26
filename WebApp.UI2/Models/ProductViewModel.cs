@@ -22,4 +22,21 @@ namespace WebApp.UI2.Models
         public decimal? SalePrice { get; set; }
 
     }
+
+    public class StockVariantViewModel
+    {
+        public Guid? Id { get; set; }
+        public string Name { get; set; }
+        public Guid? VoucherItemVarientId { get; set; }
+        public string UniqueNumber { get; set; }
+        public string Status { get; set; }
+        public decimal? SalePrice { get; set; }
+        public decimal? MRPPerUnit { get; set; }
+        public decimal? Quantity { get; set; }
+        public decimal? ItemAmount { get; set; }
+        public decimal Price { get; set; }
+        public Guid? ProductVarientId { get; set; }    
+        public Guid StockId { get; set; }
+       
+    }
 }

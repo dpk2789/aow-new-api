@@ -27,9 +27,10 @@ namespace Aow.Services.Manufacture
         public class AddInputOutputRequest
         {
             public Guid Id { get; set; }
+            public Guid? VariantId { get; set; }
             public decimal? Quantity { get; set; }
             public string Type { get; set; }
-            public Guid? StockProductVariantId { get; set; }
+            public Guid? StoreVariantId { get; set; }
         }
         public class AddManufactureResponse
         {
@@ -43,34 +44,34 @@ namespace Aow.Services.Manufacture
         {
             try
             {
-                Guid voucherId = Guid.NewGuid();
+                Guid manufactureId = Guid.NewGuid();
                 Guid fyrId = Guid.Parse(request.FinancialYearId);
                 int SrNo = 1;
                 var manufacture = new Aow.Infrastructure.Domain.Manufacture
                 {
-                    Id = voucherId,
+                    Id = manufactureId,
                     Date = request.Date,
                     VoucherNumber = request.VoucherNumber,
                     FinancialYearId = fyrId
-
                 };
-
-                var deserialiseList = JsonConvert.DeserializeObject<List<AddInputOutputRequest>>(request.data);
                 _repoWrapper.ManufacturingRepo.Create(manufacture);
+                var deserialiseList = JsonConvert.DeserializeObject<List<AddInputOutputRequest>>(request.data);
+                var deserialiseListOutput = JsonConvert.DeserializeObject<List<AddInputOutputRequest>>(request.data2);
                 foreach (var item in deserialiseList)
                 {
                     var manufacturingVarient = new Aow.Infrastructure.Domain.ManufacturingVarients
                     {
                         Id = Guid.NewGuid(),
-                        StockProductVariantId = item.Id,
+                        StockProductVariantId = item.StoreVariantId,
                         Quantity = item.Quantity,
                         Type = item.Type,
-                        ManufactureId = voucherId
+                        ManufactureId = manufactureId
                     };
 
                     _repoWrapper.ManufactureVarientsRepo.Create(manufacturingVarient);
                     SrNo++;
                 }
+
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {

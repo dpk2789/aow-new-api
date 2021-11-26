@@ -84,6 +84,11 @@
             public const string GetStocks = Rootlocal + "/api/Stocks/GetStocks";
             public const string GetStock = Rootlocal + "/api/Stocks/GetStock";
         }
+        public static class StockVarients
+        {
+            public const string GetAllStoreVarientsByCompany = Rootlocal + "/api/StockVarients/GetAllStoreVarientsByCompany";
+            public const string GetStock = Rootlocal + "/api/StockVarients/GetStock";
+        }
 
         public static class LedgerCategories
         {
