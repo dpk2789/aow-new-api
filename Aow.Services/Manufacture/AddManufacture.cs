@@ -17,10 +17,11 @@ namespace Aow.Services.Manufacture
         public class AddManufactureRequest
         {
             public string FinancialYearId { get; set; }
-            public string Name { get; set; }
             public string data { get; set; }
-            public string Invoice { get; set; }
+            public string data2 { get; set; }
+            public string VoucherNumber { get; set; }
             public DateTime Date { get; set; }
+            public List<AddInputOutputRequest> StoreVairents { get; set; }
 
         }
         public class AddInputOutputRequest
@@ -48,10 +49,12 @@ namespace Aow.Services.Manufacture
                 var manufacture = new Aow.Infrastructure.Domain.Manufacture
                 {
                     Id = voucherId,
-                    Date = request.Date
+                    Date = request.Date,
+                    VoucherNumber = request.VoucherNumber,
+                    FinancialYearId = fyrId
+
                 };
-                manufacture.Date = Convert.ToDateTime(request.Date);
-                manufacture.FinancialYearId = fyrId;
+
                 var deserialiseList = JsonConvert.DeserializeObject<List<AddInputOutputRequest>>(request.data);
                 _repoWrapper.ManufacturingRepo.Create(manufacture);
                 foreach (var item in deserialiseList)
@@ -59,7 +62,10 @@ namespace Aow.Services.Manufacture
                     var manufacturingVarient = new Aow.Infrastructure.Domain.ManufacturingVarients
                     {
                         Id = Guid.NewGuid(),
-
+                        StockProductVariantId = item.Id,
+                        Quantity = item.Quantity,
+                        Type = item.Type,
+                        ManufactureId = voucherId
                     };
 
                     _repoWrapper.ManufactureVarientsRepo.Create(manufacturingVarient);
@@ -70,7 +76,7 @@ namespace Aow.Services.Manufacture
                 {
                     return new AddManufactureResponse
                     {
-                        Name = request.Name,
+                        Description = "Manufacture Voucher Not SuccessFully Added",
                         Success = false
                     };
                 }
@@ -79,7 +85,6 @@ namespace Aow.Services.Manufacture
                     return new AddManufactureResponse
                     {
                         Id = manufacture.Id,
-                        Name = request.Name,
                         Success = true,
                         Description = "Manufacture Voucher SuccessFully Added"
                     };
@@ -90,7 +95,6 @@ namespace Aow.Services.Manufacture
             {
                 return new AddManufactureResponse
                 {
-                    Name = request.Name,
                     Success = false,
                     Description = ex.Message
                 };

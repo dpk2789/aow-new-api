@@ -138,7 +138,7 @@
                                                            placeholder="Enter Product" />
                                                     <input type="hidden" id="hdnStoreItemId" class="form-control" />
                                                     <input type="hidden" id="hdnStoreVarientIdOutput" class="form-control" />
-                                                    <input type="hidden" id="hdnProductAccountId" class="form-control" />
+                                                    <input type="hidden" id="hdnProductAccountIdOutput" class="form-control" />
                                                     <input type="hidden" id="hdnAccountCategoryName" class="form-control  hdnAccountCategoryName" />
                                                     <input type="hidden" id="hdnItemType" class="form-control  hdnItemType" />
                                                 </td>
@@ -520,7 +520,7 @@
             document.getElementById("Total").value = parseFloat(itemstotal).toFixed(2);
         };
 
-      
+
     </script>
     <script>
 
@@ -539,7 +539,7 @@
             $('#btnupdateOutput').hide();
             $('#btnneOutputw').hide();
             $('#btnaddOutput').show();
-        }     
+        }
         function recalculateExtendedPriceOutput() {
             var quantity = parseFloat(document.getElementById("txtQuantityOutput").value).toFixed(0);
             var unitPrice = parseFloat(document.getElementById("txtMRPOutput").value).toFixed(2);
@@ -558,6 +558,7 @@
             document.getElementById("txtAmountOutput").value = (quantity * unitPrice).toFixed(2);
             //document.getElementById("hdnAmount").value = (quantity * unitPrice).toFixed(2);
         };
+
         $("#txtStoreItemOutput").autocomplete({
             minLength: 1,
             source: function (request, response) {
@@ -578,7 +579,7 @@
                 }
 
                 $("#hdnAccountCategoryNameOutput").val(ui.item.accountCategoryName);
-                $("#hdnProductAccountIdOutput").val(ui.item.productAccountId);
+                $("#hdnProductAccountIdOutput").val(ui.item.ProductId);
                 //if (ui.item.ProductAccountId === null) {
                 //    alert("Please Set Item Accounts first")
                 //    return false;
@@ -610,7 +611,7 @@
             if (isNaN(txtQuantity) || txtQuantity === "") {
                 txtQuantity = 0;
             }
-        
+
             $('.dvitemexistmsg').html("");
             newcontent = "";
             let itemstotal = 0;
@@ -621,7 +622,7 @@
             $('#tbodyitemsOutput tr').each(function () {
                 let text = $(this).find("td").eq(4).html();
                 if (text !== "Total") {
-                 
+
                     let amnt = $(this).find('.hdnappendAmount').val();
 
                     itemstotal = parseFloat(itemstotal) + parseFloat(amnt);
@@ -747,10 +748,10 @@
             //var hdnAmount = $('#hdnAmount').val();
 
             $('.dvitemexistmsg').html("");
-            var newcontent = "";
+            let newcontent = "";
             newcontent = "";
             var itemstotal = 0;
-            $('#tbodyitems tr').each(function () {
+            $('#tbodyitemsOutput tr').each(function () {
                 var text = $(this).find("td").eq(4).html();
                 if (text !== "Total") {
                     var amnt = $(this).find('.hdnappendAmount').val();
@@ -816,25 +817,29 @@
             document.getElementById("Total").value = parseFloat(itemstotal).toFixed(2);
         };
 
-      
+
     </script>
-<script>
-    var addVoucherItemRequest = {
-        voucherItemId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        voucherName: "string",
+    <script>
+        var apiUrl = '@Model.ApiUrl';
+
+    var addManufactureRequest = {
+        financialYearId: "string",
         data: "string",
+        data2: "string",
+        invoice: "string",
+        date: "2021-11-26T04:26:32.023Z"
     }
 
-    function UpdateInvoice(e) {
+    function AddJournalEntries(e) {
         // let confirmAction = confirm("Are you sure to delete this product?");
-        let url = "AddVoucherItemVarient";
-        performPostRequest(e, url);
+
+        performPostRequest(e);
     }
 
     function performPostRequest(e, url) {
         e.preventDefault();
-        let voucherItemId = document.getElementById('VoucherItemId').value;
-        let apiUrl = document.getElementById('apiurl').value;
+        let financialYearId = document.getElementById('financialYearId').value;
+        let voucherNumber = document.getElementById('Input_VoucherNumber').value;        
         let userId = document.getElementById('userId');
         let userAccessToken = userId.value;
 
@@ -854,8 +859,9 @@
                 }
                 OrderDetl.push({
                     'Name': Name,
-                    'VarientId': ProductId,
+                    'StockProductVariantId': ProductId,
                     'Id': id,
+                    "type": "Input",
                     'MRPPerUnit': MRPPerUnit,
                     'Quantity': Quantity,
                     'ItemAmount': ItemAmount
@@ -865,10 +871,38 @@
 
         alert(JSON.stringify(OrderDetl) + '  ' + OrderDetl.length)
 
-        addVoucherItemRequest.voucherItemId = voucherItemId;
-        addVoucherItemRequest.data = JSON.stringify(OrderDetl);
+        let OrderOutput = [];
+        $('#tbodyitemsOutput tr').each(function () {
+            let text = $(this).find("td").eq(4).html();
+            if (text !== "Total") {
 
-        axios.post(`${apiUrl}/api/VoucherInvoice/` + url, this.addVoucherItemRequest, {
+                let Name = $(this).find("td").eq(1).text().trim();
+                let id = $(this).find(".hdnappendProductAccountId").val();
+                let ItemAmount = $(this).find(".hdnappendAmountOutput").val();
+                let MRPPerUnit = $(this).find(".hdnappendMRPOutput").val();
+                let Quantity = $(this).find(".hdnappendQuantityOutput").val();
+                let ProductId = $(this).find(".hdnappendProductIdOutput").val();
+                if (id === "/") {
+                    id = "00000000-0000-0000-0000-000000000000"
+                }
+                OrderOutput.push({
+                    'Name': Name,
+                    'StockProductVariantId': ProductId,
+                    'Id': id,
+                    "type": "Output",
+                    'MRPPerUnit': MRPPerUnit,
+                    'Quantity': Quantity,
+                    'ItemAmount': ItemAmount
+                });
+            }
+        });
+
+        addManufactureRequest.financialYearId = financialYearId;
+        addManufactureRequest.invoice = voucherNumber;
+        addManufactureRequest.data = JSON.stringify(OrderDetl);
+        addManufactureRequest.data2 = JSON.stringify(OrderOutput);
+
+        axios.post(`${apiUrl}/api/Manufacture/AddManufactureVoucher/`, this.addManufactureRequest, {
             headers: {
                 Authorization: "Bearer " + userAccessToken
             }
@@ -888,5 +922,5 @@
             });
     };
 
-</script>
+    </script>
 }
