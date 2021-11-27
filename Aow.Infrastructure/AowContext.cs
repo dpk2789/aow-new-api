@@ -46,6 +46,28 @@ namespace Aow.Infrastructure
         public DbSet<ManufacturingVarients> ManufacturingVarients { get; set; }    
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<AppUser>(entity => entity.Property(m => m.Id).HasMaxLength(85));
+            builder.Entity<AppUser>(entity => entity.Property(m => m.NormalizedEmail).HasMaxLength(85));
+            builder.Entity<AppUser>(entity => entity.Property(m => m.NormalizedUserName).HasMaxLength(85));
+
+            builder.Entity<AppUser>(entity => entity.Property(m => m.Id).HasMaxLength(85));
+          
+            builder.Entity<IdentityUserLogin<string>>(entity => entity.Property(m => m.LoginProvider).HasMaxLength(85));
+            builder.Entity<IdentityUserLogin<string>>(entity => entity.Property(m => m.ProviderKey).HasMaxLength(85));
+            builder.Entity<IdentityUserLogin<string>>(entity => entity.Property(m => m.UserId).HasMaxLength(85));
+            builder.Entity<IdentityUserRole<string>>(entity => entity.Property(m => m.UserId).HasMaxLength(85));
+
+            builder.Entity<IdentityUserRole<string>>(entity => entity.Property(m => m.RoleId).HasMaxLength(85));
+
+            builder.Entity<IdentityUserToken<string>>(entity => entity.Property(m => m.UserId).HasMaxLength(85));
+            builder.Entity<IdentityUserToken<string>>(entity => entity.Property(m => m.LoginProvider).HasMaxLength(85));
+            builder.Entity<IdentityUserToken<string>>(entity => entity.Property(m => m.Name).HasMaxLength(85));
+
+            builder.Entity<IdentityUserClaim<string>>(entity => entity.Property(m => m.Id).HasMaxLength(85));
+            builder.Entity<IdentityUserClaim<string>>(entity => entity.Property(m => m.UserId).HasMaxLength(85));
+            builder.Entity<IdentityRoleClaim<string>>(entity => entity.Property(m => m.Id).HasMaxLength(85));
+            builder.Entity<IdentityRoleClaim<string>>(entity => entity.Property(m => m.RoleId).HasMaxLength(85));
+
             builder.Entity<ItemUnit>().Property(p => p.RelationalUnit).HasColumnType("decimal(18,4)");
             builder.Entity<Ledger>().Property(p => p.OpeningBalance).HasColumnType("decimal(18,4)");
             builder.Entity<Product>().Property(p => p.SalePrice).HasColumnType("decimal(18,4)");
@@ -74,7 +96,8 @@ namespace Aow.Infrastructure
             builder.Entity<StockProductVariant>().Property(p => p.Price).HasColumnType("decimal(18,4)");
             builder.Entity<StockProductVariant>().Property(p => p.Quantity).HasColumnType("decimal(18,4)");
             builder.Entity<StockProductVariant>().Property(p => p.SalePrice).HasColumnType("decimal(18,4)");
-            builder.Entity<ManufacturingVarients>().Property(p => p.Quantity).HasColumnType("decimal(18,4)");         
+            builder.Entity<ManufacturingVarients>().Property(p => p.Quantity).HasColumnType("decimal(18,4)");
+            builder.Entity<StockProductVariant>().Property(p => p.ConsumedQuantity).HasColumnType("decimal(18,4)");
             // builder.ApplyConfiguration(new ProductCategoryConfiguration());
             base.OnModelCreating(builder);
         }       

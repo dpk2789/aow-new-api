@@ -36,10 +36,16 @@ namespace WebApp.API
                       });
             });
 
-            services.AddDbContext<AowContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly(typeof(AowContext).Assembly.FullName)));
+            //services.AddDbContext<AowContext>(options =>
+            //    options.UseSqlServer(
+            //        Configuration.GetConnectionString("DefaultConnection"),
+            //        b => b.MigrationsAssembly(typeof(AowContext).Assembly.FullName)));
+
+            services.AddDbContextPool<AowContext>(options =>
+               options.UseMySQL(
+                   Configuration.GetConnectionString("DefaultConnection"),
+                   b => b.MigrationsAssembly(typeof(AowContext).Assembly.FullName)));
+
 
             services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                .AddEntityFrameworkStores<AowContext>().AddDefaultTokenProviders(); ;
