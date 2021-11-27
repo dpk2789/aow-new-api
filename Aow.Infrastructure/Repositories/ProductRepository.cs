@@ -16,7 +16,7 @@ namespace Aow.Infrastructure.Repositories
 
         public Product GetProduct(Guid Id)
         {
-            return FindByCondition(x => x.Id == Id).FirstOrDefault();
+            return FindByCondition(x => x.Id == Id).Include(x => x.ProductVariants).FirstOrDefault();
         }
 
         public Task<PagedList<Product>> GetProducts(PagingParameters ownerParameters, Guid companyId)

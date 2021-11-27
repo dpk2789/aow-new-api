@@ -48,7 +48,8 @@ namespace Aow.Services.ProductVariants
             {
                 Id = varient.Id,
                 Name = varient.Name,
-                ProductId = varient.ProductId
+                ProductId = varient.ProductId,
+                ProductName = varient.Products.Name
             };
             var varientsInPvPat = await _repoWrapper.ProductVariantAndOptionRepo.GetVarientsWithOptionsByVarient(varient.Id);
             var getAttributes = await _repoWrapper.ProductAttributeRepo.GetProductAttributesByCatrgory(varient.Products.ProductCategoryId);

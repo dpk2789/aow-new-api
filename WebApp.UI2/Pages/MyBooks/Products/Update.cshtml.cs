@@ -29,6 +29,13 @@ namespace WebApp.UI2.Pages.MyBooks.Products
             public string CompanyName { get; set; }
             public Guid ProductCategoryId { get; set; }
             public SelectList ProductCategorySelectList { get; set; }
+            public List<UpdateProductVarientsViewModel> ProductVariants { get; set; }
+        }
+        public class UpdateProductVarientsViewModel
+        {
+            public Guid Id { get; set; }
+            public string Name { get; set; }
+            public string SalePrice { get; set; }
         }
         public class ProductCategorySelectUpdateViewModel
         {

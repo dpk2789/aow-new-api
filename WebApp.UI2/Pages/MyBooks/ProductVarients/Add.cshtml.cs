@@ -18,13 +18,14 @@ namespace WebApp.UI2.Pages.MyBooks.ProductVarients
         {
             public Guid ProductId { get; set; }
             public string Name { get; set; }
+            public string ProductName { get; set; }
             public IList<AddVarientAttributesViewModel> AttributesViewModels { get; set; }
-
         }
         public class AddVarientAttributesViewModel
         {
             public Guid? Id { get; set; }
             public string Name { get; set; }
+            public string ProductName { get; set; }
             public bool IsChecked { get; set; }
             public IEnumerable<AddVarientAttributesOptionsViewModel> AttributesOptionsViewModels { get; set; }
         }
@@ -50,6 +51,11 @@ namespace WebApp.UI2.Pages.MyBooks.ProductVarients
             {
                 var data = JsonConvert.DeserializeObject<IList<AddVarientAttributesViewModel>>(resultuerinfo);
                 inputModel.AttributesViewModels = data;
+                if (data.Count > 0)
+                {
+                    var attribute = data.FirstOrDefault();
+                    inputModel.ProductName = attribute.ProductName;
+                }
             }
             inputModel.ProductId = id;
             Input = inputModel;
@@ -66,7 +72,7 @@ namespace WebApp.UI2.Pages.MyBooks.ProductVarients
                 Uri u = new Uri(ApiUrls.ProductVarients.Create);
                 //postTask.Wait();               
 
-            
+
                 var json = JsonConvert.SerializeObject(new { request.Name, request.ProductId, OptionsSelectedOnView });
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 //HTTP POST

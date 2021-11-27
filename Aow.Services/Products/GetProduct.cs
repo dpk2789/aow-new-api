@@ -1,5 +1,4 @@
 ﻿using Aow.Infrastructure.IRepositories;
-using Aow.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 
@@ -20,18 +19,13 @@ namespace Aow.Services.Products
             public string Description { get; set; }
             public decimal Value { get; set; }
             public Guid ProductCategoryId { get; set; }
-            public IEnumerable<ProductImageResponse> ProductImages { get; set; }
+            public IEnumerable<GetProductVarientsResponse> ProductVariants { get; set; }
         }
-        public class ProductImageResponse
+        public class GetProductVarientsResponse
         {
             public Guid Id { get; set; }
-            public Guid ProductId { get; set; }
             public string Name { get; set; }
-            public long Width { get; set; }
-            public string RelativePath { get; set; }
-            public string GlobalPath { get; set; }
-            public string Type { get; set; }
-            public string Extention { get; set; }
+            public string SalePrice { get; set; }
         }
 
         public GetProductViewModel Do(Guid Id)
@@ -41,12 +35,19 @@ namespace Aow.Services.Products
             {
                 return null;
             }
-            GetProductViewModel getProductViewModel = new GetProductViewModel
+            var vareintList = new List<GetProductVarientsResponse>();
+            var getProductViewModel = new GetProductViewModel();
+            getProductViewModel.Id = product.Id;
+            getProductViewModel.ProductCategoryId = product.ProductCategoryId;
+            getProductViewModel.Name = product.Name;
+            foreach (var variant in product.ProductVariants)
             {
-                Id = product.Id,
-                ProductCategoryId = product.ProductCategoryId,
-                Name = product.Name
-            };
+                var getProductVarientsResponse = new GetProductVarientsResponse();
+                getProductVarientsResponse.Id = variant.Id;
+                getProductVarientsResponse.Name = variant.Name;
+                vareintList.Add(getProductVarientsResponse);
+            }
+            getProductViewModel.ProductVariants = vareintList;
             return getProductViewModel;
         }
     }

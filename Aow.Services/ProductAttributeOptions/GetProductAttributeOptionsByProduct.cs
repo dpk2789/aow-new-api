@@ -18,6 +18,7 @@ namespace Aow.Services.ProductAttributeOptions
         {
             public Guid? Id { get; set; }
             public string Name { get; set; }
+            public string ProductName { get; set; }
             public IEnumerable<AttributesOptionsByProductResponse> AttributesOptionsViewModels { get; set; }
             public bool IsChecked { get; set; }
         }
@@ -48,6 +49,7 @@ namespace Aow.Services.ProductAttributeOptions
                     Id = attribute.Id,
                     Name = attribute.Name,
                     IsChecked = false,
+                    ProductName = product.Name,
                     AttributesOptionsViewModels = attribute.ProductAttributeOptions.OrderBy(x => x.Name).Select(x => new AttributesOptionsByProductResponse
                     {
                         Id = x.Id,

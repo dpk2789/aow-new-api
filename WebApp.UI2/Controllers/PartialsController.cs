@@ -221,6 +221,20 @@ namespace WebApp.UI2.Controllers
             var data = JsonConvert.DeserializeObject<IEnumerable<WebApp.UI2.Pages.MyBooks.ProductVarients.IndexModel.ProductVarientsViewModel>>(resultuerinfo);
             return PartialView("_VarientsListPartial", data);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetVarientsByProductPartialView(Guid id)
+        {
+            using var client = new HttpClient();
+            var updateProductsUri = new Uri(ApiUrls.Product.GetProduct + "?id=" + id);
+            var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+            var getUserInfo = await client.GetAsync(updateProductsUri);
+
+            string result = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            var data = JsonConvert.DeserializeObject<WebApp.UI2.Pages.MyBooks.Products.UpdateModel.InputModel>(result);
+            return PartialView("_VarientsListPartial", data.ProductVariants);
+        }
 
         public async Task<IActionResult> GetCurrentStock()
         {
