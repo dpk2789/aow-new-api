@@ -52,15 +52,10 @@
                                 <div class="form-horizontal">
 
                                     <div class="form-row">
-                                        @*<div class="form-group col-md-6">
-                                            <label for="inputEmail4">Name</label>
-                                            @Html.EditorFor(model => model.VoucherName, new { htmlAttributes = new { @class = "form-control" } })
-                                            @Html.ValidationMessageFor(model => model.VoucherName, "", new { @class = "text-danger" })
-                                            </div>*@
                                         <div class="form-group col-md-6">
                                             <label for="inputPassword4">Date </label>
-                                            <input type="text" class="form-control" name="Date" id="Date"
-                                                   data-toggle="datetimepicker" data-target="#Date" autocomplete="off">
+                                            <input type="text" class="form-control" name="Date" id="voucherDate" placeholder="Date"
+                                                   data-toggle="datetimepicker" data-target="#voucherDate" autocomplete="off">
                                             <span asp-validation-for="Input.Date" class="text-danger"></span>
                                         </div>
                                         <div class="form-group col-md-6">
@@ -204,6 +199,7 @@
 </div>
 
 @section Scripts {
+
 <script>
 
     function numberWithCommas(n) {
@@ -525,8 +521,6 @@
         document.getElementById("hdnProductsTotal").value = parseFloat(itemstotal).toFixed(2);
         document.getElementById("Total").value = parseFloat(itemstotal).toFixed(2);
     };
-
-
 </script>
 <script>
 
@@ -675,7 +669,7 @@
         newcontent += "<td  >" + txtAmount + " </td >";
         newcontent += "<td   >";
         newcontent += "<input type='hidden' class='hdnappendProductIdOutput' value=" + hdnProductId + " />";
-         newcontent += "<input type='hidden' class='hdnappendIdOutput' value=" + id + " />";
+        newcontent += "<input type='hidden' class='hdnappendIdOutput' value=" + id + " />";
         newcontent += "<input type='hidden' class='hdnappendVarientIdOutput' value=" + hdnVarientIdOutput + " />";
         newcontent += "<input type='hidden' class='hdnappendProductNameOutput' value=" + txtStoreItem + " />";
         newcontent += "<input type='hidden' class='hdnappendMRPOutput' value=" + txtMRP + " />";
@@ -828,13 +822,17 @@
 
 </script>
 <script>
+     $('#voucherDate').datetimepicker({
+        /* format: 'L',*/
+        format: 'YYYY/MM/DD'
+    });
         var apiUrl = '@Model.ApiUrl';
 
     var addManufactureRequest = {
         financialYearId: "string",
         data: "string",
         data2: "string",
-        invoice: "string",
+        voucherNumber: "string",
         date: "2021-11-26T04:26:32.023Z"
     }
 
@@ -856,7 +854,7 @@
             let text = $(this).find("td").eq(4).html();
             if (text !== "Total") {
 
-                let Name = $(this).find("td").eq(1).text().trim();                
+                let Name = $(this).find("td").eq(1).text().trim();
                 let id = $(this).find(".hdnappendId").val();
                 let variantId = $(this).find(".hdnappendVarientId").val();
                  let storeVariantId = $(this).find(".hdnappendProductId").val();
@@ -910,7 +908,7 @@
         });
 
         addManufactureRequest.financialYearId = financialYearId;
-        addManufactureRequest.invoice = voucherNumber;
+        addManufactureRequest.voucherNumber = voucherNumber;
         addManufactureRequest.data = JSON.stringify(OrderDetl);
         addManufactureRequest.data2 = JSON.stringify(OrderOutput);
 

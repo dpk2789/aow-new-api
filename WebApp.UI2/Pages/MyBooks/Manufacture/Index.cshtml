@@ -34,7 +34,61 @@
                         <input type="hidden" value="@userId" id="userId" />
                         <!-- /.card-header -->
                         <div class="card-body" id="product-main">
-                           
+                            <div id="resultTable">
+                                <table id="productCategoryTable" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Number</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var voucher in Model.ManufacturingVouchers)
+                                        {
+                                            int x = 0;
+                                            if (x == 0)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => voucher.Date)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => voucher.VoucherNumber)
+                                                    </td>
+                                                     <td>
+                                                    </td>
+                                                    <td>
+                                                        <a asp-route-id="@voucher.Id" asp-page="/MyBooks/ProductCategories/Update" class="fa fa-edit">Edit</a> |
+                                                        <a asp-route-id="@voucher.Id" asp-page="/MyBooks/ProductCategoryAttributes/Index" class="btn btn-sm btn-outline-primary">Attributes</a> |
+                                                        <button onclick="confirmAction(event)" data-category-id="@voucher.Id" type="button" class="btn-danger small">Delete</button>
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                            foreach (var item in voucher.ManufacturingVarients)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                       
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.VairentName)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Quantity)
+                                                    </td>
+                                                    <td>
+                                                    </td>
+                                                </tr>
+
+                                                x++;
+                                            }
+
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
 
                         </div>
                         <!-- /.card-body -->

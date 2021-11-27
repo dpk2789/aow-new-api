@@ -5,7 +5,7 @@ namespace Aow.Infrastructure.Domain
     public class ManufacturingVarients
     {
         public Guid Id { get; set; }
-        public string Number { get; set; }
+        public int? SrNo { get; set; }
         public decimal? Quantity { get; set; }
         public string Type { get; set; }
         public Guid? StockProductVariantId { get; set; }

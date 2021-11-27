@@ -1,5 +1,6 @@
 ﻿using Aow.Infrastructure.Common;
 using System;
+using System.Collections.Generic;
 
 namespace Aow.Infrastructure.Domain
 {
@@ -11,11 +12,13 @@ namespace Aow.Infrastructure.Domain
         public decimal? SalePrice { get; set; }
         public decimal? MRPPerUnit { get; set; }
         public decimal? Quantity { get; set; }
+        public decimal? ConsumedQuantity { get; set; }       
         public decimal? ItemAmount { get; set; }
         public decimal Price { get; set; }       
         public Guid? ProductVariantId { get; set; }
         public virtual ProductVariant ProductVariant { get; set; }
         public Guid StockId { get; set; }
         public virtual Stock Stock { get; set; }
+        public List<ManufacturingVarients> ManufacturingVarients { get; set; }
     }
 }

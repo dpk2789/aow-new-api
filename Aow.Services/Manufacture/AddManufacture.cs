@@ -65,13 +65,30 @@ namespace Aow.Services.Manufacture
                         StockProductVariantId = item.StoreVariantId,
                         Quantity = item.Quantity,
                         Type = item.Type,
-                        ManufactureId = manufactureId
+                        ManufactureId = manufactureId,
+                        SrNo = SrNo
                     };
-
+                    _repoWrapper.ManufactureVarientsRepo.Create(manufacturingVarient);
+                    var storeVarient = _repoWrapper.StockVarientRepo.GetStockVarient(item.StoreVariantId.Value);
+                    storeVarient.ConsumedQuantity = item.Quantity;
+                    _repoWrapper.StockVarientRepo.Create(storeVarient);
+                    SrNo++;
+                }
+                foreach (var item in deserialiseListOutput)
+                {
+                    int x = 0;
+                    var manufacturingVarient = new Aow.Infrastructure.Domain.ManufacturingVarients
+                    {
+                        Id = Guid.NewGuid(),
+                        StockProductVariantId = item.StoreVariantId,
+                        Quantity = item.Quantity,
+                        Type = item.Type,
+                        ManufactureId = manufactureId,
+                        SrNo = x
+                    };
                     _repoWrapper.ManufactureVarientsRepo.Create(manufacturingVarient);
                     SrNo++;
                 }
-
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)
                 {

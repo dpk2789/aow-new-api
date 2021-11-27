@@ -24,24 +24,46 @@ namespace Aow.Services.Manufacture
             public string Note { get; set; }
             public bool? Type { get; set; }
             public decimal? Total { get; set; }
-
+            public List<ManufacturingVarientsResponse> ManufacturingVarients { get; set; }
         }
-
-        public IEnumerable<GetManufactureVouchersResponse> Do(PagingParameters pagingParameters, Guid companyId)
+        public class ManufacturingVarientsResponse
         {
-            var user = _repoWrapper.CompanyRepo.GetCompany(companyId);
-            if (user == null)
+            public Guid Id { get; set; }
+            public string VairentName { get; set; }
+            public decimal? Quantity { get; set; }
+            public string Type { get; set; }
+            public Guid? StockProductVariantId { get; set; }
+            public Guid ManufactureId { get; set; }
+        }
+        public IEnumerable<GetManufactureVouchersResponse> Do(PagingParameters pagingParameters, Guid fyrId)
+        {
+            var fyr = _repoWrapper.FinancialYearRepo.GetFinancialYear(fyrId);
+            if (fyr == null)
             {
                 return null;
             };
-            var list = _repoWrapper.ManufacturingRepo.GetManufactures(pagingParameters, companyId).GetAwaiter().GetResult();
-            var newList = list.Select(x => new GetManufactureVouchersResponse
+            var list = _repoWrapper.ManufacturingRepo.GetManufactures(pagingParameters, fyrId).GetAwaiter().GetResult();
+            var manufactureVoucherList = new List<GetManufactureVouchersResponse>();
+            foreach (var voucher in list)
             {
-                Id = x.Id,
-                VoucherNumber = x.VoucherNumber,
-            });
-
-            return newList;
+                var manufactureVoucher = new GetManufactureVouchersResponse();
+                manufactureVoucher.Id = voucher.Id;
+                manufactureVoucher.VoucherNumber = voucher.VoucherNumber;
+                manufactureVoucher.Date = voucher.Date;
+                manufactureVoucherList.Add(manufactureVoucher);
+                var manufacturingVarientsResponseList = new List<ManufacturingVarientsResponse>();
+                foreach (var item in voucher.ManufacturingVarients)
+                {
+                    var manufacturingVarient = new ManufacturingVarientsResponse();
+                    manufacturingVarient.Id = item.Id;
+                    manufacturingVarient.VairentName = item.StockProductVariant.ProductVariant.Name;
+                    manufacturingVarient.Quantity = item.Quantity;
+                    manufacturingVarientsResponseList.Add(manufacturingVarient);
+                }
+                manufactureVoucher.ManufacturingVarients = manufacturingVarientsResponseList;
+            }
+          
+            return manufactureVoucherList;
         }
     }
 }

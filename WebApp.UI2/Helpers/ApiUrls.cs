@@ -90,6 +90,12 @@
             public const string GetStock = Rootlocal + "/api/StockVarients/GetStock";
         }
 
+        public static class ManufactureVoucher
+        {
+            public const string GetManufactureVouchers = Rootlocal + "/api/Manufacture/GetManufactureVouchers";
+            public const string GetStock = Rootlocal + "/api/Manufacture/GetStock";
+        }
+
         public static class LedgerCategories
         {
             public const string GetLedgerCategories = Rootlocal + "/api/LedgerCategory/GetLedgerCategories";

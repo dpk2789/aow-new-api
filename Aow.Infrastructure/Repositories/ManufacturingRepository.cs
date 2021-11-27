@@ -1,6 +1,7 @@
 ﻿using Aow.Infrastructure.Domain;
 using Aow.Infrastructure.IRepositories;
 using Aow.Infrastructure.Paging;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,8 +22,8 @@ namespace Aow.Infrastructure.Repositories
 
         public Task<PagedList<Manufacture>> GetManufactures(PagingParameters ownerParameters, Guid financialYearId)
         {
-            return Task.FromResult(PagedList<Manufacture>.ToPagedList(FindAll().Where(x => x.FinancialYearId == financialYearId).OrderBy(on => on.Date),
-                                    ownerParameters.PageNumber, ownerParameters.PageSize));
+            return Task.FromResult(PagedList<Manufacture>.ToPagedList(FindAll().Where(x => x.FinancialYearId == financialYearId).OrderBy(on => on.Date).
+                Include(x => x.ManufacturingVarients).ThenInclude(x => x.StockProductVariant.ProductVariant), ownerParameters.PageNumber, ownerParameters.PageSize));
         }
     }
 
