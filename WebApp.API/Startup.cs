@@ -41,15 +41,17 @@ namespace WebApp.API
             //        Configuration.GetConnectionString("DefaultConnection"),
             //        b => b.MigrationsAssembly(typeof(AowContext).Assembly.FullName)));
 
-            services.AddDbContextPool<AowContext>(options =>
-               options.UseMySQL(
-                   Configuration.GetConnectionString("DefaultConnection"),
-                   b => b.MigrationsAssembly(typeof(AowContext).Assembly.FullName)));
+            //services.AddDbContextPool<AowContext>(options =>
+            //   options.UseMySQL(
+            //       Configuration.GetConnectionString("DefaultConnection"),
+            //       b => b.MigrationsAssembly(typeof(AowContext).Assembly.FullName)));
 
+            services.AddInfrastructure(Configuration);
 
             services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-               .AddEntityFrameworkStores<AowContext>().AddDefaultTokenProviders(); ;
+               .AddEntityFrameworkStores<AowContext>().AddDefaultTokenProviders();
 
+           
             services.AddApplicationServices();
 
             services.AddSwaggerGen(c =>
