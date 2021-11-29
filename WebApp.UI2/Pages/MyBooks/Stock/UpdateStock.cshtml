@@ -29,7 +29,7 @@
             <!-- SELECT2 EXAMPLE -->
             <div class="card card-info">
                 <div class="card-header">
-                    <h3 class="card-title">Update Product</h3>
+                    <h3 class="card-title">Update Stock Variant</h3>
 
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -62,7 +62,123 @@
                                     </div>
                                     <span asp-validation-for="Input.Name" class="text-danger"></span>
                                 </div>
+                                <div id="resultTable">
+                                    <table class="table table-hover table-responsive table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <td class="col-md-1">S.No</td>
+                                                <td class="col-md-2">Varient Name</td>
+                                                <td class="col-md-2">Description</td>
+                                                <td class="col-md-1">Unit Quantity</td>
+                                                <td class="col-md-2">Consumed Quantity</td>
+                                                <td class="col-md-1">Rate</td>
+                                                <td class="col-md-1">Status</td>
+                                                <td class="col-md-1">Total</td>
+                                                <td class="col-md-1"></td>
+                                            </tr>
 
+                                            <tr>
+                                                <td>
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtStoreItem" class="ui-autocomplete-input form-control" data-url="@Url.Action("GetVarientsForInvoice", "Vouchers")" placeholder="Enter Product" />
+                                                    <input type="hidden" id="hdnStoreItemId" class="form-control" />
+                                                    <input type="hidden" id="hdnProductId" class="form-control" />
+                                                    <input type="hidden" id="hdnProductAccountId" class="form-control" />
+                                                    <input type="hidden" id="hdnAccountCategoryName" class="form-control  hdnAccountCategoryName" />
+                                                    <input type="hidden" id="hdnItemType" class="form-control  hdnItemType" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtDescription" class="form-control" placeholder="Description" />
+
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtQuantity" class="form-control" onchange="recalculateExtendedPrice()" placeholder="Quantity" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtConsumedQuantity" class="form-control" onchange="recalculateExtendedPrice()" placeholder="Consumed Quantity" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtMRP" class="form-control" maxlength="7" placeholder="MRP" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtStatus" class="form-control" maxlength="7" placeholder="Status" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtAmount" class="form-control  txtAmount" placeholder="Amount" value="0" />
+                                                    <input type="hidden" id="hdnAmount" class="form-control  hdnAmount" />
+                                                </td>
+                                                <td>
+                                                    <input id="btnAdd" type="button" value="Add" class="btn btn-primary btn-sm btnadd" />
+                                                    @*<a href="#" class="glyphicon glyphicon-pencil btnadd" id="btnadd" title="Add"></a>*@
+                                                    <a href="#" class="fa fa-edit btnupdate" id="btnupdate" title="Edit" style="display:none;"></a>
+                                                    <a href="#" class="fa fa-erase btnnew" id="btnnew" title="New" style="display:none;"></a>
+                                                </td>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody id="tbodyitems" class="tbodyitems bordered">
+                                            @{
+                                                if (Model.Input.Varients != null)
+                                                {
+                                                    @foreach (var item in Model.Input.Varients)
+                                                    {
+                                            <tr>
+                                                <td>
+                                                    <p class='sNo'>@item.SrNo</p>
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ItemName)
+                                                </td>
+                                                <td>
+                                                    <p class='batchName'>@item.Description</p>
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Quantity)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ConsumedQuantity)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.MRPPerUnit)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Status)
+                                                </td>
+                                                <td>
+                                                    <p class="extendedPrice">@item.ItemAmount</p>
+                                                </td>
+                                                <td>
+                                                    <input type='hidden' class='hdnappendProductId' value=@item.ProductVariantId />
+                                                    <input type='hidden' class='hdnappendProductAccountId' value=@item.Id />
+                                                    <input type="hidden" id="hdnappendAmount" class="hdnappendAmount" value="@item.ItemAmount" />
+                                                    <input type='hidden' class='hdnappendMRP' value=@item.MRPPerUnit />
+                                                    <input type="hidden" id="hdnappendItemName" class="hdnappendProductName" value="@item.ItemName" />
+                                                    <input type="hidden" id="hdnappendQuantity" class="hdnappendQuantity" value="@item.Quantity" />
+                                                    <input type="hidden" id="hdnappendMRPPerUnit" class="hdnappendMRPPerUnit" value="@item.MRPPerUnit" />
+                                                    <button class="btn btn-sm btn-outline-warning fas fa-edit addVoucherVariant" value="@item.Id" style='cursor:pointer;'></button>
+                                                    @*<button class="btn btn-sm btn-outline-light fa fa-edit edit" value="@item.Id" style='cursor:pointer;'></button>*@
+                                                    @*<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">modal</button>*@
+                                                    <button class="btn btn-sm btn-outline-danger fas fa-trash-alt delete" value="@item.Id" style='cursor:pointer;'></button>
+
+
+                                                </td>
+                                            </tr>
+
+                                                    }
+                                                }
+                                            }
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><input type='hidden' id="hdnItemTotal" class='hdnItemTotal' /></td>
+                                                <td>Total</td>
+                                                <td class='itemstotalclass'></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </form>
                         </div>
 

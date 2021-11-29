@@ -80,7 +80,7 @@ namespace WebApp.UI2.Pages.MyBooks.ProductVarients
                 string result = postTask.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             }
 
-            return RedirectToPage("/MyBooks/ProductVarients/Index", new { id = request.ProductId });
+            return RedirectToPage("/MyBooks/Products/Update", new { id = request.ProductId });
         }
     }
 }

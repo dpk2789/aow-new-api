@@ -24,22 +24,39 @@ namespace WebApp.UI2.Pages.MyBooks.Stock
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
-            public DateTime Date { get; set; }
+            public DateTime Date { get; set; }         
             public string VoucherNumber { get; set; }
             public string ModelNumber { get; set; }
             public string Discription { get; set; }
             public string Size { get; set; }
-            public decimal? SalePrice { get; set; }
-            public string ItemType { get; set; }
-            public string TaxType { get; set; }
-            public bool Is_Taxable { get; set; }
+            public decimal? SalePrice { get; set; }           
             public decimal? MRPPerUnit { get; set; }
             public decimal? Quantity { get; set; }
             public decimal? ItemAmount { get; set; }
             public string Description { get; set; }
             public decimal Price { get; set; }
             public Guid? VoucherItemId { get; set; }
+            public List<UpdateStockVariant> Varients { get; set; }
         }
+        public class UpdateStockVariant
+        {
+            public Guid Id { get; set; }
+            public Guid? VoucherItemVarientId { get; set; }
+            public int? SrNo { get; set; }
+            public string UniqueNumber { get; set; }
+            public string Status { get; set; }
+            public string ItemName { get; set; }
+            public string Description { get; set; }
+            public decimal? SalePrice { get; set; }
+            public decimal? MRPPerUnit { get; set; }
+            public decimal? Quantity { get; set; }
+            public decimal? ConsumedQuantity { get; set; }
+            public decimal? ItemAmount { get; set; }
+            public decimal Price { get; set; }
+            public Guid? ProductVariantId { get; set; }          
+            public Guid StockId { get; set; }          
+        }
+   
         [BindProperty] public UpdateStockViewModel Input { get; set; }
         public async Task<IActionResult> OnGet(Guid Id)
         {
