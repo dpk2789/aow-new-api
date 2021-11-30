@@ -87,7 +87,7 @@
         public static class StockVarients
         {
             public const string GetAllStoreVarientsByCompany = Rootlocal + "/api/StockVarients/GetAllStoreVarientsByCompany";
-            public const string GetStock = Rootlocal + "/api/StockVarients/GetStock";
+            public const string GetStockVariant = Rootlocal + "/api/StockVarients/GetStockVariant";
         }
 
         public static class ManufactureVoucher

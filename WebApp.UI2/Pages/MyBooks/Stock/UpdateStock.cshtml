@@ -123,47 +123,45 @@
                                                 {
                                                     @foreach (var item in Model.Input.Varients)
                                                     {
-                                            <tr>
-                                                <td>
-                                                    <p class='sNo'>@item.SrNo</p>
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.ItemName)
-                                                </td>
-                                                <td>
-                                                    <p class='batchName'>@item.Description</p>
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Quantity)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.ConsumedQuantity)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.MRPPerUnit)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Status)
-                                                </td>
-                                                <td>
-                                                    <p class="extendedPrice">@item.ItemAmount</p>
-                                                </td>
-                                                <td>
-                                                    <input type='hidden' class='hdnappendProductId' value=@item.ProductVariantId />
-                                                    <input type='hidden' class='hdnappendProductAccountId' value=@item.Id />
-                                                    <input type="hidden" id="hdnappendAmount" class="hdnappendAmount" value="@item.ItemAmount" />
-                                                    <input type='hidden' class='hdnappendMRP' value=@item.MRPPerUnit />
-                                                    <input type="hidden" id="hdnappendItemName" class="hdnappendProductName" value="@item.ItemName" />
-                                                    <input type="hidden" id="hdnappendQuantity" class="hdnappendQuantity" value="@item.Quantity" />
-                                                    <input type="hidden" id="hdnappendMRPPerUnit" class="hdnappendMRPPerUnit" value="@item.MRPPerUnit" />
-                                                    <button class="btn btn-sm btn-outline-warning fas fa-edit addVoucherVariant" value="@item.Id" style='cursor:pointer;'></button>
-                                                    @*<button class="btn btn-sm btn-outline-light fa fa-edit edit" value="@item.Id" style='cursor:pointer;'></button>*@
-                                                    @*<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">modal</button>*@
-                                                    <button class="btn btn-sm btn-outline-danger fas fa-trash-alt delete" value="@item.Id" style='cursor:pointer;'></button>
+                                                        <tr>
+                                                            <td>
+                                                                <p class='sNo'>@item.SrNo</p>
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.ItemName)
+                                                            </td>
+                                                            <td>
+                                                                <p class='batchName'>@item.Description</p>
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Quantity)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.ConsumedQuantity)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.MRPPerUnit)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Status)
+                                                            </td>
+                                                            <td>
+                                                                <p class="extendedPrice">@item.ItemAmount</p>
+                                                            </td>
+                                                            <td>
+                                                                <input type='hidden' class='hdnappendProductId' value=@item.ProductVariantId />
+                                                                <input type='hidden' class='hdnappendProductAccountId' value=@item.Id />
+                                                                <input type="hidden" id="hdnappendAmount" class="hdnappendAmount" value="@item.ItemAmount" />
+                                                                <input type='hidden' class='hdnappendMRP' value=@item.MRPPerUnit />
+                                                                <input type="hidden" id="hdnappendItemName" class="hdnappendProductName" value="@item.ItemName" />
+                                                                <input type="hidden" id="hdnappendQuantity" class="hdnappendQuantity" value="@item.Quantity" />
+                                                                <input type="hidden" id="hdnappendMRPPerUnit" class="hdnappendMRPPerUnit" value="@item.MRPPerUnit" />
+                                                                 <a asp-route-id="@item.Id" asp-page="/MyBooks/Stock/UpdateStockVariant" target="_blank" 
+                                                                 class="btn btn-primary btn-sm" title="Edit Voucher"><i class="fas fa-edit"></i></a>                                                                                                             
+                                                                <button class="btn btn-sm btn-outline-danger fas fa-trash-alt delete" value="@item.Id" style='cursor:pointer;'></button>
 
-
-                                                </td>
-                                            </tr>
+                                                            </td>
+                                                        </tr>
 
                                                     }
                                                 }
@@ -203,51 +201,375 @@
 
 </div>
 
+
+
 @section scripts{
     @*<script src="~/js/product.js"></script>*@
-    <script>
-       var apiUrl = '@Model.ApiUrl';
+<script>
 
-        function UpdateProduct(e) {
-           // let confirmAction = confirm("Are you sure to delete this product?");
-            performPostRequest(e);
+    function numberWithCommas(n) {
+        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function ClearItemAdd() {
+        $('#txtDescription').val('');
+        $('#txtStoreItemInput').val('');
+        $('#hdnStoreItemId').val('');
+        $('#hdnProductId').val('');
+        $('#txtMRP').val('');
+        $('#txtQuantity').val('');
+        $('#txtAmount').val('');
+        $('#btnupdate').hide();
+        $('#btnnew').hide();
+        $('#btnadd').show();
+    }
+
+    function ClearOthers() {
+        $('#Head').val('');
+        $('#Invoice').val('');
+        $('#Date').val('');
+        $('#Particular').val('');
+        $('#ParticularId').val('');
+        $('#CustomerName').val('');
+        $('#Total').val('');
+        $('#MembershipId').val('');
+        //  $('#Net').val('');
+    };
+
+    function recalculateExtendedPrice() {
+        var quantity = parseFloat(document.getElementById("txtQuantity").value).toFixed(0);
+        var unitPrice = parseFloat(document.getElementById("txtMRP").value).toFixed(2);
+
+        if (isNaN(quantity)) {
+            quantity = 1;
         }
 
-        var updateStockRequest = {
-            id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            name: "f1",
-            quantity: 0,
-        };
-        function performPostRequest(e) {
-            let userId = document.getElementById('userId');
-            let stockId = document.getElementById('StockId').value;
-            let name = document.getElementById('Input_Name').value;
-            let quantity = document.getElementById('Input_Quantity').value;
-            updateStockRequest.name = name;
-            updateStockRequest.id = stockId;
-            updateStockRequest.quantity = quantity;
-            let userAccessToken = userId.value;
-            console.log(this.updateStockRequest);
+        if (isNaN(unitPrice)) {
+            unitPrice = 0;
+        }
 
-            axios.put(`${apiUrl}/api/Stocks/UpdateStock`, this.updateStockRequest, {
-                headers: {
-                    Authorization: "Bearer " + userAccessToken
-                }
+        document.getElementById("txtQuantity").value = quantity;
+        document.getElementById("txtMRP").value = unitPrice;
+
+        document.getElementById("txtAmount").value = (quantity * unitPrice).toFixed(2);
+        //document.getElementById("hdnAmount").value = (quantity * unitPrice).toFixed(2);
+    };
+
+
+    $("#txtStoreItemInput").autocomplete({
+        minLength: 1,
+        source: function (request, response) {
+            var url = $(this.element).data("url");
+            $.getJSON(url, { term: request.term }, function (data) {
+                response(data)
             })
-                 .then(function (response) {
-                     console.log(response);
-                     if (response.data.success) {
-                         toastr.success(response.data.description)
-                         window.location.href = '/MyBooks/Stock/CurrentStock'
-                     } else {
-                         toastr.error(response.data.description)
-                     }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    toastr.error('Some Error Occur!!')
-                });
-            e.preventDefault();
+        },
+        appendTo: $(".modal-body ui-autocomplete-input"),
+        select: function (event, ui) {
+            $("#hdnStoreVarientId").val(ui.item.id);
+             $("#hdnVarientId").val(ui.item.varientId);
+            $("#txtDescription").val(ui.item.autoGenerateName);
+            $('#txtDescription').focus()
+            if (ui.item.Itemtype === "Taxation") {
+                $("#txtMRP").val(ui.item.percent);
+            } else {
+                $("#txtMRP").val(ui.item.mRPPerUnit);
+            }
+
+            $("#hdnAccountCategoryName").val(ui.item.accountCategoryName);
+            $("#hdnProductAccountId").val(ui.item.productAccountId);
+            //if (ui.item.ProductAccountId === null) {
+            //    alert("Please Set Item Accounts first")
+            //    return false;
+            //}
+            $("#hdnItemType").val(ui.item.itemtype);
+        },
+        change: function (event, ui) {
+            if (!ui.item) {
+                $(event.target).val("");
+            }
         }
-    </script>
+    });
+
+    $('.btnadd').on("click", function (e) {
+        let golbalPreviousAmount = 0;
+        let sNo = 0;
+        let newcontent = "";
+        let id ="/" ;
+        let txtStoreItem = $('#txtStoreItemInput').val();
+        let txtDescription = $('#txtDescription').val();
+        let hdnProductId = $('#hdnStoreVarientId').val();
+        let hdnVarientId = $('#hdnVarientId').val();
+        let txtMRP = $('#txtMRP').val();
+        let txtQuantity = $('#txtQuantity').val();
+        let txtAmount = $('#txtAmount').val();
+        let hdnAmount = $('#hdnAmount').val();
+        let hdnPreviousAmount = golbalPreviousAmount;
+
+        golbalPreviousAmount = txtAmount;
+        if (isNaN(txtQuantity) || txtQuantity === "") {
+            txtQuantity = 0;
+        }
+        var hdnAccountCategoryName = $('#hdnAccountCategoryName').val();
+        //  alert(hdnAccountCategoryName)
+        $('.dvitemexistmsg').html("");
+        newcontent = "";
+        let itemstotal = 0;
+        let itemstotalWithOutTax = 0;
+        let dueMoney = 0;
+        let x = 0;
+
+        $('#tbodyitems tr').each(function () {
+            let text = $(this).find("td").eq(4).html();
+            if (text !== "Total") {
+
+                let hdnappendProductName = $(this).find('.hdnappendProductName').val();
+                let amnt = $(this).find('.hdnappendAmount').val();
+
+                itemstotal = parseFloat(itemstotal) + parseFloat(amnt);
+                itemstotalWithOutTax = parseFloat(itemstotalWithOutTax) + parseFloat(amnt);
+                dueMoney = parseFloat(dueMoney) + parseFloat(amnt);
+                x = parseFloat(x) + parseFloat(1);
+
+                newcontent += "<tr >";
+                newcontent += "<td>" + x + " </td >";
+                newcontent += "<td>" + $(this).find("td").eq(1).html(); + " </td >";
+                newcontent += "<td>" + $(this).find("td").eq(2).html(); + " </td >";
+                newcontent += "<td>" + $(this).find("td").eq(3).html(); + " </td >";
+                newcontent += "<td>" + $(this).find("td").eq(4).html(); + " </td >";
+                newcontent += "<td>" + $(this).find("td").eq(5).html(); + " </td >";
+                newcontent += "<td   >";
+
+                let hdnappendMRP = $(this).find('.hdnappendMRP').val();
+                let hdnappendQuantity = $(this).find('.hdnappendQuantity').val();
+                let hdnappendProductId = $(this).find(".hdnappendProductId").val();
+                let hdnappendVarientId = $(this).find(".hdnappendVarientId").val();
+                let hdnappendId = $(this).find(".hdnappendId").val();
+
+                newcontent += "<input type='hidden' class='hdnappendId' value=" + hdnappendId + " />";
+                newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnappendProductId + " />";
+                newcontent += "<input type='hidden' class='hdnappendVarientId' value=" + hdnappendVarientId + " />";
+                newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
+                newcontent += "<input type='hidden' class='hdnappendAmount' value=" + amnt + " />";
+                newcontent += "<input type='hidden' class='hdnappendMRP' value=" + hdnappendMRP + " />";
+                newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + hdnappendQuantity + " />";
+                newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
+                newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
+                newcontent += "</td >";
+                newcontent += "</tr >";
+            }
+        });
+        itemstotal = parseFloat(itemstotal) + parseFloat(txtAmount);
+        x = parseFloat(x) + parseFloat(1);
+
+        //alert(hdnBatchId);
+        newcontent += "<tr >";
+        newcontent += "<td  >" + x + " </td >";
+        newcontent += "<td  class='txtStoreItem'>" + txtStoreItem + " </td >";
+        newcontent += "<td  class='txtDescription'>" + txtDescription + " </td >";
+        newcontent += "<td  >" + txtMRP + " </td >";
+        newcontent += "<td  >" + txtQuantity + " </td >";
+        newcontent += "<td  >" + txtAmount + " </td >";
+        newcontent += "<td   >";
+        newcontent += "<input type='hidden' class='hdnappendId' value=" + id + " />";
+        newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnProductId + " />";
+        newcontent += "<input type='hidden' class='hdnappendVarientId' value=" + hdnVarientId + " />";
+        newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
+        newcontent += "<input type='hidden' class='hdnappendMRP' value=" + txtMRP + " />";
+        newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + txtQuantity + " />";
+        newcontent += "<input type='hidden' class='hdnappendAmount' value=" + parseFloat(txtAmount) + " />";
+        newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
+        newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
+        newcontent += "</td >";
+        newcontent += "</tr >";
+
+
+        if (txtStoreItem === "SubTotal") {
+            var subTotal = 0;
+            $('#tbodyitems tr').each(function () {
+                var text = $(this).find("td").eq(3).html();
+                if (text !== "Total") {
+                    var amnt = $(this).find('.hdnappendAmount').val();
+                    if (hdnAccountCategoryName === "SalesDiscount") {
+                        subTotal = parseFloat(subTotal) - parseFloat(amnt);
+                    }
+                    else {
+                        subTotal = parseFloat(subTotal) + parseFloat(amnt);
+                    }
+                }
+            });
+
+            newcontent += "<tr >";
+            newcontent += "<td  class='txtStoreItem'>" + txtStoreItem + " </td >";
+            newcontent += "<td  ></td >";
+            newcontent += "<td  ><input type='hidden' class='itemstotalhdnclass' value=" + subTotal + " /></td >";
+            newcontent += "<td  ></td >";
+            newcontent += "<td  class='itemstotalclass'>" + numberWithCommas(parseFloat(subTotal).toFixed(2)) + " </td >";
+            newcontent += "<td   >";
+            newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
+            newcontent += "<input type='hidden' class='hdnappendId' value=" + id + " />";
+            newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnProductId + " />";
+            newcontent += "<input type='hidden' class='hdnappendVarientId' value=" + hdnVarientId + " />";
+            newcontent += "<input type='hidden' class='hdnappendAmount' value=" + subTotal + " />";
+            newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
+            newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
+            newcontent += "</td >";
+            newcontent += "</tr >";
+            itemstotal = subTotal;
+        }
+
+        //calculate total
+        newcontent += "<tr >";
+        newcontent += "<td ></td >";
+        newcontent += "<td ></td >";
+        newcontent += "<td  ></td >";
+        newcontent += "<td  ><input type='hidden' id='hdnItemTotal' class='itemstotalhdnclass' value=" + itemstotal + " /></td >";
+        newcontent += "<td  >Total</td >";
+        newcontent += "<td  class='itemstotalclass'>" + numberWithCommas(parseFloat(itemstotal).toFixed(2)) + " </td >";
+        newcontent += "</tr >";
+
+
+        $('#tbodyitems').empty().append(newcontent);
+        //document.getElementById("ProductsTotal").value = numberWithCommas(parseFloat(itemstotal).toFixed(2));
+        //  document.getElementById("hdnProductsTotal").value = parseFloat(itemstotal).toFixed(2);
+        // document.getElementById("Input_Total").value = parseFloat(itemstotal).toFixed(2);
+
+        //  $(".showimg").hide();
+        ClearItemAdd();
+    });
+
+    $("#tbodyitems").on('click', '.delete', function (e) {
+        e.preventDefault();
+        var tr = $(this).closest('tr');
+        tr.css("background-color", "#FF3700");
+        tr.remove();
+        yoCalculateItemsTotal();
+        ClearItemAdd();
+    });
+
+    function yoCalculateItemsTotal() {
+        //var BatchId = $('#BatchId').val();
+        //var BatchIdName = $("#BatchId option:selected").text();
+        //var txtStoreItem = $('#txtStoreItem').val();
+        //var hdnStoreItemId = $('#hdnStoreItemId').val();
+        //var txtMRP = $('#txtMRP').val();
+        //var txtQuantity = $('#txtQuantity').val();
+        //var txtAmount = $('#txtAmount').val();
+        //var hdnAmount = $('#hdnAmount').val();
+
+        $('.dvitemexistmsg').html("");
+        var newcontent = "";
+        newcontent = "";
+        var itemstotal = 0;
+        $('#tbodyitems tr').each(function () {
+            var text = $(this).find("td").eq(4).html();
+            if (text !== "Total") {
+                var amnt = $(this).find('.hdnappendAmount').val();
+
+                var hdnappendhdnItemType = $(this).find(".hdnappendhdnItemType").val();
+                if (hdnappendhdnItemType.replace(/\s/g, '') === "Discount") {
+                    itemstotal = parseFloat(itemstotal) - parseFloat(amnt);
+                }
+                else if (hdnappendhdnItemType.replace(/\s/g, '') === "PayMentReceived") {
+                    // itemstotal = parseFloat(itemstotal) - parseFloat(amnt);
+                }
+                else {
+                    itemstotal = parseFloat(itemstotal) + parseFloat(amnt);
+                }
+
+                newcontent += "<tr >";
+                newcontent += "<td>" + $(this).find("td").eq(0).html(); + " </td >";
+                newcontent += "<td>" + $(this).find("td").eq(1).html(); + " </td >";
+                newcontent += "<td>" + $(this).find("td").eq(2).html(); + " </td >";
+                newcontent += "<td>" + $(this).find("td").eq(3).html(); + " </td >";
+                newcontent += "<td>" + $(this).find("td").eq(4).html(); + " </td >";
+                newcontent += "<td>" + $(this).find("td").eq(5).html(); + " </td >";
+                newcontent += "<td   >";
+
+                var amnt = $(this).find('.hdnappendAmount').val();
+                var hdnAccountCategoryName = $(this).find('.hdnappendhdnAccountCategoryName').val();
+                var hdnappendProductName = $(this).find('.hdnappendProductName').val();
+                var hdnappendMRP = $(this).find('.hdnappendMRP').val();
+                var hdnappendQuantity = $(this).find('.hdnappendQuantity').val();
+                var hdnappendAmount = $(this).find(".hdnappendAmount").val();
+                var hdnappendProductId = $(this).find(".hdnappendProductId").val();
+                var hdnappendProductAccountId = $(this).find(".hdnappendProductAccountId").val();
+
+
+                newcontent += "<input type='hidden' class='hdnappendhdnAccountCategoryName' value=" + hdnAccountCategoryName + " />";
+                newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnappendProductId + " />";
+                newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnappendProductAccountId + " />";
+                newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
+                newcontent += "<input type='hidden' class='hdnappendAmount' value=" + amnt + " />";
+                newcontent += "<input type='hidden' class='hdnappendMRP' value=" + hdnappendMRP + " />";
+                newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + hdnappendQuantity + " />";
+                newcontent += "<input type='hidden' class='hdnappendhdnItemType' value=" + hdnappendhdnItemType + " />";
+                newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
+                newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
+                newcontent += "</td >";
+                newcontent += "</tr >";
+            }
+        });
+
+        //calculate total
+        newcontent += "<tr >";
+        newcontent += "<td ></td >";
+        newcontent += "<td  ></td >";
+        newcontent += "<td  ></td >";
+        newcontent += "<td  ><input type='hidden' id='hdnItemTotal' class='itemstotalhdnclass' value=" + itemstotal + " /></td >";
+        newcontent += "<td  >Total</td >";
+        newcontent += "<td  class='itemstotalclass'>" + numberWithCommas(parseFloat(itemstotal).toFixed(2)) + " </td >";
+        newcontent += "</tr >";
+
+        $('#tbodyitems').empty().append(newcontent);
+        //document.getElementById("ProductsTotal").value = numberWithCommas(parseFloat(itemstotal).toFixed(2));
+        document.getElementById("hdnProductsTotal").value = parseFloat(itemstotal).toFixed(2);
+        document.getElementById("Total").value = parseFloat(itemstotal).toFixed(2);
+    };
+</script>
+<script>
+    var apiUrl = '@Model.ApiUrl';
+
+     function UpdateProduct(e) {
+        // let confirmAction = confirm("Are you sure to delete this product?");
+         performPostRequest(e);
+     }
+
+     var updateStockRequest = {
+         id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+         name: "f1",
+         quantity: 0,
+     };
+     function performPostRequest(e) {
+         let userId = document.getElementById('userId');
+         let stockId = document.getElementById('StockId').value;
+         let name = document.getElementById('Input_Name').value;
+         let quantity = document.getElementById('Input_Quantity').value;
+         updateStockRequest.name = name;
+         updateStockRequest.id = stockId;
+         updateStockRequest.quantity = quantity;
+         let userAccessToken = userId.value;
+         console.log(this.updateStockRequest);
+
+         axios.put(`${apiUrl}/api/Stocks/UpdateStock`, this.updateStockRequest, {
+             headers: {
+                 Authorization: "Bearer " + userAccessToken
+             }
+         })
+              .then(function (response) {
+                  console.log(response);
+                  if (response.data.success) {
+                      toastr.success(response.data.description)
+                      window.location.href = '/MyBooks/Stock/CurrentStock'
+                  } else {
+                      toastr.error(response.data.description)
+                  }
+             })
+             .catch(function (error) {
+                 console.log(error);
+                 toastr.error('Some Error Occur!!')
+             });
+         e.preventDefault();
+     }
+</script>
 }

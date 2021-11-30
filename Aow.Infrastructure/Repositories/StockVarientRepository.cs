@@ -18,7 +18,7 @@ namespace Aow.Infrastructure.Repositories
 
         public StockProductVariant GetStockVarient(Guid Id)
         {
-            return FindByCondition(x => x.Id == Id).FirstOrDefault();
+            return FindByCondition(x => x.Id == Id).Include(x => x.ProductVariant).FirstOrDefault();
         }
         public StockProductVariant GetStockVarientByVoucherVarient(Guid Id)
         {
