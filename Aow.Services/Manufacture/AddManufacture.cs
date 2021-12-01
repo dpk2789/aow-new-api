@@ -29,6 +29,7 @@ namespace Aow.Services.Manufacture
             public Guid Id { get; set; }
             public Guid? VariantId { get; set; }
             public decimal? Quantity { get; set; }
+            public decimal? Rate { get; set; }
             public string Type { get; set; }
             public Guid? StoreVariantId { get; set; }
         }
@@ -57,37 +58,59 @@ namespace Aow.Services.Manufacture
                 _repoWrapper.ManufacturingRepo.Create(manufacture);
                 var deserialiseList = JsonConvert.DeserializeObject<List<AddInputOutputRequest>>(request.data);
                 var deserialiseListOutput = JsonConvert.DeserializeObject<List<AddInputOutputRequest>>(request.data2);
-                foreach (var item in deserialiseList)
+                //input
+                foreach (var input in deserialiseList)
                 {
                     var manufacturingVarient = new Aow.Infrastructure.Domain.ManufacturingVarients
                     {
                         Id = Guid.NewGuid(),
-                        StockProductVariantId = item.StoreVariantId,
-                        Quantity = item.Quantity,
-                        Type = item.Type,
+                        StockProductVariantId = input.StoreVariantId,
+                        Quantity = input.Quantity,
+                        Type = input.Type,
                         ManufactureId = manufactureId,
                         SrNo = SrNo
                     };
                     _repoWrapper.ManufactureVarientsRepo.Create(manufacturingVarient);
-                    var storeVarient = _repoWrapper.StockVarientRepo.GetStockVarient(item.StoreVariantId.Value);
-                    storeVarient.ConsumedQuantity = item.Quantity;
-                    _repoWrapper.StockVarientRepo.Create(storeVarient);
+                    var storeVarient = _repoWrapper.StockVarientRepo.GetStockVarient(input.StoreVariantId.Value);
+                    storeVarient.ConsumedQuantity = input.Quantity;
+                    _repoWrapper.StockVarientRepo.Update(storeVarient);
                     SrNo++;
                 }
-                foreach (var item in deserialiseListOutput)
+                //output
+                foreach (var output in deserialiseListOutput)
                 {
                     int x = 0;
+                    Guid stockId = Guid.NewGuid();
+                    var variant = _repoWrapper.ProductVarientRepo.GetProductVariant(output.VariantId.Value);
+                    var stockNew = new Aow.Infrastructure.Domain.Stock
+                    {
+                        Id = stockId,
+                        MRPPerUnit = output.Rate,                       
+                        Quantity = output.Quantity,
+                        ProductId = variant.ProductId,                       
+                        CreatedDate = DateTime.Now,
+                    };
+                    _repoWrapper.StockRepo.Create(stockNew);
+                    var stockVariant = new Aow.Infrastructure.Domain.StockProductVariant
+                    {
+                        Id = Guid.NewGuid(),
+                        MRPPerUnit = output.Rate,                      
+                        Quantity = output.Quantity,
+                        ProductVariantId = variant.Id,                       
+                        StockId = stockId
+                    };
+                    _repoWrapper.StockVarientRepo.Create(stockVariant);
                     var manufacturingVarient = new Aow.Infrastructure.Domain.ManufacturingVarients
                     {
                         Id = Guid.NewGuid(),
-                        StockProductVariantId = item.StoreVariantId,
-                        Quantity = item.Quantity,
-                        Type = item.Type,
+                        StockProductVariantId = stockVariant.Id,
+                        Quantity = output.Quantity,
+                        Type = output.Type,
                         ManufactureId = manufactureId,
                         SrNo = x
                     };
                     _repoWrapper.ManufactureVarientsRepo.Create(manufacturingVarient);
-                    SrNo++;
+                    x++;
                 }
                 int i = await _repoWrapper.SaveNew();
                 if (i <= 0)

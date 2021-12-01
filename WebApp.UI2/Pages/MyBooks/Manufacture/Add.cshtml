@@ -74,7 +74,7 @@
                                                 <td>S.No</td>
                                                 <td>Item Name</td>
                                                 <td>Description</td>
-                                                <td>Quantity</td>
+                                                <td>Consumed Quantity</td>
                                                 <td>Rate</td>
                                                 <td>Amount</td>
                                             </tr>
@@ -121,7 +121,7 @@
                                                 <td>S.No</td>
                                                 <td>Item Name</td>
                                                 <td>Description</td>
-                                                <td>Quantity</td>
+                                                <td>Output Quantity</td>
                                                 <td>Rate</td>
                                                 <td>Amount</td>
                                             </tr>
@@ -129,7 +129,7 @@
                                                 <td>
                                                 </td>
                                                 <td>
-                                                    <input type="text" id="txtStoreItemOutput" class="ui-autocomplete-input form-control" data-url="@Url.Action("GetStockVarientsForManufacturing", "Vouchers")"
+                                                    <input type="text" id="txtStoreItemOutput" class="ui-autocomplete-input form-control" data-url="@Url.Action("GetVarientsForManufacturing", "Vouchers")"
                                                            placeholder="Enter Product" />
                                                     <input type="hidden" id="hdnVarientIdOutput" class="form-control" />
                                                     <input type="hidden" id="hdnStoreVarientIdOutput" class="form-control" />
@@ -570,7 +570,7 @@
         appendTo: $(".modal-body ui-autocomplete-input"),
         select: function (event, ui) {
             $("#hdnStoreVarientIdOutput").val(ui.item.id);
-             $("#hdnVarientIdOutput").val(ui.item.varientId);
+             $("#hdnVarientIdOutput").val(ui.item.id);
             $("#txtDescriptionOutput").val(ui.item.autoGenerateName);
             $('#txtDescriptionOutput').focus()
             if (ui.item.Itemtype === "Taxation") {
@@ -870,7 +870,7 @@
                     'storeVariantId': storeVariantId,
                     'Id': id,
                     "type": "Input",
-                    'MRPPerUnit': MRPPerUnit,
+                    'Rate': MRPPerUnit,
                     'Quantity': Quantity,
                     'ItemAmount': ItemAmount
                 });
@@ -898,9 +898,10 @@
                 OrderOutput.push({
                     'Name': Name,
                     'storeVariantId': storeVariantId,
+                    'variantId':variantId,
                     'Id': id,
                     "type": "Output",
-                    'MRPPerUnit': MRPPerUnit,
+                    'Rate': MRPPerUnit,
                     'Quantity': Quantity,
                     'ItemAmount': ItemAmount
                 });

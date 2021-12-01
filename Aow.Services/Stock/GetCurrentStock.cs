@@ -79,7 +79,29 @@ namespace Aow.Services.Stock
                         }
                         newStock.StockProductVariants = varientList;
                     }                   
-                }               
+                }
+                else
+                {
+                    var varientList = new List<GetStockProductVariantResponse>();
+                    GetCurrentStockResponse newStock = new GetCurrentStockResponse
+                    {
+                        Id = item.Id,
+                        Quantity = item.Quantity,
+                        Name = item.Product.Name,                       
+                    };
+                    stockList.Add(newStock);
+                    foreach (var varient in item.StockProductVariants)
+                    {
+                        var getStockProductVariantResponse = new GetStockProductVariantResponse
+                        {
+                            Id = varient.Id,
+                            Name = varient.ProductVariant.Name,
+                            Quantity = varient.Quantity
+                        };
+                        varientList.Add(getStockProductVariantResponse);
+                    }
+                    newStock.StockProductVariants = varientList;
+                }
             }
             return stockList;
         }
