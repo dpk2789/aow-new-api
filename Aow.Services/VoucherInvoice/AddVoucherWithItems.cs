@@ -229,7 +229,7 @@ namespace Aow.Services.VoucherInvoice
 
                         foreach (var item in deserialiseList)
                         {
-                            Aow.Infrastructure.Domain.VoucherItem voucherItem = new Aow.Infrastructure.Domain.VoucherItem();
+                            var voucherItem = new Aow.Infrastructure.Domain.VoucherItem();
                             var itemId = Guid.NewGuid();
                             voucherItem.Id = itemId;
                             voucherItem.SrNo = srnoItem;
@@ -247,6 +247,10 @@ namespace Aow.Services.VoucherInvoice
                             var stockNew = new Aow.Infrastructure.Domain.Stock
                             {
                                 Id = stockId,
+                                Date = request.data,
+                                InOut = "In",
+                                Status = "Full",
+                                Type = "Purchase Bill",
                                 MRPPerUnit = item.MRPPerUnit,
                                 Price = item.Price,
                                 Quantity = item.Quantity,

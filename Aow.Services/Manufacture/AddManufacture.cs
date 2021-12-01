@@ -85,18 +85,25 @@ namespace Aow.Services.Manufacture
                     var stockNew = new Aow.Infrastructure.Domain.Stock
                     {
                         Id = stockId,
-                        MRPPerUnit = output.Rate,                       
+                        Date = request.Date.ToString(),
+                        MRPPerUnit = output.Rate,
                         Quantity = output.Quantity,
-                        ProductId = variant.ProductId,                       
+                        ProductId = variant.ProductId,
                         CreatedDate = DateTime.Now,
+                        InOut = "In",
+                        Status = "Full",
+                        Type = "Manufacture",
                     };
                     _repoWrapper.StockRepo.Create(stockNew);
                     var stockVariant = new Aow.Infrastructure.Domain.StockProductVariant
                     {
                         Id = Guid.NewGuid(),
-                        MRPPerUnit = output.Rate,                      
+                        MRPPerUnit = output.Rate,
+                        InOut = "In",
+                        Status = "Full",
+                        StockInBy = "Manufacture",
                         Quantity = output.Quantity,
-                        ProductVariantId = variant.Id,                       
+                        ProductVariantId = variant.Id,
                         StockId = stockId
                     };
                     _repoWrapper.StockVarientRepo.Create(stockVariant);

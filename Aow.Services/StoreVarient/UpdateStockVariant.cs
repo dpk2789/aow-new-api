@@ -46,6 +46,7 @@ namespace Aow.Services.StoreVarient
                 }
 
                 stockVariant.ConsumedQuantity = request.ConsumedQuantity;
+                stockVariant.Status = request.Status;
                 _repoWrapper.StockVarientRepo.Update(stockVariant);
 
                 int i = await _repoWrapper.SaveNew();

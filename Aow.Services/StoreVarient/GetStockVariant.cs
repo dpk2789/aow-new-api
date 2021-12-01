@@ -14,6 +14,7 @@ namespace Aow.Services.StoreVarient
         public class GetStockVariantResponse
         {
             public Guid Id { get; set; }
+            public Guid StockId { get; set; }
             public string ItemName { get; set; }
             public decimal? Quantity { get; set; }
             public string UniqueNumber { get; set; }
@@ -35,6 +36,7 @@ namespace Aow.Services.StoreVarient
                 Rate = stockVarient.MRPPerUnit,
                 ConsumedQuantity = stockVarient.ConsumedQuantity,
                 Status = stockVarient.Status,
+                StockId = stockVarient.StockId,
             };
 
             return getCompanyResponse;

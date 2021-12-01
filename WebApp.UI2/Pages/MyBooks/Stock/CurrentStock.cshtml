@@ -95,130 +95,142 @@
     </section>
 </div>
 @section scripts{
-    <script>
-        $(document).ready(function () {
-            DataTableInit();
+<script>
+    $(document).ready(function () {
+        DataTableInit();
+    });
+
+    function DataTableInit() {
+
+        var table = $('#productList').DataTable({
+            destroy: true,
+            "ajax": '/Partials/GetCurrentStock',
+            "columns": [
+                {
+                    "className": 'details-control',
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": ''
+                },
+                { "data": "date" },
+                { "data": "voucherNumber" },
+                { "data": "name" },
+                { "data": "quantity" },
+                {
+                    'data': 'Options',
+                    'render': function (data, type, row) {
+                        let id =  row.id ;
+                        var url = '/MyBooks/Stock/UpdateStock/?Id=' + id;
+                        /**/
+                        let update = '<a class="btn btn-warning btn-sm" href=' + url + '>Update </a>';
+                        let delet = "<a onclick='confirmAction(event)' data-stock-id=" + row.id + " type='button' class='btn btn-danger btn-sm' style='margin-left: 10px'>Delete</a>";
+                        /**/
+                        return  update+ delet;
+                    }
+                },
+            ],
         });
 
-        function DataTableInit() {
+        // Add event listener for opening and closing details
+        $('#productList tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
 
-            var table = $('#productList').DataTable({
-                destroy: true,
-                "ajax": '/Partials/GetCurrentStock',
-                "columns": [
-                    {
-                        "className": 'details-control',
-                        "orderable": false,
-                        "data": null,
-                        "defaultContent": ''
-                    },
-                    { "data": "date" },
-                    { "data": "voucherNumber" },
-                    { "data": "name" },
-                    { "data": "quantity" },
-                    {
-                        'data': 'Options',
-                        'render': function (data, type, row) {
-                            let id =  row.id ;
-                            var url = '/MyBooks/Stock/UpdateStock/?Id=' + id;
-                            /**/
-                            let update = '<a class="btn btn-warning btn-sm" href=' + url + '>Update </a>';
-                            let delet = "<a onclick='confirmAction(event)' data-stock-id=" + row.id + " type='button' class='btn btn-danger btn-sm' style='margin-left: 10px'>Delete</a>";
-                            /**/
-                            return  update+ delet;
-                        }
-                    },
-                ],
-            });
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
 
-            // Add event listener for opening and closing details
-            $('#productList tbody').on('click', 'td.details-control', function () {
-                var tr = $(this).closest('tr');
-                var row = table.row(tr);
-
-                if (row.child.isShown()) {
-                    // This row is already open - close it
-                    row.child.hide();
-                    tr.removeClass('shown');
-                }
-                else {
-                    // Open this row
-                    row.child(format(row.data())).show();
-                    tr.addClass('shown');
-                }
-            });
-
-            function format(d) {
-                var tbl = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;" class="table table-hover table-striped table-condensed table-bordered tbldetl">';
-                tbl += '<tr>';
-                tbl += "<td>Name</td>";
-                tbl += "<td>Quantity</td>";
-                tbl += '</tr>';
-                var flag = false;
-                $.each(d.stockProductVariants, function (i) {
-                    let Name = '';
-                    let Quantity = '';
-                    $.each(d.stockProductVariants[i], function (key, val) {
-                        if (key == 'name') {
-                            Name = val;
-                        }
-                        if (key == 'quantity') {
-                            Quantity = val;
-                        }
-                    });
-                    tbl += '<tr>';
-                    tbl += '<td>' + Name + ' </td>';
-                    tbl += '<td>' + Quantity + ' </td>';
-                    tbl += '</tr>';
-                    flag = true;
+        function format(d) {
+            var tbl = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;" class="table table-hover table-striped table-condensed table-bordered tbldetl">';
+            tbl += '<tr>';
+            tbl += "<td>Name</td>";
+            tbl += "<td>Quantity</td>";
+             tbl += "<td>Consumed Quantity</td>";
+              tbl += "<td>Status</td>";
+            tbl += '</tr>';
+            var flag = false;
+            $.each(d.stockProductVariants, function (i) {
+                let Name = '';
+                let Quantity = '';
+                  let Status = '';
+                let ConsumedQuantity = '';
+                $.each(d.stockProductVariants[i], function (key, val) {
+                    if (key == 'name') {
+                        Name = val;
+                    }
+                    if (key == 'quantity') {
+                        Quantity = val;
+                    }
+                     if (key == 'consumedQuantity') {
+                        ConsumedQuantity = val;
+                    }
+                    if (key == 'status') {
+                        Status = val;
+                    }
                 });
-                if (flag == false) {
-                    tbl += '<tr>';
-                    tbl += '<td colspan="11">No record found</td>';
-                    tbl += '</tr>';
-                }
-                tbl + '</table>';
-                return tbl;
+                tbl += '<tr>';
+                tbl += '<td>' + Name + ' </td>';
+                tbl += '<td>' + Quantity + ' </td>';
+                  tbl += '<td>' + ConsumedQuantity + ' </td>';
+                tbl += '<td>' + Status + ' </td>';
+                tbl += '</tr>';
+                flag = true;
+            });
+            if (flag == false) {
+                tbl += '<tr>';
+                tbl += '<td colspan="11">No record found</td>';
+                tbl += '</tr>';
             }
+            tbl + '</table>';
+            return tbl;
         }
+    }
 
-        function confirmAction(e) {
-            let confirmAction = confirm("Are you sure to delete this product?");
-            if (confirmAction) {
-                //  alert("Action successfully executed");
-                removeProduct(e);
-            } else {
-                alert("Action canceled");
+    function confirmAction(e) {
+        let confirmAction = confirm("Are you sure to delete this product?");
+        if (confirmAction) {
+            //  alert("Action successfully executed");
+            removeProduct(e);
+        } else {
+            alert("Action canceled");
+        }
+    };
+    var apiUrl = '@Model.ApiUrl';
+
+    var removeProduct = function (e) {
+        let fyrId = e.target.dataset.stockId;
+        let el = document.getElementById('userId');
+        let userAccessToken = el.value;
+        console.log(fyrId);
+
+        axios.delete(apiUrl + "/api/Stocks/DeleteStock?id=" + fyrId, {
+            headers: {
+                Authorization: "Bearer " + userAccessToken
             }
-        };
-        var apiUrl = '@Model.ApiUrl';
-
-        var removeProduct = function (e) {
-            let fyrId = e.target.dataset.stockId;
-            let el = document.getElementById('userId');
-            let userAccessToken = el.value;
-            console.log(fyrId);
-
-            axios.delete(apiUrl + "/api/Stocks/DeleteStock?id=" + fyrId, {
-                headers: {
-                    Authorization: "Bearer " + userAccessToken
-                }
-            }).then(res => {
-                console.log(res);
-                if (res.data.success) {
-                    // alert(res.data.message)
-                    toastr.success(res.data.message)
-                }
-                else {
-                    toastr.error(res.data.message)
-                }
-                DataTableInit();
+        }).then(res => {
+            console.log(res);
+            if (res.data.success) {
+                // alert(res.data.message)
+                toastr.success(res.data.message)
+            }
+            else {
+                toastr.error(res.data.message)
+            }
+            DataTableInit();
+        })
+            .catch(err => {
+                alert(err.error);
             })
-                .catch(err => {
-                    alert(err.error);
-                })
 
-        }
+    }
 
-    </script>
+</script>
 }

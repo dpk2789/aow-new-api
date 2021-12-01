@@ -44,13 +44,14 @@
                     <div class="row">
                         <div class="col-12">
                             <form method="post" enctype="multipart/form-data">
-                                <input type="hidden" asp-for="Input.Id" id="ledgerId" />
+                                <input type="hidden" asp-for="Input.Id" id="stockVariantId" />
                                 <input type="hidden" value="@userId" id="userId" />
+                                 <input type="hidden" value="@Model.Input.StockId" id="StockId" />
                                 <div asp-validation-summary="All" class="text-danger"></div>
                                 <div class="mb-3 row">
                                     <label class="col-sm-2 col-form-label">Quantity</label>
                                     <div class="col-sm-6">
-                                        <input asp-for="Input.Quantity" class="form-control" />
+                                        <input asp-for="Input.Quantity" class="form-control" disabled />
                                     </div>
                                     <span asp-validation-for="Input.ItemName" class="text-danger"></span>
                                 </div>
@@ -64,7 +65,7 @@
                                 <div class="mb-3 row">
                                     <label asp-for="Input.ItemName" class="col-sm-2 col-form-label"></label>
                                     <div class="col-sm-6">
-                                        <input asp-for="Input.ItemName" class="form-control" />
+                                        <input asp-for="Input.ItemName" class="form-control" disabled />
                                     </div>
                                     <span asp-validation-for="Input.ItemName" class="text-danger"></span>
                                 </div>
@@ -85,7 +86,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                    <button onclick="UpdateLedger(event)" class="btn btn-info float-right" style="margin-left:20px">Update</button>
+                    <button onclick="UpdateStockVariant(event)" class="btn btn-info float-right" style="margin-left:20px">Update</button>
                     <button type="submit" class="btn btn-default float-right">Cancel</button>
                 </div>
             </div>
@@ -104,7 +105,7 @@
 <script>
     var apiUrl = '@Model.ApiUrl';
 
-     function UpdateLedger(e) {
+     function UpdateStockVariant(e) {
         // let confirmAction = confirm("Are you sure to delete this product?");
          performPostRequest(e);
      }
@@ -126,16 +127,18 @@
      };
      function performPostRequest(e) {
          let userId = document.getElementById('userId');
-         let ledgerId = document.getElementById('ledgerId').value;
-         let ledgerName = document.getElementById('Input_Name').value;
-         let categoryId = document.getElementById('CategoryId').value;
-         updateLedgerRequest.name = ledgerName;
-         updateLedgerRequest.id = ledgerId;
-         updateLedgerRequest.ledgerCategoryId = categoryId;
-         let userAccessToken = userId.value;
-         console.log(this.updateLedgerRequest);
+         let stockVariantId = document.getElementById('stockVariantId').value;
+          let stockId = document.getElementById('StockId').value;
+         let consumedQuantity =parseFloat( document.getElementById('Input_ConsumedQuantity').value);
+         let status = document.getElementById('Input_Status').value;
+         updateStockVariantRequest.consumedQuantity = consumedQuantity;
+          updateStockVariantRequest.status = status;
+         updateStockVariantRequest.id = stockVariantId;
 
-         axios.put(`${apiUrl}/api/StockVarients/UpdateStockVariant`, this.updateLedgerRequest, {
+         let userAccessToken = userId.value;
+         console.log(this.updateStockVariantRequest);
+
+         axios.put(`${apiUrl}/api/StockVarients/UpdateStockVariant`, this.updateStockVariantRequest, {
              headers: {
                  Authorization: "Bearer " + userAccessToken
              }
@@ -144,7 +147,7 @@
                   console.log(response);
                   if (response.data.success) {
                       toastr.success(response.data.description)
-                      window.location.href = '/MyBooks/Ledgers/index'
+                      window.location.href = '/MyBooks/Stock/UpdateStock?Id='+stockId
                   } else {
                       toastr.error(response.data.description)
                   }

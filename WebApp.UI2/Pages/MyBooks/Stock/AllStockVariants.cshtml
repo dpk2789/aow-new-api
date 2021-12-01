@@ -1,0 +1,89 @@
+﻿@page
+@model WebApp.UI2.Pages.MyBooks.Stock.AllStockVariantsModel
+@{
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
+}
+
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0"><i class="fa fa-2x fa-cubes"></i>Varients </h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-page="/MyBooks/Products/Index">Products</a></li>
+                        <li class="breadcrumb-item active">Varients </li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+
+                            <h3 class="card-title">
+                                <a asp-route-id="@ViewBag.ProductId" class="btn btn-success" asp-page="/MyBooks/ProductVarients/Add">Add Product Varient </a>
+                            </h3>
+                        </div>
+
+                        <!-- /.card-header -->
+                        <div class="card-body" id="product-main">
+                            <input type="hidden" value="@userId" id="userId" />
+                            <input type="hidden" value="@ViewBag.ProductId" id="ProductId" />
+                            <div class="card-body" id="product-main">
+                                <div id="resultTable">
+                                    <table id="VarientsTable" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Quantity</th>
+                                                <th>Consumed Quantity</th>
+                                                <th>Status</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var varient in Model.CurrentStockVariants)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => varient.Name)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => varient.Quantity)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => varient.ConsumedQuantity)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => varient.Status)
+                                                    </td>
+                                                    <td>
+                                                        <a asp-route-id="@varient.Id" asp-page="/MyBooks/ProductVarients/Update" class="fa fa-edit">Edit</a> |
+                                                        <button onclick="confirmAction(event)" data-varient-id="@varient.Id" type="button" class="btn-danger small">Delete</button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

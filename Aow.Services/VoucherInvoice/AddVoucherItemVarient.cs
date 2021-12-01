@@ -72,8 +72,11 @@ namespace Aow.Services.VoucherInvoice
                                 _repoWrapper.VoucherItemVarientRepo.Delete(voucherItemVarient);
                             }
                             //stock deletion after voucher item delete from ui
-                            var retriveStockVarient =  _repoWrapper.StockVarientRepo.GetStockVarientByVoucherVarient(voucherItemVarient.Id);                         
-                            _repoWrapper.StockVarientRepo.Delete(retriveStockVarient);
+                            var retriveStockVarient = _repoWrapper.StockVarientRepo.GetStockVarientByVoucherVarient(voucherItemVarient.Id);
+                            if (retriveStockVarient != null)
+                            {
+                                _repoWrapper.StockVarientRepo.Delete(retriveStockVarient);
+                            }
                         }
                     }
                     foreach (var item in deserialiseList)
@@ -95,18 +98,26 @@ namespace Aow.Services.VoucherInvoice
                                 ProductVariantId = item.VarientId
                             };
                             _repoWrapper.VoucherItemVarientRepo.Create(varient);
-                            var stockVarientNew = new Aow.Infrastructure.Domain.StockProductVariant
+
+                            if (getStock != null)
                             {
-                                Id = Guid.NewGuid(),
-                                MRPPerUnit = item.MRPPerUnit,
-                                Price = item.MRPPerUnit.Value,
-                                Quantity = item.Quantity,
-                                ProductVariantId = item.VarientId,
-                                ItemAmount = item.ItemAmount,
-                                StockId = getStock.Id,
-                                VoucherItemVarientId = varient.Id
-                            };
-                            _repoWrapper.StockVarientRepo.Create(stockVarientNew);
+                                var stockVarientNew = new Aow.Infrastructure.Domain.StockProductVariant
+                                {
+                                    Id = Guid.NewGuid(),
+                                    MRPPerUnit = item.MRPPerUnit,
+                                    Price = item.MRPPerUnit.Value,
+                                    Quantity = item.Quantity,
+                                    InOut = "In",
+                                    Status = "Full",
+                                    StockInBy = "Purchase Bill",
+                                    ProductVariantId = item.VarientId,
+                                    ItemAmount = item.ItemAmount,
+                                    StockId = getStock.Id,
+                                    VoucherItemVarientId = varient.Id
+                                };
+                                _repoWrapper.StockVarientRepo.Create(stockVarientNew);
+                            }
+                            
                         }
                         else
                         {
@@ -135,6 +146,9 @@ namespace Aow.Services.VoucherInvoice
                                     MRPPerUnit = item.MRPPerUnit,
                                     Price = item.MRPPerUnit.Value,
                                     Quantity = item.Quantity,
+                                    InOut = "In",
+                                    Status = "Full",
+                                    StockInBy = "Purchase Bill",
                                     ProductVariantId = item.VarientId,
                                     ItemAmount = item.ItemAmount,
                                     StockId = getStock.Id,
