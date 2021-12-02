@@ -5,6 +5,31 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20211001095554_init.cs" />
+    <Compile Remove="Migrations\20211001095554_init.Designer.cs" />
+    <Compile Remove="Migrations\20211019102202_NoofDaysInCompany.cs" />
+    <Compile Remove="Migrations\20211019102202_NoofDaysInCompany.Designer.cs" />
+    <Compile Remove="Migrations\20211108092817_varientVoucher.cs" />
+    <Compile Remove="Migrations\20211108092817_varientVoucher.Designer.cs" />
+    <Compile Remove="Migrations\20211113090414_stock.cs" />
+    <Compile Remove="Migrations\20211113090414_stock.Designer.cs" />
+    <Compile Remove="Migrations\20211113095725_stockFixes.cs" />
+    <Compile Remove="Migrations\20211113095725_stockFixes.Designer.cs" />
+    <Compile Remove="Migrations\20211120165858_stockVariet.cs" />
+    <Compile Remove="Migrations\20211120165858_stockVariet.Designer.cs" />
+    <Compile Remove="Migrations\20211124091050_maufacturingAdded.cs" />
+    <Compile Remove="Migrations\20211124091050_maufacturingAdded.Designer.cs" />
+    <Compile Remove="Migrations\20211125101808_manufacturingChanges.cs" />
+    <Compile Remove="Migrations\20211125101808_manufacturingChanges.Designer.cs" />
+    <Compile Remove="Migrations\20211125111336_manufacturinginvoice.cs" />
+    <Compile Remove="Migrations\20211125111336_manufacturinginvoice.Designer.cs" />
+    <Compile Remove="Migrations\20211126091951_stockVarients.cs" />
+    <Compile Remove="Migrations\20211126091951_stockVarients.Designer.cs" />
+    <Compile Remove="Migrations\20211127074703_newFieldsStock.cs" />
+    <Compile Remove="Migrations\20211127074703_newFieldsStock.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.9" />
@@ -12,6 +37,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="MySql.EntityFrameworkCore" Version="5.0.8" />
   </ItemGroup>
 
 </Project>

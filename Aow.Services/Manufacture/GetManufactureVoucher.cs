@@ -49,14 +49,14 @@ namespace Aow.Services.Manufacture
             var getProductViewModel = new GetManufactureVoucherResponse();
             getProductViewModel.Id = manufacture.Id;
             getProductViewModel.Date = manufacture.Date;
-            getProductViewModel.VoucherNumber = manufacture.VoucherNumber;            
+            getProductViewModel.VoucherNumber = manufacture.VoucherNumber;
             foreach (var variant in manufacture.ManufactureItems)
             {
                 var getProductVarientsResponse = new ManufactureVariantResponse();
                 getProductVarientsResponse.Id = variant.Id;
                 getProductVarientsResponse.ItemName = variant.Stock.Product.Name;
-                getProductVarientsResponse.Quantity = variant.Quantity;               
-                getProductVarientsResponse.Status = variant.Stock.Status;              
+                getProductVarientsResponse.Quantity = variant.Quantity;
+                getProductVarientsResponse.Status = variant.Stock.Status;
                 vareintList.Add(getProductVarientsResponse);
             }
             getProductViewModel.Varients = vareintList;

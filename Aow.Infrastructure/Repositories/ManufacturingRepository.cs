@@ -23,7 +23,7 @@ namespace Aow.Infrastructure.Repositories
         public Task<PagedList<Manufacture>> GetManufactures(PagingParameters ownerParameters, Guid financialYearId)
         {
             return Task.FromResult(PagedList<Manufacture>.ToPagedList(FindAll().Where(x => x.FinancialYearId == financialYearId).OrderBy(on => on.Date).
-                Include(x => x.ManufacturingVarients).ThenInclude(x => x.StockProductVariant.ProductVariant), ownerParameters.PageNumber, ownerParameters.PageSize));
+                Include(x => x.ManufactureItems).ThenInclude(x => x.Stock.Product), ownerParameters.PageNumber, ownerParameters.PageSize));
         }
     }
 

@@ -10,7 +10,7 @@ namespace Aow.Infrastructure.Domain
         public string Type { get; set; }
         public Guid? StockProductVariantId { get; set; }
         public virtual StockProductVariant StockProductVariant { get; set; }
-        public Guid ManufactureItemId { get; set; }
+        public Guid? ManufactureItemId { get; set; }
         public virtual ManufactureItem ManufactureItem { get; set; }
     }
 }
