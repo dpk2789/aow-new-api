@@ -52,11 +52,11 @@ namespace Aow.Services.Manufacture
                 manufactureVoucher.Date = voucher.Date;
                 manufactureVoucherList.Add(manufactureVoucher);
                 var manufacturingVarientsResponseList = new List<ManufacturingVarientsResponse>();
-                foreach (var item in voucher.ManufacturingVarients)
+                foreach (var item in voucher.ManufactureItems)
                 {
                     var manufacturingVarient = new ManufacturingVarientsResponse();
                     manufacturingVarient.Id = item.Id;
-                    manufacturingVarient.VairentName = item.StockProductVariant.ProductVariant.Name;
+                    manufacturingVarient.VairentName = item.Stock.Product.Name;
                     manufacturingVarient.Quantity = item.Quantity;
                     manufacturingVarientsResponseList.Add(manufacturingVarient);
                 }
