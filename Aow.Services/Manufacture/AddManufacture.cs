@@ -61,16 +61,16 @@ namespace Aow.Services.Manufacture
                 //input
                 foreach (var input in deserialiseList)
                 {
-                    var manufacturingVarient = new Aow.Infrastructure.Domain.ManufacturingVarients
+                    var manufacturingItem = new Aow.Infrastructure.Domain.ManufactureItem
                     {
                         Id = Guid.NewGuid(),
-                        StockProductVariantId = input.StoreVariantId,
+                        StockId = input.StoreVariantId,
                         Quantity = input.Quantity,
                         Type = input.Type,
                         ManufactureId = manufactureId,
                         SrNo = SrNo
                     };
-                    _repoWrapper.ManufactureVarientsRepo.Create(manufacturingVarient);
+                    _repoWrapper.ManufacturingItemRepo.Create(manufacturingItem);
                     var storeVarient = _repoWrapper.StockVarientRepo.GetStockVarient(input.StoreVariantId.Value);
                     storeVarient.ConsumedQuantity = input.Quantity;
                     _repoWrapper.StockVarientRepo.Update(storeVarient);
@@ -107,16 +107,16 @@ namespace Aow.Services.Manufacture
                         StockId = stockId
                     };
                     _repoWrapper.StockVarientRepo.Create(stockVariant);
-                    var manufacturingVarient = new Aow.Infrastructure.Domain.ManufacturingVarients
+                    var manufacturingItem = new Aow.Infrastructure.Domain.ManufactureItem
                     {
                         Id = Guid.NewGuid(),
-                        StockProductVariantId = stockVariant.Id,
+                        StockId = stockVariant.Id,
                         Quantity = output.Quantity,
                         Type = output.Type,
                         ManufactureId = manufactureId,
                         SrNo = x
                     };
-                    _repoWrapper.ManufactureVarientsRepo.Create(manufacturingVarient);
+                    _repoWrapper.ManufacturingItemRepo.Create(manufacturingItem);
                     x++;
                 }
                 int i = await _repoWrapper.SaveNew();

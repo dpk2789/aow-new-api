@@ -36,6 +36,7 @@ namespace Aow.Infrastructure.Repositories
         private IStockRepository _stockRepository;
         private IStockVarientRepository _stockVarientRepository;
         private IManufacturingRepository _manufacturingRepo;
+        private IManufacturingItemRepository _manufacturingItemRepository;
         private IManufacturingVarientsRepository _manufacturingVarientsRepository;
 
         public IUserRepository UserRepo
@@ -102,6 +103,17 @@ namespace Aow.Infrastructure.Repositories
                     _manufacturingRepo = new ManufacturingRepository(_repoContext);
                 }
                 return _manufacturingRepo;
+            }
+        }
+        public IManufacturingItemRepository ManufacturingItemRepo
+        {
+            get
+            {
+                if (_manufacturingItemRepository == null)
+                {
+                    _manufacturingItemRepository = new ManufacturingItemRepository(_repoContext);
+                }
+                return _manufacturingItemRepository;
             }
         }
         public IManufacturingVarientsRepository ManufactureVarientsRepo

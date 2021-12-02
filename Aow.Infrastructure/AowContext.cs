@@ -43,6 +43,7 @@ namespace Aow.Infrastructure
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<StockProductVariant> StockProductVariants { get; set; }
         public DbSet<Manufacture> Manufactures { get; set; }
+        public DbSet<ManufactureItem> ManufactureItems { get; set; }
         public DbSet<ManufacturingVarients> ManufacturingVarients { get; set; }    
         protected override void OnModelCreating(ModelBuilder builder)
         {

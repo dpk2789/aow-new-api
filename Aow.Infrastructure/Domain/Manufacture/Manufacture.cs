@@ -10,7 +10,7 @@ namespace Aow.Infrastructure.Domain
         public string VoucherNumber { get; set; }     
         public Guid? FinancialYearId { get; set; }
         public virtual FinancialYear FinancialYear { get; set; }
-        public List<ManufacturingVarients> ManufacturingVarients { get; set; }
+        public List<ManufactureItem> ManufactureItems { get; set; }
 
     }
 }
