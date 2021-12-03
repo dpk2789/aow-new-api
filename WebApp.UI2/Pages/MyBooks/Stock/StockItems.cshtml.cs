@@ -11,11 +11,11 @@ using WebApp.UI2.Helpers;
 
 namespace WebApp.UI2.Pages.MyBooks.Stock
 {
-    public class CurrentStockModel : PageModel
+    public class StockItemsModel : PageModel
     {
         public string ApiUrl { get; }
         private readonly ICookieHelper _cookieHelper;
-        public CurrentStockModel(ICookieHelper cookieHelper)
+        public StockItemsModel(ICookieHelper cookieHelper)
         {
             ApiUrl = ApiUrls.Rootlocal;
             _cookieHelper = cookieHelper;
@@ -26,10 +26,8 @@ namespace WebApp.UI2.Pages.MyBooks.Stock
             public string Name { get; set; }
             public DateTime Date { get; set; }
             public string VoucherNumber { get; set; }
-            public string VoucherName { get; set; }         
-            public string Type { get; set; }
-            public string LedgerName { get; set; }
-            public string ModelNumber { get; set; }         
+            public string VoucherName { get; set; }
+            public string ModelNumber { get; set; }
             public string Size { get; set; }
             public string UniqueNumber { get; set; }
             public string Status { get; set; }
@@ -39,7 +37,7 @@ namespace WebApp.UI2.Pages.MyBooks.Stock
             public decimal? ItemAmount { get; set; }
             public string Description { get; set; }
             public decimal Price { get; set; }
-            public Guid? VoucherItemId { get; set; }           
+            public Guid? VoucherItemId { get; set; }
         }
 
         [BindProperty]
@@ -66,6 +64,5 @@ namespace WebApp.UI2.Pages.MyBooks.Stock
             }
             return Page();
         }
-
     }
 }

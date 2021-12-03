@@ -18,7 +18,10 @@ namespace Aow.Services.Stock
             public Guid Id { get; set; }
             public string Name { get; set; }
             public DateTime Date { get; set; }
+            public string VoucherName { get; set; }
             public string VoucherNumber { get; set; }
+            public string Type { get; set; }
+            public string LedgerName { get; set; }
             public decimal? SalePrice { get; set; }
             public decimal? MRPPerUnit { get; set; }
             public decimal? Quantity { get; set; }
@@ -33,7 +36,7 @@ namespace Aow.Services.Stock
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
-            public string ModelNumber { get; set; }          
+            public string ModelNumber { get; set; }
             public string Size { get; set; }
             public decimal? SalePrice { get; set; }
             public decimal? MRPPerUnit { get; set; }
@@ -56,17 +59,26 @@ namespace Aow.Services.Stock
                 if (item.VoucherItemId != null)
                 {
                     var voucherItem = _repoWrapper.VoucherItemRepo.GetVoucherItem(item.VoucherItemId.Value).GetAwaiter().GetResult();
-                    if(voucherItem != null)
+
+                    if (voucherItem != null)
                     {
                         var varientList = new List<GetStockProductVariantResponse>();
                         GetCurrentStockResponse newStock = new GetCurrentStockResponse
                         {
                             Id = item.Id,
                             Quantity = item.Quantity,
+                            VoucherName = voucherItem.Voucher.VoucherName,
                             Name = item.Product.Name,
                             Date = voucherItem.Voucher.Date,
                             VoucherNumber = voucherItem.Voucher.VoucherNumber
                         };
+                        foreach (var jentry in voucherItem.Voucher.JournalEntries)
+                        {
+                            if (jentry.SrNo == 1)
+                            {
+                                newStock.LedgerName = jentry.Ledger.Name;
+                            }
+                        }
                         stockList.Add(newStock);
                         foreach (var varient in item.StockProductVariants)
                         {
@@ -79,7 +91,7 @@ namespace Aow.Services.Stock
                             varientList.Add(getStockProductVariantResponse);
                         }
                         newStock.StockProductVariants = varientList;
-                    }                   
+                    }
                 }
                 else
                 {
@@ -88,7 +100,7 @@ namespace Aow.Services.Stock
                     {
                         Id = item.Id,
                         Quantity = item.Quantity,
-                        Name = item.Product.Name,                       
+                        Name = item.Product.Name,
                     };
                     stockList.Add(newStock);
                     foreach (var varient in item.StockProductVariants)

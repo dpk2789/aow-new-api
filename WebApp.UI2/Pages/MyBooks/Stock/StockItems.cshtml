@@ -1,0 +1,93 @@
+﻿@page
+@model WebApp.UI2.Pages.MyBooks.Stock.StockItemsModel
+@{
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Current Stock </h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Current Stock</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><a class="btn btn-success" asp-page="/MyBooks/ProductCategories/Add">Add New Product Category</a></h3>
+                        </div>
+                        <input type="hidden" value="@userId" id="userId" />
+                        <!-- /.card-header -->
+                        <div class="card-body" id="product-main">
+                            @if (Model.CurrentStock != null)
+                            {
+                                <table id="productList" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Name</th>
+                                            <th>Voucher Name</th>
+                                            <th>Quantity</th>
+                                            <th>Consumed Quantity</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            if (Model != null)
+                                            {
+                                                foreach (var product in Model.CurrentStock)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => product.Date)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => product.VoucherName)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => product.Name)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => product.Quantity)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => product.ConsumedQuantity)
+                                                        </td>
+                                                        <td>
+                                                            <a asp-route-id="@product.Id" asp-page="/MyBooks/Products/Update" class="fa fa-edit">Edit</a> |
+                                                            <a asp-route-id="@product.Id" asp-page="/MyBooks/ProductVarients/Index" class="btn btn-sm btn-outline-primary">Varients</a> |
+                                                            <button onclick="confirmAction(event)" data-category-id="@product.Id" type="button" class="btn-danger small">Delete</button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    </tbody>
+
+                                </table>
+                            }
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
