@@ -27,6 +27,7 @@ namespace WebApp.UI2.Pages.MyBooks.Stock
             public DateTime Date { get; set; }
             public string VoucherNumber { get; set; }
             public string VoucherName { get; set; }
+            public string LedgerName { get; set; }
             public string ModelNumber { get; set; }
             public string Size { get; set; }
             public string UniqueNumber { get; set; }
