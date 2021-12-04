@@ -36,6 +36,7 @@ namespace Aow.Services.Stock
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
+            public string Description { get; set; }
             public string ModelNumber { get; set; }
             public string Size { get; set; }
             public decimal? SalePrice { get; set; }
@@ -44,7 +45,6 @@ namespace Aow.Services.Stock
             public decimal? ConsumedQuantity { get; set; }
             public string Status { get; set; }
             public decimal? ItemAmount { get; set; }
-            public string Description { get; set; }
             public decimal Price { get; set; }
             public Guid? ProductVariantId { get; set; }
             public string ProductVariantName { get; set; }
@@ -66,9 +66,10 @@ namespace Aow.Services.Stock
                         GetCurrentStockResponse newStock = new GetCurrentStockResponse
                         {
                             Id = item.Id,
-                            Quantity = item.Quantity,
+                            Quantity = voucherItem.Quantity,
                             VoucherName = voucherItem.Voucher.VoucherName,
                             Name = item.Product.Name,
+                            Description = voucherItem.Description,
                             Date = voucherItem.Voucher.Date,
                             VoucherNumber = voucherItem.Voucher.VoucherNumber
                         };

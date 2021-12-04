@@ -43,10 +43,11 @@
                                             <th>Voucher Name</th>
                                             <th>Voucher Number</th>
                                             <th>Ledger</th>
+                                            <th>Item</th>
                                             <th>Quantity</th>
                                             <th>Rate</th>
                                             <th>Consumed Quantity</th>
-                                         
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -80,7 +81,7 @@
                                                         <td>
                                                             @Html.DisplayFor(modelItem => product.ConsumedQuantity)
                                                         </td>
-                                                        <td>
+                                                         <td>
                                                             <a asp-route-id="@product.Id" asp-page="/MyBooks/Products/Update" class="fa fa-edit">Edit</a>
                                                         </td>
                                                     </tr>

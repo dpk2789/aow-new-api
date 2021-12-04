@@ -35,12 +35,12 @@ namespace WebApp.UI2.Controllers
             var getUserInfo = await client.GetAsync(getProductsUri);
 
             string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-           
+
             if (resultuerinfo != null)
             {
                 var data = JsonConvert.DeserializeObject<IList<LedgerCategorySelectViewModel>>(resultuerinfo);
                 LedgerCategories = data.Where(c => c.Name.IndexOf(term, StringComparison.CurrentCultureIgnoreCase) != -1).ToList();
-               // LedgerCategories = data.Where(ii => ii.Name.IndexOf(term)>-1).ToList();
+                // LedgerCategories = data.Where(ii => ii.Name.IndexOf(term)>-1).ToList();
             }
             return Json(LedgerCategories.Select(m => new
             {
@@ -79,7 +79,7 @@ namespace WebApp.UI2.Controllers
                 id = m.Id,
                 value = m.Name,
                 label = String.Format("{0}/{1}/{2}", m.Code, m.Name, m.SalePrice),
-                mRPPerUnit = m.SalePrice,              
+                mRPPerUnit = m.SalePrice,
                 name = m.Name,
                 productCategoryId = m.ProductCategoryId,
                 productId = m.ProductId,
@@ -88,8 +88,8 @@ namespace WebApp.UI2.Controllers
         }
 
         public async Task<JsonResult> GetVarientsForInvoice(string term, string productId)
-        {          
-            List<ProductViewModel> ProductViewModelList = null;          
+        {
+            List<ProductViewModel> ProductViewModelList = null;
             using var client = new HttpClient();
             var getProductsUri = new Uri(ApiUrls.ProductVarients.GetAllVarientsByProduct + "?productId=" + productId);
 
@@ -111,8 +111,8 @@ namespace WebApp.UI2.Controllers
                 value = m.Name,
                 label = String.Format("{0}/{1}/{2}", m.Code, m.Name, m.SalePrice),
                 mRPPerUnit = m.SalePrice,
-                name = m.Name,             
-                productId = m.ProductId,              
+                name = m.Name,
+                productId = m.ProductId,
             }));
         }
 
@@ -144,6 +144,42 @@ namespace WebApp.UI2.Controllers
                 id = m.Id,
                 value = m.Name,
                 label = String.Format("{0}/{1}/{2}", m.Code, m.Name, m.SalePrice),
+                mRPPerUnit = m.SalePrice,
+                name = m.Name,
+                productId = m.ProductId,
+            }));
+        }
+
+        public async Task<JsonResult> GetStoreItemsForManufacturing(string term)
+        {
+            var cmpid = _cookieHelper.Get("cmpCookee");
+            if (string.IsNullOrEmpty(cmpid) && string.IsNullOrEmpty(cmpid))
+            {
+                return null;
+            }
+            List<ProductViewModel> ProductViewModelList = null;
+            using var client = new HttpClient();
+            var getProductsUri = new Uri(ApiUrls.Stock.GetStocks + "?companyId=" + cmpid);
+
+            var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+            var getUserInfo = await client.GetAsync(getProductsUri);
+
+            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            if (resultuerinfo != null)
+            {
+                var data = JsonConvert.DeserializeObject<IList<ProductViewModel>>(resultuerinfo);
+                ProductViewModelList = data.Where(c => c.Name.IndexOf(term, StringComparison.CurrentCultureIgnoreCase) != -1).ToList();
+                // LedgerCategories = data.Where(ii => ii.Name.IndexOf(term)>-1).ToList();
+            }
+            return Json(ProductViewModelList.Select(m => new
+            {
+                id = m.Id,
+                value = m.Name,
+                label = String.Format("{0}/{1}/{2}", m.Code, m.Name, m.SalePrice),
+                quantity = m.Quantity,
+                description = m.Description,
                 mRPPerUnit = m.SalePrice,
                 name = m.Name,
                 productId = m.ProductId,
@@ -213,7 +249,7 @@ namespace WebApp.UI2.Controllers
                 label = String.Format("{0}/{1}/{2}", m.Code, m.Name, m.SalePrice),
                 percent = m.Percent,
                 name = m.Name,
-                productCategoryId = m.ProductCategoryId,               
+                productCategoryId = m.ProductCategoryId,
                 itemtype = m.ItemType != null ? m.ItemType.Replace(" ", string.Empty) : null,
             }));
         }
