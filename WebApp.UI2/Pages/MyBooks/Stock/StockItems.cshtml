@@ -46,7 +46,7 @@
                                             <th>Quantity</th>
                                             <th>Rate</th>
                                             <th>Consumed Quantity</th>
-                                            <th>Actions</th>
+                                         
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -57,7 +57,7 @@
                                                 {
                                                     <tr>
                                                         <td>
-                                                          @Html.DisplayFor(modelItem => product.Date.ToShortDateString(), "DateReadOnly")                                                          
+                                                            @product.Date.ToString("dd/MM/yyyy")
                                                         </td>
                                                         <td>
                                                             @Html.DisplayFor(modelItem => product.VoucherName)
@@ -81,7 +81,7 @@
                                                             @Html.DisplayFor(modelItem => product.ConsumedQuantity)
                                                         </td>
                                                         <td>
-                                                            <a asp-route-id="@product.Id" asp-page="/MyBooks/Products/Update" class="fa fa-edit">Edit</a>                                                
+                                                            <a asp-route-id="@product.Id" asp-page="/MyBooks/Products/Update" class="fa fa-edit">Edit</a>
                                                         </td>
                                                     </tr>
                                                 }
