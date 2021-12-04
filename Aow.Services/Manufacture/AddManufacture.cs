@@ -20,18 +20,19 @@ namespace Aow.Services.Manufacture
             public string data { get; set; }
             public string data2 { get; set; }
             public string VoucherNumber { get; set; }
-            public DateTime Date { get; set; }
-            public List<AddInputOutputRequest> StoreVairents { get; set; }
+            public string Date { get; set; }
+            public List<AddInputOutputRequest> StoreItems { get; set; }
 
         }
         public class AddInputOutputRequest
         {
             public Guid Id { get; set; }
-            public Guid? VariantId { get; set; }
+            public Guid? StockItemId { get; set; }
             public decimal? Quantity { get; set; }
+            public decimal? ConsumedQuantity { get; set; }
+            public string Status { get; set; }
             public decimal? Rate { get; set; }
             public string Type { get; set; }
-            public Guid? StoreVariantId { get; set; }
         }
         public class AddManufactureResponse
         {
@@ -51,7 +52,7 @@ namespace Aow.Services.Manufacture
                 var manufacture = new Aow.Infrastructure.Domain.Manufacture
                 {
                     Id = manufactureId,
-                    Date = request.Date,
+                    Date = Convert.ToDateTime(request.Date),
                     VoucherNumber = request.VoucherNumber,
                     FinancialYearId = fyrId
                 };
@@ -64,16 +65,16 @@ namespace Aow.Services.Manufacture
                     var manufacturingItem = new Aow.Infrastructure.Domain.ManufactureItem
                     {
                         Id = Guid.NewGuid(),
-                        StockId = input.StoreVariantId,
+                        StockId = input.StockItemId,
                         Quantity = input.Quantity,
                         Type = input.Type,
                         ManufactureId = manufactureId,
-                        SrNo = SrNo
+                        SrNo = SrNo,
                     };
                     _repoWrapper.ManufacturingItemRepo.Create(manufacturingItem);
-                    var storeVarient = _repoWrapper.StockVarientRepo.GetStockVarient(input.StoreVariantId.Value);
-                    storeVarient.ConsumedQuantity = input.Quantity;
-                    _repoWrapper.StockVarientRepo.Update(storeVarient);
+                    var storeItem = _repoWrapper.StockRepo.GetStock(input.StockItemId.Value);
+                    storeItem.ConsumedQuantity = input.ConsumedQuantity;
+                    _repoWrapper.StockRepo.Update(storeItem);
                     SrNo++;
                 }
                 //output
@@ -81,36 +82,25 @@ namespace Aow.Services.Manufacture
                 {
                     int x = 0;
                     Guid stockId = Guid.NewGuid();
-                    var variant = _repoWrapper.ProductVarientRepo.GetProductVariant(output.VariantId.Value);
+                    var stockItem = _repoWrapper.StockRepo.GetStock(output.StockItemId.Value);
                     var stockNew = new Aow.Infrastructure.Domain.Stock
                     {
                         Id = stockId,
                         Date = request.Date.ToString(),
                         MRPPerUnit = output.Rate,
                         Quantity = output.Quantity,
-                        ProductId = variant.ProductId,
+                        ProductId = stockItem.ProductId,
                         CreatedDate = DateTime.Now,
                         InOut = "In",
                         Status = "Full",
                         Type = "Manufacture",
                     };
                     _repoWrapper.StockRepo.Create(stockNew);
-                    var stockVariant = new Aow.Infrastructure.Domain.StockProductVariant
-                    {
-                        Id = Guid.NewGuid(),
-                        MRPPerUnit = output.Rate,
-                        InOut = "In",
-                        Status = "Full",
-                        StockInBy = "Manufacture",
-                        Quantity = output.Quantity,
-                        ProductVariantId = variant.Id,
-                        StockId = stockId
-                    };
-                    _repoWrapper.StockVarientRepo.Create(stockVariant);
+
                     var manufacturingItem = new Aow.Infrastructure.Domain.ManufactureItem
                     {
                         Id = Guid.NewGuid(),
-                        StockId = stockVariant.Id,
+                        StockId = output.StockItemId,
                         Quantity = output.Quantity,
                         Type = output.Type,
                         ManufactureId = manufactureId,

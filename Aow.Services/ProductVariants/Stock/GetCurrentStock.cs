@@ -68,6 +68,7 @@ namespace Aow.Services.Stock
                             Id = item.Id,
                             Quantity = voucherItem.Quantity,
                             VoucherName = voucherItem.Voucher.VoucherName,
+                            MRPPerUnit = voucherItem.MRPPerUnit,
                             Name = item.Product.Name,
                             Description = voucherItem.Description,
                             Date = voucherItem.Voucher.Date,

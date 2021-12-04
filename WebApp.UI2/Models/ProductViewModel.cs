@@ -9,10 +9,11 @@ namespace WebApp.UI2.Models
         public Guid? ProductId { get; set; }     
         public string Name { get; set; }
         public string Description { get; set; }
-        public decimal? Quantity { get; set; }
         public string Code { get; set; }
         public string ModelNumber { get; set; }
         public string Title { get; set; }
+        public decimal? Quantity { get; set; }
+        public decimal? MRPPerUnit { get; set; }       
         public string Percent { get; set; }
         public string ProductTaxCode { get; set; }
         public string DiscountType { get; set; } //dynamic amount or %
