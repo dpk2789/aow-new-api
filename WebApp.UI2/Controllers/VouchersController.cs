@@ -180,7 +180,7 @@ namespace WebApp.UI2.Controllers
                 label = String.Format("{0}/{1}/{2}", m.Code, m.Name, m.SalePrice),
                 quantity = m.Quantity,
                 description = m.Description,
-                mRPPerUnit = m.SalePrice,
+                mRPPerUnit = m.MRPPerUnit,
                 name = m.Name,
                 productId = m.ProductId,
             }));
