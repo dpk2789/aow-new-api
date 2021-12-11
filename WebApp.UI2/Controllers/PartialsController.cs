@@ -264,5 +264,22 @@ namespace WebApp.UI2.Controllers
             };
             return Json(result);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProductSearchByAttributePartialView(string data)
+        {
+            var fyrId = _cookieHelper.Get("fYrCookee");
+            var cmpid = _cookieHelper.Get("cmpCookee");
+            using var client = new HttpClient();
+            var getVouchersUri = new Uri(ApiUrls.Vouchers.GetVouchers);
+
+            var userAccessToken = User.Claims.Where(x => x.Type == "AcessToken").FirstOrDefault().Value;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);
+            var getUserInfo = await client.GetAsync(getVouchersUri);
+
+            string resultuerinfo = getUserInfo.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var result = JsonConvert.DeserializeObject<IEnumerable<WebApp.UI2.Pages.MyBooks.VoucherWithItems.IndexModel.VoucherWithItemsViewModel>>(resultuerinfo);
+            return PartialView("_VoucherInvoiceListPartial", result);
+        }
     }
 }

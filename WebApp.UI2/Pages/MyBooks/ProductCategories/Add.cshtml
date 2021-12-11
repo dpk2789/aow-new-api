@@ -80,49 +80,50 @@
 
 @section scripts{
     @*<script src="~/js/product.js"></script>*@
-    <script>
-      
-        var apiUrl = '@Model.ApiUrl';
-     
+<script>
 
-        function AddProductCategory(e) {
-           // let confirmAction = confirm("Are you sure to delete this product?");
-            performPostRequest(e);
-        }
+    var apiUrl = '@Model.ApiUrl';
 
-        var addFinancialYearRequest = {
-            name: "f1",           
-            companyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-        };
-        function performPostRequest(e) {
-            let userId = document.getElementById('userId');
-            let fName = document.getElementById('Input_Name').value;
-            let cmpId = document.getElementById('cmpId').value;         
-            addFinancialYearRequest.name = fName;
-            addFinancialYearRequest.companyId = cmpId;
-          
-            let userAccessToken = userId.value;
-            console.log(this.addFinancialYearRequest);
 
-            axios.post(`${apiUrl}/api/ProductCategories/AddProductCategory`, this.addFinancialYearRequest, {
-                headers: {
-                    Authorization: "Bearer " + userAccessToken
-                }
+    function AddProductCategory(e) {
+       // let confirmAction = confirm("Are you sure to delete this product?");
+        performPostRequest(e);
+    }
+
+    var addFinancialYearRequest = {
+        name: "f1",
+        companyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    };
+    function performPostRequest(e)
+    {
+        let userId = document.getElementById('userId');
+        let fName = document.getElementById('Input_Name').value;
+        let cmpId = document.getElementById('cmpId').value;
+        addFinancialYearRequest.name = fName;
+        addFinancialYearRequest.companyId = cmpId;
+
+        let userAccessToken = userId.value;
+        console.log(this.addFinancialYearRequest);
+
+        axios.post(`${apiUrl}/api/ProductCategories/AddProductCategory`, this.addFinancialYearRequest, {
+            headers: {
+                Authorization: "Bearer " + userAccessToken
+            }
+        })
+             .then(function (response) {
+                 console.log(response);
+                 if (response.data.success) {
+                     toastr.success(response.data.description)
+                     window.location.href = '/MyBooks/ProductCategories/index'
+                 } else {
+                     toastr.error(response.data.description)
+                 }
             })
-                 .then(function (response) {
-                     console.log(response);
-                     if (response.data.success) {
-                         toastr.success(response.data.description)
-                         window.location.href = '/MyBooks/ProductCategories/index'
-                     } else {
-                         toastr.error(response.data.description)
-                     }
-                })
-                .catch(function (response) {
-                    console.log(error);
-                    toastr.error('Some Error Occur!!')
-                });
-            e.preventDefault();
-        }      
-    </script>
+            .catch(function (response) {
+                console.log(error);
+                toastr.error('Some Error Occur!!')
+            });
+        e.preventDefault();
+    }
+</script>
 }
