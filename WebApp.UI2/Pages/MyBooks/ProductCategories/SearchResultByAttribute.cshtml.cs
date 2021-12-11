@@ -25,13 +25,32 @@ namespace WebApp.UI2.Pages.MyBooks.ProductCategories
         {
             public string Name { get; set; }
             public string CompanyId { get; set; }
-            public string CategoryId { get; set; }           
+            public string CategoryId { get; set; }
+            public IList<ProductVariantsViewModel> ProductVariantsViewModel { get; set; }
+            public IList<CategoryAttributesViewModel> AttributesViewModel { get; set; }
         }
-      
+        public class CategoryAttributesViewModel
+        {
+            public Guid? Id { get; set; }
+            public string Name { get; set; }
+            public IEnumerable<AttributesOptionsViewModel> AttributesOptionsViewModels { get; set; }
+            public bool IsChecked { get; set; }
+        }
+        public class AttributesOptionsViewModel
+        {
+            public Guid? Id { get; set; }
+            public string Name { get; set; }
+            public bool IsChecked { get; set; }
+        }
+        public class ProductVariantsViewModel
+        {
+            public Guid Id { get; set; }
+            public string Name { get; set; }           
+        }
         public async Task<IActionResult> OnGet(Guid id)
         {
             using var client = new HttpClient();
-            var updateProductsUri = new Uri(ApiUrls.ProductCategories.GetProductCategory + "?id=" + id);
+            var updateProductsUri = new Uri(ApiUrls.ProductCategories.GetItemVarientsSearchByCategory + "?id=" + id);
 
             var userAccessToken = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAccessToken);

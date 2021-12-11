@@ -1,4 +1,131 @@
 ﻿@page
 @model WebApp.UI2.Pages.MyBooks.ProductCategories.SearchResultByAttributeModel
 @{
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
 }
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Item Varients Search Page </h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Product Categories</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                        </div>
+                        <input type="hidden" value="@userId" id="userId" />
+                        <!-- /.card-header -->
+                        <div class="card-body" id="product-main">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="container">
+                                        <span>
+                                            <img id="loading" style="display: none;" src="~/Content/ajax-loader.gif" />
+                                        </span>
+                                        <button class="btn btn-success" id="searchbtn">Search</button>
+
+                                        @{
+                                            foreach (var tag in Model.Input.AttributesViewModel)
+                                            {
+                                                <div style="float:left;padding:10px">
+                                                    @*<input type="checkbox" value=@tag.Id name="AttributeSelectedOnView">*@
+                                                    <label>@tag.Name</label>
+                                                    @foreach (var option in tag.AttributesOptionsViewModels)
+                                                    {
+                                                        <ul>
+                                                            <li>
+                                                                <input type="checkbox" value=@option.Id name=OptionsSelectedOnView>
+                                                                <label>@option.Name</label>
+                                                            </li>
+                                                        </ul>
+                                                    }
+
+                                                </div>
+                                            }
+                                        }
+
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div id="searchdata">
+                                        <table class="table">
+                                            <tr>
+                                                <th>
+                                                    <label>Name</label>
+                                                </th>
+                                                @*<th>
+                                                    <label>Option1</label>
+                                                    </th>
+                                                    <th>
+                                                    <label>Option2</label>
+                                                    </th>*@
+
+                                                <th>
+                                                    <label>Size</label>
+                                                </th>
+                                                <th>
+                                                    <label>Cost Price</label>
+                                                </th>
+                                                <th>
+                                                    <label>MRP</label>
+                                                </th>
+                                                <th>
+                                                    <label>Sale Price</label>
+                                                </th>
+
+                                                <th></th>
+                                            </tr>
+                                            <tbody>
+                                                @foreach (var item in Model.Input.ProductVariantsViewModel)
+                                                {
+
+                                                    <tr>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Name)
+                                                        </td>
+                                                       
+
+                                                        <td>
+                                                            @Html.ActionLink("Edit", "Edit", "ProductVariants", new { id = item.Id }) |
+                                                            @*@Html.ActionLink("Details", "Details", new { id = item.Id }) |*@
+                                                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+

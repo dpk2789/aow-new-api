@@ -9,6 +9,7 @@ namespace Aow.Infrastructure.IRepositories
     public interface IProductCategoryRepository : IRepositoryBase<ProductCategory>
     {
         ProductCategory GetProductCategory(Guid Id);
+        ProductCategory GetProductCategoryForSearch(Guid Id);
         Task<PagedList<ProductCategory>> GetProductCategories(PagingParameters ownerParameters, Guid cmpId);
     }
 }

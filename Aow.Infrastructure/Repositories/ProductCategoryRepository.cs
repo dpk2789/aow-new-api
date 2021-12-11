@@ -22,6 +22,11 @@ namespace Aow.Infrastructure.Repositories
             return FindByCondition(x => x.Id == Id).FirstOrDefault();
         }
 
+        public ProductCategory GetProductCategoryForSearch(Guid Id)
+        {
+            return FindByCondition(x => x.Id == Id).Include(x => x.ProductAttributes).ThenInclude(x => x.ProductAttributeOptions).
+                Include(x => x.Products).ThenInclude(x => x.ProductVariants).FirstOrDefault();
+        }
         //public Task<PagedList<ProductCategory>> GetProductCategories(PagingParameters ownerParameters, Guid cmpId)
         //{
         //    return Task.FromResult(PagedList<ProductCategory>.ToPagedList(FindAll().Include(x => x.Parent).Where(x => x.CompanyId == cmpId).OrderBy(on => on.Name),

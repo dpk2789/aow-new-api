@@ -33,6 +33,7 @@
         {
             public const string GetProductCategories = Rootlocal + "/api/ProductCategories/GetProductCategories";
             public const string GetProductCategory = Rootlocal + "/api/ProductCategories/GetProductCategory";
+            public const string GetItemVarientsSearchByCategory = Rootlocal + "/api/ProductCategories/GetItemVarientsSearchByCategory";
             public const string Create = Rootlocal + "/api/ProductCategories/AddProductCategory";
             public const string Update = Rootlocal + "/api/ProductCategories/UpdateProductCategory";
             public const string Delete = Rootlocal + "api/ProductCategories/DeleteProductCategory/{postId}";

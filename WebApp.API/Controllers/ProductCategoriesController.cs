@@ -25,6 +25,13 @@ namespace WebApp.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("api/ProductCategories/GetItemVarientsSearchByCategory")]
+        public IActionResult GetItemVarientsSearchByCategory([FromQuery] Guid id, [FromServices] GetItemVarientsSearchByCategory getProduct)
+        {
+            var result = getProduct.Do(id);
+            return Ok(result);
+        }
+
         [HttpPost("api/ProductCategories/AddProductCategory")]
         public async Task<IActionResult> AddProductCategory([FromBody] AddProductCategory.AddProductCategoryRequest request, [FromServices] AddProductCategory addFinancialYear)
         {
