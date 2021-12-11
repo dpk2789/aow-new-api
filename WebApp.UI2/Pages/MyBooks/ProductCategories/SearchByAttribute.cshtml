@@ -1,7 +1,7 @@
 ﻿@page
 @model WebApp.UI2.Pages.MyBooks.ProductCategories.SearchByAttributeModel
 @{
-     var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "AcessToken").Value;
 }
 
 <div class="content-wrapper">
@@ -50,21 +50,18 @@
                                 <div class="mb-3 row">
                                     <label class="col-sm-2 col-form-label">Select Category</label>
                                     <div class="col-sm-6">
-                                        @Html.DropDownList("CategoryId", Model.Input.ProductCategorySelectList, "-Select Category-", new { id = "CategoryId", @class = "form-control" })
-                                        @*<select asp-for="Input.CategoryId">
-                                                <option>1</option>
-                                                <option>1</option>
-                                            </select>*@
+                                        @{
+                                            foreach (var item in Model.Input.ProductCategorySelectList)
+                                            {
+                                                <a href="/MyBooks/ProductCategories/SearchResultByAttribute?id=@item.Value" class="fa fa-edit">@item.Text</a>
+                                                <br />
+                                            }
+                                        }
                                     </div>
+
                                     <span asp-validation-for="Input.Name" class="text-danger"></span>
                                 </div>
-                                <div class="mb-3 row">
-                                    <label asp-for="Input.Name" class="col-sm-2 col-form-label"></label>
-                                    <div class="col-sm-6">
-                                        <input asp-for="Input.Name" class="form-control" />
-                                    </div>
-                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
-                                </div>
+
 
                             </form>
                         </div>
