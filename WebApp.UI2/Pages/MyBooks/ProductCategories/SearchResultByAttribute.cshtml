@@ -34,7 +34,8 @@
                         <!-- /.card-header -->
                         <div class="card-body" id="product-main">
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-3">
+
                                     <div class="container">
                                         <span>
                                             <img id="loading" style="display: none;" src="~/Content/ajax-loader.gif" />
@@ -44,32 +45,47 @@
                                         @{
                                             foreach (var tag in Model.Input.AttributesViewModel)
                                             {
-                                                <div style="float:left;padding:10px">
-                                                    @*<input type="checkbox" value=@tag.Id name="AttributeSelectedOnView">*@
-                                                    <label>@tag.Name</label>
-                                                    @foreach (var option in tag.AttributesOptionsViewModels)
-                                                    {
-                                                        <ul>
-                                                            <li>
-                                                                <input type="checkbox" value=@option.Id name=OptionsSelectedOnView>
-                                                                <label>@option.Name</label>
-                                                            </li>
-                                                        </ul>
-                                                    }
+                                                <article class="filter-group">
+                                                    <header class="card-header">
+                                                        <a href="#" data-toggle="collapse" data-target="#@tag.Name.Replace(" ","-").Replace(".","-")" aria-expanded="false" class="">
+                                                            <i class="icon-control fa fa-chevron-down"></i>
+                                                            <h6 class="title">@tag.Name.Replace(" ","-").Replace(".","-") </h6>
+                                                        </a>
+                                                    </header>
+                                                    <div class="filter-content collapse in" id="@tag.Name.Replace(" ","-").Replace(".","-")" style="">
+                                                        <div class="card-body">
+                                                            <div style="float:left;padding:10px">
+                                                                @*<input type="checkbox" value=@tag.Id name="AttributeSelectedOnView">*@
+                                                               
+                                                                @foreach (var option in tag.AttributesOptionsViewModels)
+                                                                {
+                                                                    <ul>
+                                                                        <li>
+                                                                            <input type="checkbox" value=@option.Id name=OptionsSelectedOnView>
+                                                                            <label>@option.Name</label>
+                                                                        </li>
+                                                                    </ul>
+                                                                }
 
+                                                            </div>
+
+                                                        </div> <!-- card-body.// -->
                                                 </div>
+                                                </article>
+
                                             }
                                         }
 
                                         <div class="clearfix"></div>
                                     </div>
                                 </div>
-                                <div class="col-md-10">
+                                <div class="col-md-9">
                                     <div id="searchdata">
                                         @if (Model.Input.ProductVariantsViewModel != null)
                                         {
                                             <partial name="_ProductVariantSearchResultByAtt" model="@Model.Input.ProductVariantsViewModel" />
-                                        }                                       
+
+                                        }
 
                                     </div>
                                 </div>
@@ -104,41 +120,30 @@
                 'Id': $(this).val(),
             });
         });
+        var attributes = {
+            Id: "f1",
+        };
+        attributes = JSON.stringify(favorite);
+        let el = document.getElementById('userId');
+        let userAccessToken = el.value;
 
-            axios.post(`${apiUrl}/api/ProductCategories/AddProductCategory`, this.addFinancialYearRequest, {
-                    headers: {
-                        Authorization: "Bearer " + userAccessToken
-                    }
-                })
-             .then(function (response) {
-                 console.log(response);
-                 if (response.data.success) {
-                     toastr.success(response.data.description)
-                     window.location.href = '/MyBooks/ProductCategories/index'
-                 } else {
-                     toastr.error(response.data.description)
-                 }
-            })
-            .catch(function (response) {
-                console.log(error);
-                toastr.error('Some Error Occur!!')
-            });
-        e.preventDefault();
         $.ajax({
-            type: 'GET',
-            url: "@Url.Action("ItemVarientsSearchPageReport", "ProductAttributes")",
-            data: { data: JSON.stringify(favorite) },
-            // dataType: 'json',
-            success: function (data) {
-                console.log('success', data);
-                $("#searchdata").html(data.modelString);
-                $('#loadingmessage').hide();
-            },
-            error: function (exception) {
-                //alert('Exeption:' + exception);
-            }
-        });
-        e.preventDefault();
+        type: 'GET',
+        url: "/Partials/GetProductSearchByAttributePartialView",
+        data: { attributes: JSON.stringify(favorite) },
+        // dataType: 'json',
+        success: function (res) {
+           var html = res;
+                var el = document.getElementById('resultTable');
+                el.outerHTML = html;
+                console.log(res);
+        },
+        error: function (exception) {
+            //alert('Exeption:' + exception);
+        }
+    });
+    e.preventDefault();
+
     });
 
     $(document)
@@ -153,8 +158,8 @@
                 });
 
         });
-    //$.get(action, null, function (data) {
-    //    $('#someDiv').html(data);
-    //}, 'html');
+                        //$.get(action, null, function (data) {
+                        //    $('#someDiv').html(data);
+                        //}, 'html');
 </script>
-    }
+}

@@ -28,7 +28,7 @@ namespace Aow.Infrastructure.Repositories
                 Include(x => x.Products).OrderBy(on => on.Name),
                                     ownerParameters.PageNumber, ownerParameters.PageSize));
         }
-
+      
         public Task<List<ProductVariant>> GetAllProductVarients(Guid productId)
         {
             return (FindAll().Where(x => x.ProductId == productId).Include(x => x.Products).ToListAsync());

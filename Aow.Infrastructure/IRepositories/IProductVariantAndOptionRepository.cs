@@ -11,6 +11,7 @@ namespace Aow.Infrastructure.IRepositories
     {
         Task<PagedList<ProductVariantProductAttributeOption>> GetProductVarientsWithOptions(PagingParameters ownerParameters, Guid productId);
         ProductVariantProductAttributeOption GetProductVarientsWithOption(Guid Id);
+        Task<List<ProductVariantProductAttributeOption>> GetVarientsWithOptionsByOption(Guid optionId);
         Task<List<ProductVariantProductAttributeOption>> GetVarientsWithOptionsByVarient(Guid varientId);
     }
 }
