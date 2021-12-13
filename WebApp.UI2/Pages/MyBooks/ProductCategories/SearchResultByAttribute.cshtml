@@ -43,7 +43,7 @@
                                         <button class="btn btn-success" id="searchbtn">Search</button>
 
                                         @{
-                                            foreach (var tag in Model.Input.AttributesViewModel)
+                                            foreach (var tag in Model.Input.AttributesViewModel.OrderBy(x=>x.Name))
                                             {
                                                 <article class="filter-group">
                                                     <header class="card-header">
@@ -57,7 +57,7 @@
                                                             <div style="float:left;padding:10px">
                                                                 @*<input type="checkbox" value=@tag.Id name="AttributeSelectedOnView">*@
                                                                
-                                                                @foreach (var option in tag.AttributesOptionsViewModels)
+                                                                @foreach (var option in tag.AttributesOptionsViewModels.OrderBy(x=>x.Name))
                                                                 {
                                                                     <ul>
                                                                         <li>
