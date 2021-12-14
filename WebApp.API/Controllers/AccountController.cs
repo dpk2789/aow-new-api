@@ -44,5 +44,16 @@ namespace WebApp.API.Controllers
 
             return Ok(result);
         }
+        [HttpPost("api/user/ForgetPassword")]
+        public async Task<IActionResult> ForgetPassword([FromBody] ForgetPassword.ForgetPasswordRequest request, [FromServices] ForgetPassword login)
+        {
+            var result = await login.Do(request);
+            if (!result.Success)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result);
+        }
     }
 }

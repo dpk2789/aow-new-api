@@ -9,6 +9,7 @@
             public const string Login = Rootlocal + "/api/user/login";
             public const string Register = Rootlocal + "/api/user/register";
             public const string ConfirmEmail = Rootlocal + "/api/user/ConfirmEmail";
+            public const string ForgetPassword = Rootlocal + "/api/user/ForgetPassword";
         }
 
         public static class Company
