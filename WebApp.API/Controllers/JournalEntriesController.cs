@@ -34,5 +34,17 @@ namespace WebApp.API.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPut("api/JournalEntries/UpdateJournalEntries")]
+        public async Task<IActionResult> UpdateJournalEntries([FromBody] UpdateJournalEntries.UpdateJournalEntriesRequest request, [FromServices] UpdateJournalEntries updateFinancialYear)
+        {
+            var response = await updateFinancialYear.Do(request);
+
+            if (response == null)
+            {
+                return BadRequest("Failed to update");
+            }
+            return Ok(response);
+        }
     }
 }
