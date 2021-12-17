@@ -18,9 +18,9 @@ namespace WebApp.API.Controllers
         }
 
         [HttpGet("api/Vouchers/GetVoucher")]
-        public IActionResult GetVoucher([FromQuery] Guid id, [FromServices] GetVoucher getVoucher)
+        public async Task<IActionResult> GetVoucher([FromQuery] Guid id, [FromServices] GetVoucher getVoucher)
         {
-            var result = getVoucher.Do(id);
+            var result = await getVoucher.Do(id);
             return Ok(result);
         }
 

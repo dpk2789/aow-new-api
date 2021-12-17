@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -21,20 +20,18 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
             ApiUrl = ApiUrls.Rootlocal;
             _cookieHelper = cookieHelper;
         }
-        [BindProperty] public InputModel Input { get; set; }
-        public class InputModel
+        [BindProperty] public UpdateViewModel Input { get; set; }
+        public class UpdateViewModel
         {
             public Guid Id { get; set; }
             public string FinancialYearId { get; set; }
             public string VoucherNumber { get; set; }
             public int VoucherTypeId { get; set; }
             public string VoucherName { get; set; }
-
-            //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd-MM-yyyy")]
-            public DateTime? Date { get; set; }
+            public DateTime Date { get; set; }
             public string RefId { get; set; }
             public string Note { get; set; }
-            public decimal? Total { get; set; }
+            public decimal Total { get; set; }
             public bool? Type { get; set; }
             public virtual List<JournalEntryViewModel> JournalEntries { get; set; }
         }
@@ -42,10 +39,10 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
         {
             public Guid? Id { get; set; }
             public Guid? VoucherId { get; set; }
-            public string VoucherName { get; set; }           
-            public string VoucherNumber { get; set; }           
-            public DateTime? VoucherDate { get; set; }
-            public decimal? VoucherTotal { get; set; }         
+            public string VoucherName { get; set; }
+            public string VoucherNumber { get; set; }
+            public DateTime VoucherDate { get; set; }
+            public decimal? VoucherTotal { get; set; }
             public int? SrNo { get; set; }
             public string CrDrType { get; set; }
             public Guid LedgerId { get; set; }
@@ -55,7 +52,8 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
             public decimal? CreditAmount { get; set; }
             public decimal? DebitAmount { get; set; }
             public string RefId { get; set; }
-            public decimal? ItemAmount { get; set; }          
+            public decimal? Quantity { get; set; }
+            public decimal? ItemAmount { get; set; }
         }
 
         public async Task<IActionResult> OnGet(Guid Id)
@@ -76,7 +74,7 @@ namespace WebApp.UI2.Pages.MyBooks.JournalEntries
             var result = postTask.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             if (result != null)
             {
-                var data = JsonConvert.DeserializeObject<InputModel>(result);
+                var data = JsonConvert.DeserializeObject<UpdateViewModel>(result);
                 Input = data;
             }          
             return Page();

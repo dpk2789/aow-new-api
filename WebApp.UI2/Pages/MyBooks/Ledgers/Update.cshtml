@@ -63,7 +63,57 @@
                                     <span asp-validation-for="Input.Name" class="text-danger"></span>
                                 </div>
 
+                                <div class="mb-3 row">
+                                    <label for="inputAddress" class="col-sm-2 col-form-label">Address Line1</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                                    </div>
+                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="inputAddress" class="col-sm-2 col-form-label">Address Line2</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                                    </div>
+                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="inputAddress" class="col-sm-2 col-form-label">City</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                                    </div>
+                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="inputAddress" class="col-sm-2 col-form-label">State</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                                    </div>
+                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="inputAddress" class="col-sm-2 col-form-label">Country</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                                    </div>
+                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="inputAddress" class="col-sm-2 col-form-label">Pin Code</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                                    </div>
+                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="inputAddress" class="col-sm-2 col-form-label">Registered Tax Number</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                                    </div>
+                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                </div>
                             </form>
+
                         </div>
 
                     </div>
@@ -90,49 +140,49 @@
 
 @section scripts{
     @*<script src="~/js/product.js"></script>*@
-    <script>
-       var apiUrl = '@Model.ApiUrl';
+<script>
+    var apiUrl = '@Model.ApiUrl';
 
-        function UpdateLedger(e) {
-           // let confirmAction = confirm("Are you sure to delete this product?");
-            performPostRequest(e);
-        }
+     function UpdateLedger(e) {
+        // let confirmAction = confirm("Are you sure to delete this product?");
+         performPostRequest(e);
+     }
 
-        var updateLedgerRequest = {
-            id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            name: "f1",
-            ledgerCategoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-        };
-        function performPostRequest(e) {
-            let userId = document.getElementById('userId');
-            let ledgerId = document.getElementById('ledgerId').value;
-            let ledgerName = document.getElementById('Input_Name').value;
-            let categoryId = document.getElementById('CategoryId').value;
-            updateLedgerRequest.name = ledgerName;
-            updateLedgerRequest.id = ledgerId;
-            updateLedgerRequest.ledgerCategoryId = categoryId;
-            let userAccessToken = userId.value;
-            console.log(this.updateLedgerRequest);
+     var updateLedgerRequest = {
+         id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+         name: "f1",
+         ledgerCategoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+     };
+     function performPostRequest(e) {
+         let userId = document.getElementById('userId');
+         let ledgerId = document.getElementById('ledgerId').value;
+         let ledgerName = document.getElementById('Input_Name').value;
+         let categoryId = document.getElementById('CategoryId').value;
+         updateLedgerRequest.name = ledgerName;
+         updateLedgerRequest.id = ledgerId;
+         updateLedgerRequest.ledgerCategoryId = categoryId;
+         let userAccessToken = userId.value;
+         console.log(this.updateLedgerRequest);
 
-            axios.put(`${apiUrl}/api/Ledger/UpdateLedger`, this.updateLedgerRequest, {
-                headers: {
-                    Authorization: "Bearer " + userAccessToken
-                }
-            })
-                 .then(function (response) {
-                     console.log(response);
-                     if (response.data.success) {
-                         toastr.success(response.data.description)
-                         window.location.href = '/MyBooks/Ledgers/index'
-                     } else {
-                         toastr.error(response.data.description)
-                     }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    toastr.error('Some Error Occur!!')
-                });
-            e.preventDefault();
-        }
-    </script>
+         axios.put(`${apiUrl}/api/Ledger/UpdateLedger`, this.updateLedgerRequest, {
+             headers: {
+                 Authorization: "Bearer " + userAccessToken
+             }
+         })
+              .then(function (response) {
+                  console.log(response);
+                  if (response.data.success) {
+                      toastr.success(response.data.description)
+                      window.location.href = '/MyBooks/Ledgers/index'
+                  } else {
+                      toastr.error(response.data.description)
+                  }
+             })
+             .catch(function (error) {
+                 console.log(error);
+                 toastr.error('Some Error Occur!!')
+             });
+         e.preventDefault();
+     }
+</script>
 }
