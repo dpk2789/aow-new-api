@@ -66,51 +66,51 @@
                                 <div class="mb-3 row">
                                     <label for="inputAddress" class="col-sm-2 col-form-label">Address Line1</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" asp-for="Input.AddressLine1" id="inputAddress" placeholder="Line1">
                                     </div>
-                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                    <span asp-validation-for="Input.AddressLine1" class="text-danger"></span>
                                 </div>
                                 <div class="mb-3 row">
                                     <label for="inputAddress" class="col-sm-2 col-form-label">Address Line2</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" asp-for="Input.AddressLine2" id="inputAddress2" placeholder="Line 2">
                                     </div>
-                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                    <span asp-validation-for="Input.AddressLine2" class="text-danger"></span>
                                 </div>
                                 <div class="mb-3 row">
                                     <label for="inputAddress" class="col-sm-2 col-form-label">City</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" asp-for="Input.City"  id="inputCity" placeholder="City">
                                     </div>
-                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                    <span asp-validation-for="Input.City" class="text-danger"></span>
                                 </div>
                                 <div class="mb-3 row">
                                     <label for="inputAddress" class="col-sm-2 col-form-label">State</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" asp-for="Input.State" id="inputState" placeholder="State">
                                     </div>
-                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                    <span asp-validation-for="Input.State" class="text-danger"></span>
                                 </div>
                                 <div class="mb-3 row">
                                     <label for="inputAddress" class="col-sm-2 col-form-label">Country</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" asp-for="Input.Country" id="inputCountry" placeholder="Country">
                                     </div>
-                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                    <span asp-validation-for="Input.Country" class="text-danger"></span>
                                 </div>
                                 <div class="mb-3 row">
                                     <label for="inputAddress" class="col-sm-2 col-form-label">Pin Code</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" id="inputZipCode" asp-for="Input.ZipCode" placeholder="Pin Code/Zip Code">
                                     </div>
-                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                    <span asp-validation-for="Input.ZipCode" class="text-danger"></span>
                                 </div>
                                 <div class="mb-3 row">
                                     <label for="inputAddress" class="col-sm-2 col-form-label">Registered Tax Number</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                                        <input type="text" class="form-control" id="inputRegTaxNumber" asp-for="Input.RegTaxNumber" placeholder="Reg Tax Number">
                                     </div>
-                                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                                    <span asp-validation-for="Input.RegTaxNumber" class="text-danger"></span>
                                 </div>
                             </form>
 
@@ -151,16 +151,38 @@
      var updateLedgerRequest = {
          id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
          name: "f1",
-         ledgerCategoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+         ledgerCategoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+         regTaxNumber: "string",
+          panNumber: "string",
+          addressLine1: "string",
+         addressLine2: "string",
+          city: "string",
+          state: "string",
+          country: "string",
+          zipCode: "string",
      };
      function performPostRequest(e) {
          let userId = document.getElementById('userId');
          let ledgerId = document.getElementById('ledgerId').value;
          let ledgerName = document.getElementById('Input_Name').value;
          let categoryId = document.getElementById('CategoryId').value;
+          let inputAddress = document.getElementById('inputAddress').value;
+           let inputAddress2 = document.getElementById('inputAddress2').value;
+            let inputCity = document.getElementById('inputCity').value;
+           let inputState = document.getElementById('inputState').value;
+            let inputCountry = document.getElementById('inputCountry').value;
+             let inputZipCode = document.getElementById('inputZipCode').value;
+              let inputRegTaxNumber = document.getElementById('inputRegTaxNumber').value;
          updateLedgerRequest.name = ledgerName;
          updateLedgerRequest.id = ledgerId;
          updateLedgerRequest.ledgerCategoryId = categoryId;
+          updateLedgerRequest.addressLine1 = inputAddress;
+          updateLedgerRequest.addressLine2 = inputAddress2;
+         updateLedgerRequest.city = inputCity;
+          updateLedgerRequest.state = inputState;
+         updateLedgerRequest.country = inputCountry;
+          updateLedgerRequest.zipCode = inputZipCode;
+          updateLedgerRequest.regTaxNumber = inputRegTaxNumber;
          let userAccessToken = userId.value;
          console.log(this.updateLedgerRequest);
 

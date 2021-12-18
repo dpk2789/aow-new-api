@@ -23,7 +23,7 @@
     </thead>
     <tbody>
         @{
-            foreach (var voucher in Model)
+            foreach (var voucher in Model.OrderBy(x => x.Date))
             {
                 foreach (var item in voucher.JournalEntries.OrderBy(x => x.SrNo))
                 {
@@ -31,7 +31,7 @@
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => voucher.Date)
+                                @voucher.Date.ToString("dd/MM/yyyy")
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => voucher.VoucherNumber)
@@ -46,7 +46,7 @@
                                 @Html.DisplayFor(modelItem => item.DebitAmount)
                             </td>
                             <td>
-                                <a asp-route-id="@voucher.Id" asp-page="/MyBooks/VoucherWithItems/Edit"  class="btn btn-primary btn-sm" title="Edit Voucher"><i class="fas fa-edit"></i></a> |
+                                <a asp-route-id="@voucher.Id" asp-page="/MyBooks/VoucherWithItems/Edit" class="btn btn-primary btn-sm" title="Edit Voucher"><i class="fas fa-edit"></i></a> |
                                 <a asp-route-id="@voucher.Id" asp-page="/MyBooks/VoucherWithItems/Print" target="_blank" class="btn btn-success btn-sm" title="Print Voucher"><i class="fas fa-print"></i> </a> |
                                 <a asp-route-id="@voucher.Id" asp-page="/MyBooks/VoucherWithItems/AllVarients" target="_blank" class="btn btn-warning btn-sm" title="All Voucher Varients"><i class="nav-icon fas fa-warehouse"></i></a> |
                                 <button onclick="confirmAction(event)" data-category-id="@voucher.Id" type="button" class="btn btn-danger btn-sm" title="Delete Voucher"><i class="fas fa-trash-alt"></i></button>

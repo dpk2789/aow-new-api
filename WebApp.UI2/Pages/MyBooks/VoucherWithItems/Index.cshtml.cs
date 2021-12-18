@@ -29,7 +29,7 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
         {
             public Guid Id { get; set; }
             public string VoucherNumber { get; set; }
-            public DateTime? Date { get; set; }
+            public DateTime Date { get; set; }
             public string VoucherName { get; set; }
             public string RefId { get; set; }
             public string Note { get; set; }
