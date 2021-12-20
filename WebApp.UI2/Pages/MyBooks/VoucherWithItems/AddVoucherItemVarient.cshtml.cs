@@ -23,6 +23,7 @@ namespace WebApp.UI2.Pages.MyBooks.VoucherWithItems
         public class AddVoucherItemVarientViewModel
         {
             public Guid Id { get; set; }
+            public string VoucherName { get; set; }
             public int? SrNo { get; set; }
             public decimal ItemsTotal { get; set; }
             public string ItemName { get; set; }        

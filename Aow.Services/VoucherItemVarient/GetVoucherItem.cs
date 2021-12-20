@@ -16,7 +16,8 @@ namespace Aow.Services.VoucherItemVarient
 
         public class GetVoucherItemResponse
         {
-            public Guid Id { get; set; }          
+            public Guid Id { get; set; }
+            public string VoucherName { get; set; }
             public decimal ItemsTotal { get; set; }
             public string ItemName { get; set; }         
             public Guid ProductId { get; set; }
@@ -50,6 +51,7 @@ namespace Aow.Services.VoucherItemVarient
                 Id = voucherItem.Id,
                 ItemName = voucherItem.Product.Name,
                 ProductId = voucherItem.Product.Id,
+                VoucherName= voucherItem.Voucher.VoucherName,
             };
             decimal ItemsTotal = 0;
             var varients = new List<GetVoucherItemVarientResponse>();
@@ -61,6 +63,7 @@ namespace Aow.Services.VoucherItemVarient
                     viewModel.Id = varient.Id;
                     viewModel.SrNo = varient.SrNo;
                     viewModel.ItemName = varient.Name;
+                    viewModel.Description = varient.Description;
                     viewModel.Quantity = varient.UnitQuantity;
                     viewModel.ItemAmount = varient.ItemAmount;
                     viewModel.MRPPerUnit = varient.MRPPerUnit;

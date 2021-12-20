@@ -30,13 +30,14 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">
-                                @Model.Input.ItemName
+                             @Model.Input.VoucherName  - @Model.Input.ItemName
                             </h3>
                         </div>
 
                         <!-- /.card-header -->
                         <div class="card-body" id="product-main">
                             <input type="hidden" value="@userId" id="userId" />
+                            <input type="hidden" value="@Model.Input.VoucherName" id="hdnVoucherName" />
                             <input type="hidden" value="@Model.Input.Id" id="VoucherItemId" />
                             <input type="hidden" value="@Model.Input.ProductId" id="ProductId" />
                             <input type="hidden" value="@Model.ApiUrl" id="apiurl" />
@@ -495,7 +496,8 @@
 
         function performPostRequest(e, url) {
             e.preventDefault();
-            let voucherItemId = document.getElementById('VoucherItemId').value;
+            let voucherItemId = document.getElementById('VoucherItemId').value;            
+            let voucherName = document.getElementById('hdnVoucherName').value;
             let apiUrl = document.getElementById('apiurl').value;
             let userId = document.getElementById('userId');
             let userAccessToken = userId.value;
@@ -525,7 +527,7 @@
                 }
             });
 
-            alert(JSON.stringify(OrderDetl) + '  ' + OrderDetl.length)
+            //alert(JSON.stringify(OrderDetl) + '  ' + OrderDetl.length)
 
             addVoucherItemRequest.voucherItemId = voucherItemId;
             addVoucherItemRequest.data = JSON.stringify(OrderDetl);

@@ -54,7 +54,7 @@
                                         @{
                                             if (Model != null)
                                             {
-                                                foreach (var product in Model.CurrentStock)
+                                                foreach (var product in Model.CurrentStock.OrderBy(x => x.Date))
                                                 {
                                                     <tr>
                                                         <td>
@@ -81,7 +81,7 @@
                                                         <td>
                                                             @Html.DisplayFor(modelItem => product.ConsumedQuantity)
                                                         </td>
-                                                         <td>
+                                                        <td>
                                                             <a asp-route-id="@product.Id" asp-page="/MyBooks/Products/Update" class="fa fa-edit">Edit</a>
                                                         </td>
                                                     </tr>
