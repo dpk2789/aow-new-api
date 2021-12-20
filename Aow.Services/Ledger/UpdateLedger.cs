@@ -16,6 +16,14 @@ namespace Aow.Services.Ledger
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
+            public string RegTaxNumber { get; set; }
+            public string PANNumber { get; set; }
+            public string AddressLine1 { get; set; }
+            public string AddressLine2 { get; set; }
+            public string City { get; set; }
+            public string State { get; set; }
+            public string Country { get; set; }
+            public string ZipCode { get; set; }
             public Guid LedgerCategoryId { get; set; }
         }
         public class UpdateLedgerResponse
@@ -37,6 +45,13 @@ namespace Aow.Services.Ledger
                 }
                 ledger.Name = request.Name;
                 ledger.LedgerCategoryId = request.LedgerCategoryId;
+                ledger.AddressLine1 = request.AddressLine1;
+                ledger.AddressLine2 = request.AddressLine2;
+                ledger.City = request.City;
+                ledger.State = request.State;
+                ledger.Country = request.Country;
+                ledger.ZipCode = request.ZipCode;
+                ledger.RegTaxNumber = request.RegTaxNumber;
                 _repoWrapper.LedgerRepositoryRepo.Update(ledger);
 
                 int i = await _repoWrapper.SaveNew();

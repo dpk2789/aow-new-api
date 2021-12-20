@@ -27,6 +27,14 @@ namespace WebApp.UI2.Pages.MyBooks.Ledgers
             public Guid Id { get; set; }
             public string Name { get; set; }
             public string CompanyName { get; set; }
+            public string RegTaxNumber { get; set; }
+            public string PANNumber { get; set; }
+            public string AddressLine1 { get; set; }
+            public string AddressLine2 { get; set; }
+            public string City { get; set; }
+            public string State { get; set; }
+            public string Country { get; set; }
+            public string ZipCode { get; set; }
             public Guid LedgerCategoryId { get; set; }
             public SelectList LedgerCategorySelectList { get; set; }
         }

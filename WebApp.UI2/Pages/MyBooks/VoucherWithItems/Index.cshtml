@@ -63,7 +63,8 @@
 
     function DataTableInit() {
         $("#voucherInvoiceList").DataTable({
-            "pageLength": 50,
+            "pageLength": 100,
+             "order": [[ 1, "desc" ]],
             "responsive": true, "lengthChange": false, "autoWidth": false, "ordering": false,
             "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#voucherInvoiceList_wrapper .col-md-6:eq(0)');
