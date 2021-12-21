@@ -512,13 +512,14 @@ function yoCalculateItemsTotal() {
 
 $("#tbodyitems").on('click', '.edit', function (e) {
     e.preventDefault();
-    var tr = $(this).closest('tr');
+    var tr = $(this).closest('tr');   
 
-    var txtDescription = tr.find("td").eq(1).html();
-    var txtStoreItem = tr.find("td").eq(0).html();
-    var txtMRP = tr.find("td").eq(2).html();
-    var txtQuantity = tr.find("td").eq(3).html();
-    var txtAmount = tr.find("td").eq(4).html();
+    var txtSrNo = tr.find("td").eq(0).html().trim();
+    var txtStoreItem = tr.find("td").eq(1).html().trim();
+    var txtDescription = tr.find("td").eq(2).html().trim();
+    var txtMRP = tr.find("td").eq(3).html().trim();
+    var txtQuantity = tr.find("td").eq(4).html().trim();
+    var txtAmount = tr.find("td").eq(5).html().trim();
 
     $('#txtDescription').val(txtDescription);
     $('#txtStoreItem').val(txtStoreItem);

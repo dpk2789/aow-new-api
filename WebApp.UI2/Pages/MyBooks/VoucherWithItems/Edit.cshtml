@@ -147,23 +147,22 @@
                                                     {
                                                         <tr>
                                                             <td>
-                                                                <p class='sNo'>@item.SrNo</p>
+                                                               @item.SrNo
                                                             </td>
                                                             <td>
-                                                                @Html.DisplayFor(modelItem => item.ItemName)
+                                                                @item.ItemName.Trim()
                                                             </td>
                                                             <td>
-                                                                <p class='batchName'>@item.Description</p>
+                                                               @item.Description
                                                             </td>
                                                             <td>
-                                                                @Html.DisplayFor(modelItem => item.Quantity)                                                               
+                                                                @Html.DisplayFor(modelItem => item.Quantity)
                                                             </td>
                                                             <td>
                                                                 @Html.DisplayFor(modelItem => item.MRPPerUnit)
                                                             </td>
                                                             <td>
-                                                                <p class="extendedPrice">@item.ItemAmount</p>
-                                                            </td>
+                                                                @item.ItemAmount                                                            </td>
                                                             <td>
                                                                 <input type='hidden' class='hdnappendProductId' value=@item.ProductId />
                                                                 <input type='hidden' class='hdnappendProductAccountId' value=@item.Id />
@@ -174,12 +173,12 @@
                                                                 <input type="hidden" id="hdnappendQuantity" class="hdnappendQuantity" value="@item.Quantity" />
                                                                 <input type="hidden" id="hdnappendMRPPerUnit" class="hdnappendMRPPerUnit" value="@item.MRPPerUnit" />
                                                                 <input type="hidden" id="hdnappenItemDesc" class="hdnappenItemDesc" value="@item.Description" />
-                                                                <button class="btn btn-sm btn-outline-warning fas fa-edit addVoucherVariant" value="@item.Id" style='cursor:pointer;'></button>
+                                                                <button class="btn btn-sm btn-outline-warning fas fa-edit edit" value="@item.Id" style='cursor:pointer;'></button>
                                                                 @*<button class="btn btn-sm btn-outline-light fa fa-edit edit" value="@item.Id" style='cursor:pointer;'></button>*@
                                                                 @*<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">modal</button>*@
                                                                 <button class="btn btn-sm btn-outline-danger fas fa-trash-alt delete" value="@item.Id" style='cursor:pointer;'></button>
-                                                                <a asp-route-id="@item.Id" asp-route-voucherId="@Model.Input.Id" asp-page="/MyBooks/VoucherWithItems/AddVoucherItemVarient" 
-                                                                   class="btn btn-sm btn-outline-primary" target="_blank"><i class="fas fa-cubes"></i></a>
+                                                                <a asp-route-id="@item.Id" asp-route-voucherId="@Model.Input.Id" asp-page="/MyBooks/VoucherWithItems/AddVoucherItemVarient"
+                                                       class="btn btn-sm btn-outline-primary" target="_blank"><i class="fas fa-cubes"></i></a>
 
                                                             </td>
                                                         </tr>
@@ -343,46 +342,46 @@
 </div>
 
 @section Scripts {
-    <script>
-        $('#voucherDate').datetimepicker({
-            /* format: 'L',*/
-            format: 'YYYY/MM/DD',
-            // format: 'd.m.Y'
-        });
+<script>
+    $('#voucherDate').datetimepicker({
+        /* format: 'L',*/
+        format: 'YYYY/MM/DD',
+        // format: 'd.m.Y'
+    });
 
-        var addToStockRequest = {
-            id: "string",
-        }
-        function AddToStock(e) {
-            // let confirmAction = confirm("Are you sure to delete this product?");
-            let userId = document.getElementById('userId');
-            let userAccessToken = userId.value;
-            let apiUrl = document.getElementById('apiurl').value;
-            let url = "AddToStock";
-            let voucherId = document.getElementById('voucherId').value;
-            addToStockRequest.voucherId = voucherId;
-            axios.post(`${apiUrl}/api/Stocks/` + url, this.addToStockRequest, {
-                headers: {
-                    Authorization: "Bearer " + userAccessToken
+    var addToStockRequest = {
+        id: "string",
+    }
+    function AddToStock(e) {
+        // let confirmAction = confirm("Are you sure to delete this product?");
+        let userId = document.getElementById('userId');
+        let userAccessToken = userId.value;
+        let apiUrl = document.getElementById('apiurl').value;
+        let url = "AddToStock";
+        let voucherId = document.getElementById('voucherId').value;
+        addToStockRequest.voucherId = voucherId;
+        axios.post(`${apiUrl}/api/Stocks/` + url, this.addToStockRequest, {
+            headers: {
+                Authorization: "Bearer " + userAccessToken
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.data.success) {
+                    toastr.success(response.data.description)
+                    window.location.href = '/MyBooks/VoucherWithItems/index?voucherName=' + voucherName
+                } else {
+                    toastr.error(response.data.description)
                 }
             })
-                .then(function (response) {
-                    console.log(response);
-                    if (response.data.success) {
-                        toastr.success(response.data.description)
-                        window.location.href = '/MyBooks/VoucherWithItems/index?voucherName=' + voucherName
-                    } else {
-                        toastr.error(response.data.description)
-                    }
-                })
-                .catch(function (response) {
-                    console.log(response);
-                    toastr.error(response)
-                });
-        }
-    </script>
-    <script src="~/mysite/createAddUpdateDeleteItem.js"></script>
-    <script src="~/mysite/addupdatedeteteSundry.js"></script>
-    <script src="~/mysite/saveandCommonFunctions.js"></script>
+            .catch(function (response) {
+                console.log(response);
+                toastr.error(response)
+            });
+    }
+</script>
+<script src="~/mysite/createAddUpdateDeleteItem.js"></script>
+<script src="~/mysite/addupdatedeteteSundry.js"></script>
+<script src="~/mysite/saveandCommonFunctions.js"></script>
 
 }
