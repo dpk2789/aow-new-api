@@ -2,6 +2,7 @@
 using Aow.Infrastructure.Paging;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,11 @@ namespace Aow.Infrastructure.Repositories
             return FindByCondition(x => x.Id == Id).Include(x => x.UserPayments).FirstOrDefault();
         }
 
+        public async Task<List<Company>> GetAllCompanies()
+        {
+            var result = await FindAll().Include(x => x.FinancialYears).ToListAsync();
+            return result;
+        }
         public Task<PagedList<Company>> GetCompanies(PagingParameters ownerParameters)
         {
             return Task.FromResult(PagedList<Company>.ToPagedList(FindAll().OrderBy(on => on.Name),
