@@ -89,42 +89,47 @@
 
 @section scripts{
 
-    <script>
+<script>
 
-        function SetFYr(e) {
-            // let confirmAction = confirm("Are you sure to delete this product?");
-            performPostRequest(e);
-        }
+    function SetFYr(e) {
+        // let confirmAction = confirm("Are you sure to delete this product?");
+        performPostRequest(e);
+    }
 
 
-        function performPostRequest(e) {
-            e.preventDefault();
-            let userId = document.getElementById('userId');
-            let fyrId = document.getElementById('FinancialYearId').value;
-            let returnUrl = document.getElementById('returnUrl').value;
-            let userAccessToken = userId.value;
-
-            axios.post(`/UserAccount/SetFinancialYear/?fyrId=` + fyrId, {
-                headers: {
-                    Authorization: "Bearer " + userAccessToken
+    function performPostRequest(e) {
+        e.preventDefault();
+        let userId = document.getElementById('userId');
+        let fyrId = document.getElementById('FinancialYearId').value;
+        let returnUrl = document.getElementById('returnUrl').value;
+        let userAccessToken = userId.value;
+        
+        axios.post(`/UserAccount/SetFinancialYear/?fyrId=` + fyrId, {
+            headers: {
+                Authorization: "Bearer " + userAccessToken
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                toastr.success(response.data.msg)
+                if(returnUrl === ""){
+                    returnUrl= '/MyBooks/Dashboard';
+                    window.location.href = returnUrl;
+                }
+              
+                if (returnUrl !== "undefined") {
+                    window.location.href = returnUrl;
+                }
+                else {
+                    window.location.href = '/MyBooks/FinancialYear/index';
                 }
             })
-                .then(function (response) {
-                    console.log(response);
-                    toastr.success(response.data.msg)
-                    if (returnUrl !== "undefined") {
-                        window.location.href = returnUrl;
-                    }
-                    else {
-                        window.location.href = '/MyBooks/FinancialYear/index';
-                    }
-                })
-                .catch(function (response) {
-                    console.log(response);
-                    toastr.error('Some Error Occur!!')
-                });
+            .catch(function (response) {
+                console.log(response);
+                toastr.error('Some Error Occur!!')
+            });
 
-        }
-    </script>
+    }
+</script>
 
 }

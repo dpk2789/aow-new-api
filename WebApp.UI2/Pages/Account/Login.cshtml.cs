@@ -141,7 +141,7 @@ namespace WebApp.RazorPages.Areas.Identity.Pages.Account
                 if (postTask.IsSuccessStatusCode)
                 {
                     // sessionStorage.setItem("accessToken", token.token);
-                    return RedirectToPage("/Index");
+                    return RedirectToPage("/Companies/Index");
                 }
 
                 ModelState.AddModelError(string.Empty, result);
