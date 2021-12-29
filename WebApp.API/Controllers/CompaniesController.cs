@@ -11,7 +11,7 @@ namespace WebApp.API.Controllers
     public class CompaniesController : ControllerBase
     {
         [HttpGet("api/Companies/GetAllCompanies")]
-        public async Task<IActionResult> GetAllCompanies( [FromServices] GetCompanies getCompanies)
+        public async Task<IActionResult> GetAllCompanies( [FromServices] GetAllCompanies getCompanies)
         {
             var result = await getCompanies.Do();
             return Ok(result);

@@ -10,10 +10,10 @@ namespace Aow.Services.Companies
     [Service]
     public class GetAllCompanies
     {
-        private IRepositoryWrapper _repoWrapper;      
+        private IRepositoryWrapper _repoWrapper;
         public GetAllCompanies(IRepositoryWrapper repoWrapper)
         {
-            _repoWrapper = repoWrapper;           
+            _repoWrapper = repoWrapper;
         }
         public class CompaniesResponse
         {
@@ -23,20 +23,16 @@ namespace Aow.Services.Companies
             public decimal Value { get; set; }
         }
 
-        public async Task<IEnumerable<CompaniesResponse>> Do(PagingParameters pagingParameters, string userName)
+        public async Task<IEnumerable<CompaniesResponse>> Do()
         {
-            var user = await _repoWrapper.CompanyRepo.GetAll(userName);
-            if (user == null)
-            {
-                return null;
-            };
-            var list = _repoWrapper.UserCompanyRepo.GetCompaniesByUser(pagingParameters, user.Id).GetAwaiter().GetResult();
+
+            var list = await _repoWrapper.CompanyRepo.GetAllCompanies();
             //  var list = _companyRepository.GetCompanies(pagingParameters).GetAwaiter().GetResult();
 
             var newList = list.Select(x => new CompaniesResponse
             {
-                Id = x.Company.Id,
-                Name = x.Company.Name
+                Id = x.Id,
+                Name = x.Name
             });
 
             return newList;

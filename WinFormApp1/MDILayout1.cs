@@ -108,5 +108,10 @@ namespace WinFormApp1
             childForm.Text = "Window " + childFormNumber++;
             childForm.Show();
         }
+
+        private void allCompaniesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

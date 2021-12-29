@@ -112,6 +112,7 @@
                                                     <input type="text" id="txtStoreItem" class="ui-autocomplete-input form-control" data-url="@Url.Action("GetItemsForInvoice", "Vouchers")" placeholder="Enter Product" />
                                                     <input type="hidden" id="hdnStoreItemId" class="form-control" />
                                                     <input type="hidden" id="hdnProductId" class="form-control" />
+                                                    <input type='hidden' id="hdnappendItemId" />
                                                     <input type="hidden" id="hdnProductAccountId" class="form-control" />
                                                     <input type="hidden" id="hdnAccountCategoryName" class="form-control  hdnAccountCategoryName" />
                                                     <input type="hidden" id="hdnItemType" class="form-control  hdnItemType" />
@@ -147,13 +148,13 @@
                                                     {
                                                         <tr>
                                                             <td>
-                                                               @item.SrNo
+                                                                @item.SrNo
                                                             </td>
                                                             <td>
                                                                 @item.ItemName.Trim()
                                                             </td>
                                                             <td>
-                                                               @item.Description
+                                                                @item.Description
                                                             </td>
                                                             <td>
                                                                 @Html.DisplayFor(modelItem => item.Quantity)
@@ -162,10 +163,12 @@
                                                                 @Html.DisplayFor(modelItem => item.MRPPerUnit)
                                                             </td>
                                                             <td>
-                                                                @item.ItemAmount                                                            </td>
+                                                                @item.ItemAmount
+                                                            </td>
                                                             <td>
                                                                 <input type='hidden' class='hdnappendProductId' value=@item.ProductId />
                                                                 <input type='hidden' class='hdnappendProductAccountId' value=@item.Id />
+                                                                <input type='hidden' class="hdnappendItemId" value=@item.Id />
                                                                 <input type='hidden' class='hdnappendhdnItemType' value=@item.ItemType />
                                                                 <input type="hidden" id="hdnappendAmount" class="hdnappendAmount" value="@item.ItemAmount" />
                                                                 <input type='hidden' class='hdnappendMRP' value=@item.MRPPerUnit />

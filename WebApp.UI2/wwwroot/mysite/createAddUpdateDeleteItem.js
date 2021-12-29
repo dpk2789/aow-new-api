@@ -270,7 +270,7 @@ $('.btnupdate').on("click", function (e) {
     //var BatchIdName = $("#BatchId option:selected").text();
     var txtDescription = $('#txtDescription').val();
     var txtStoreItem = $('#txtStoreItem').val();
-    var hdnStoreItemId = $('#hdnStoreItemId').val();
+    var hdnStoreItemId = $('#hdnappendId').val();
     var txtMRP = $('#txtMRP').val();
     var txtQuantity = $('#txtQuantity').val();
     var txtAmount = $('#txtAmount').val();
@@ -520,12 +520,14 @@ $("#tbodyitems").on('click', '.edit', function (e) {
     var txtMRP = tr.find("td").eq(3).html().trim();
     var txtQuantity = tr.find("td").eq(4).html().trim();
     var txtAmount = tr.find("td").eq(5).html().trim();
+    var hdnappendItemId = $(this).find(".hdnappendItemId").val();
 
     $('#txtDescription').val(txtDescription);
     $('#txtStoreItem').val(txtStoreItem);
     $('#txtMRP').val(txtMRP);
     $('#txtQuantity').val(txtQuantity);
     $('#txtAmount').val(txtAmount);
+    $('#hdnappendItemId').val(hdnappendItemId);
 
     $('#btnupdate').show();
     $('#btnnew').show();
