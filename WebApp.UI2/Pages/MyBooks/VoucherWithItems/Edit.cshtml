@@ -132,9 +132,9 @@
                                                     <input type="hidden" id="hdnAmount" class="form-control  hdnAmount" />
                                                 </td>
                                                 <td>
-                                                    <input id="btnAdd" type="button" value="Add" class="btn btn-primary btn-sm btnadd" />
-                                                    @*<a href="#" class="glyphicon glyphicon-pencil btnadd" id="btnadd" title="Add"></a>*@
-                                                    <a href="#" class="fa fa-edit btnupdate" id="btnupdate" title="Edit" style="display:none;"></a>
+                                                   @* <input id="btnAdd" type="button" value="Add" class="btn btn-primary btn-sm btnadd"/>*@
+                                                    <a href="#" class="btn btn-primary btn-sm btnadd" id="btnadd" title="Add">Add</a>
+                                                    <a href="#" class="fa fa-edit btnupdate" id="btnupdate" title="Edit" style="display:none;">Update</a>
                                                     <a href="#" class="fa fa-erase btnnew" id="btnnew" title="New" style="display:none;"></a>
                                                 </td>
                                             </tr>
@@ -176,7 +176,7 @@
                                                                 <input type="hidden" id="hdnappendQuantity" class="hdnappendQuantity" value="@item.Quantity" />
                                                                 <input type="hidden" id="hdnappendMRPPerUnit" class="hdnappendMRPPerUnit" value="@item.MRPPerUnit" />
                                                                 <input type="hidden" id="hdnappenItemDesc" class="hdnappenItemDesc" value="@item.Description" />
-                                                                <button class="btn btn-sm btn-outline-warning fas fa-edit edit" value="@item.Id" style='cursor:pointer;'></button>
+                                                                <button class="btn btn-sm btn-outline-warning fas fa-edit edit" value="@item.Id" style='cursor:pointer;'>Update</button>
                                                                 @*<button class="btn btn-sm btn-outline-light fa fa-edit edit" value="@item.Id" style='cursor:pointer;'></button>*@
                                                                 @*<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">modal</button>*@
                                                                 <button class="btn btn-sm btn-outline-danger fas fa-trash-alt delete" value="@item.Id" style='cursor:pointer;'></button>

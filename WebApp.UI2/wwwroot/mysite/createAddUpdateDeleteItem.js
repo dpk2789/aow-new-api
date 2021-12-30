@@ -97,7 +97,7 @@ $('.btnadd').on("click", function (e) {
     let txtDescription = $('#txtDescription').val();
     let hdnStoreItemId = $('#hdnStoreItemId').val();
     let hdnProductId = $('#hdnProductId').val();
-    let hdnBatchId = $("#BatchId option:selected").val();
+    var hdnAccountCategoryName = $('#hdnAccountCategoryName').val();
     let hdnProductAccountId = $('#hdnProductAccountId').val();
     let txtMRP = $('#txtMRP').val();
     let txtQuantity = $('#txtQuantity').val();
@@ -111,7 +111,7 @@ $('.btnadd').on("click", function (e) {
     if (isNaN(txtQuantity) || txtQuantity === "") {
         txtQuantity = 0;
     }
-    var hdnAccountCategoryName = $('#hdnAccountCategoryName').val();
+  
     //  alert(hdnAccountCategoryName)
     $('.dvitemexistmsg').html("");
     newcontent = "";
@@ -193,7 +193,6 @@ $('.btnadd').on("click", function (e) {
     newcontent += "<td   >";
     newcontent += "<input type='hidden' class='hdnappendhdnAccountCategoryName' value=" + hdnAccountCategoryName.replace(/\s/g, '') + " />";
     newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnProductId + " />";
-    newcontent += "<input type='hidden' class='hdnappendBatchId' value=" + hdnBatchId + " />";
     newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnProductAccountId + " />";
     newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
     newcontent += "<input type='hidden' class='hdnappenItemDesc' value=" + txtDescription.replace(/(\s+&\s+|\s+)/g, '-') + " />";
@@ -269,68 +268,103 @@ $('.btnupdate').on("click", function (e) {
     //var BatchId = $('#BatchId').val();
     //var BatchIdName = $("#BatchId option:selected").text();
     var txtDescription = $('#txtDescription').val();
-    var txtStoreItem = $('#txtStoreItem').val();
-    var hdnStoreItemId = $('#hdnappendId').val();
+    var txtStoreItem = $('#txtStoreItem').val();   
     var txtMRP = $('#txtMRP').val();
     var txtQuantity = $('#txtQuantity').val();
     var txtAmount = $('#txtAmount').val();
     var hdnAmount = $('#hdnAmount').val();
-
+    var hdnItemId = $('#hdnappendItemId').val();
+    var hdnAccountCategoryName = $('#hdnAccountCategoryName').val();
+    let ItemType = $('#hdnItemType').val();
+    let itemstotal = 0;
+    let itemstotalWithOutTax = 0;
+    let dueMoney = 0;
+    let x = 0;
     $('.dvitemexistmsg').html("");
     var isItemEdit = false;
     newcontent = "";
     $('#tbodyitems tr').each(function () {
         var text = $(this).find("td").eq(3).html();
         if (text != "Total") {
-            var itemId = $(this).find('.hdnappendhdnStoreItemId').val();
-            if (hdnStoreItemId == itemId) {
+            var itemId = $(this).find('.hdnappendItemId').val();
+            if (hdnItemId == itemId) {
                 isItemEdit = true;
-                var amnt = $(this).find("td").eq(4).html();
-                //  var amnt = $(this).find('.hdnappentAmount').val();
+                let amnt = $(this).find('.hdnappendAmount').val();
+
+                itemstotal = parseFloat(itemstotal) + parseFloat(amnt);
+                itemstotalWithOutTax = parseFloat(itemstotalWithOutTax) + parseFloat(amnt);
+                dueMoney = parseFloat(dueMoney) + parseFloat(amnt);
+                x = parseFloat(x) + parseFloat(1);
                 newcontent += "<tr >";
+                newcontent += "<td  >" + x + " </td >";
                 newcontent += "<td  class='txtStoreItem'>" + txtStoreItem + " </td >";
                 newcontent += "<td  class='txtDescription'>" + txtDescription + " </td >";
-                //newcontent += "<td   >";
-                //newcontent += "<p class='txtDescription'>" + txtDescription + "</p>";
-                //newcontent += "</td >";              
-                newcontent += "<td  >" + txtMRP + " </td >";
                 newcontent += "<td  >" + txtQuantity + " </td >";
+                newcontent += "<td  >" + txtMRP + " </td >";
                 newcontent += "<td  >" + txtAmount + " </td >";
                 newcontent += "<td   >";
-                newcontent += "<input type='hidden' class='hdnappendAmount' value=" + hdnAmount + " />";
+                newcontent += "<input type='hidden' class='hdnappendhdnAccountCategoryName' value=" + hdnAccountCategoryName.replace(/\s/g, '') + " />";
+                newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnProductId + " />";
+                newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnProductAccountId + " />";
+                newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
+                newcontent += "<input type='hidden' class='hdnappenItemDesc' value=" + txtDescription.replace(/(\s+&\s+|\s+)/g, '-') + " />";
+                newcontent += "<input type='hidden' class='hdnappendMRP' value=" + txtMRP + " />";
+                newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + txtQuantity + " />";
+                newcontent += "<input type='hidden' class='hdnappendAmount' value=" + parseFloat(txtAmount) + " />";
                 newcontent += "<input type='hidden' class='hdnappendhdnStoreItemId' value=" + hdnStoreItemId + " />";
-                newcontent += "<a  class='glyphicon glyphicon-edit edit' style='cursor:pointer;'/>";
-                newcontent += "<a  class='glyphicon glyphicon-trash delete' style='cursor:pointer;'/>";
-                newcontent += "</td >";
-                newcontent += "</tr >";
-                totalamnt = parseFloat(totalamnt) + parseFloat(hdnAmount);
-            }
-            else {
-                //  var amnt = $(this).find('.hdnappentAmount').val();
-                var amnt = $(this).find("td").eq(4).html();
-                var txtDescription = $(this).find("td").eq(1).html();
-                var productname = $(this).find("td").eq(0).html();
-                var price = parseFloat($(this).find("td").eq(2).html()).toFixed(2);
-                var qty = $(this).find("td").eq(3).html();
-                var amount = $(this).find("td").eq(4).html();
-                newcontent += "<tr >";
-                newcontent += "<td >" + productname + " </td >";
-                newcontent += "<td >" + txtDescription + " </td >";
-                newcontent += "<td >" + price + " </td >";
-                newcontent += "<td >" + qty + "</td >";
-                newcontent += "<td >" + amount + "</td >";
-
-                var hdnappendAmount = $(this).find(".hdnappendAmount").val();
-                var hdnappendhdnStoreItemId = $(this).find(".hdnappendhdnStoreItemId").val();
-                // alert('product id<>item id' + StatusId)
-                newcontent += "<td   >";
-                newcontent += "<input type='hidden' id='hdnappendAmount' class='hdnappendAmount' value=" + hdnappendAmount + " />";
-                newcontent += "<input type='hidden' id='hdnappendhdnStoreItemId' class='hdnappendhdnStoreItemId' value=" + hdnappendhdnStoreItemId + " />";
-                newcontent += "<a  class='glyphicon glyphicon-edit edit' style='cursor:pointer;'/>";
-                newcontent += "<a  class='glyphicon glyphicon-trash delete' style='cursor:pointer;'/>";
+                newcontent += "<input type='hidden' class='hdnappendhdnItemType' value=" + ItemType + " />";
+                newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
+                newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
                 newcontent += "</td >";
                 newcontent += "</tr >";
                 totalamnt = parseFloat(totalamnt) + parseFloat(hdnappendAmount);
+            }
+            else {
+                let hdnappendhdnItemType = $(this).find(".hdnappendhdnItemType").val();
+                let hdnAccountCategoryName = $(this).find('.hdnappendhdnAccountCategoryName').val();
+                let hdnappendProductName = $(this).find('.hdnappendProductName').val();
+                let amnt = $(this).find('.hdnappendAmount').val();
+
+                itemstotal = parseFloat(itemstotal) + parseFloat(amnt);
+                itemstotalWithOutTax = parseFloat(itemstotalWithOutTax) + parseFloat(amnt);
+                dueMoney = parseFloat(dueMoney) + parseFloat(amnt);
+                x = parseFloat(x) + parseFloat(1);
+
+                newcontent += "<tr >";
+                newcontent += "<td>" + x + " </td >";
+                newcontent += "<td>" + $(this).find("td").eq(1).html(); + " </td >";
+                newcontent += "<td>" + $(this).find("td").eq(2).html(); + " </td >";
+                newcontent += "<td>" + $(this).find("td").eq(3).html(); + " </td >";
+                newcontent += "<td>" + $(this).find("td").eq(4).html(); + " </td >";
+                newcontent += "<td>" + $(this).find("td").eq(5).html(); + " </td >";
+                newcontent += "<td   >";
+
+                let hdnappendMRP = $(this).find('.hdnappendMRP').val();
+                let hdnappendQuantity = $(this).find('.hdnappendQuantity').val();
+                let hdnappendProductId = $(this).find(".hdnappendProductId").val();
+                let hdnappendhdnStoreItemId = $(this).find(".hdnappendhdnStoreItemId").val();
+                let hdnappendProductAccountId = $(this).find(".hdnappendProductAccountId").val();
+                let hdnappenItemDesc = $(this).find(".hdnappenItemDesc").val();
+                if (hdnappenItemDesc != undefined) {
+                    hdnappenItemDesc.replace(/(\s+&\s+|\s+)/g, '-');
+                }
+                //  let hdnappenItemDesc = $(this).find("td").eq(2).html().replace(/(\s+&\s+|\s+)/g,'-');
+
+                newcontent += "<input type='hidden' class='hdnappendhdnAccountCategoryName' value=" + hdnAccountCategoryName + " />";
+                newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnappendProductId + " />";
+                newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnappendProductAccountId + " />";
+                newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
+                newcontent += "<input type='hidden' class='hdnappenItemDesc' value=" + hdnappenItemDesc + " />";
+                newcontent += "<input type='hidden' class='hdnappendAmount' value=" + amnt + " />";
+                newcontent += "<input type='hidden' class='hdnappendMRP' value=" + hdnappendMRP + " />";
+                newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + hdnappendQuantity + " />";
+                newcontent += "<input type='hidden' class='hdnappendhdnStoreItemId' value=" + hdnappendhdnStoreItemId + " />";
+                newcontent += "<input type='hidden' class='hdnappendhdnItemType' value=" + hdnappendhdnItemType + " />";
+                newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
+                newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
+                newcontent += "</td >";
+                newcontent += "</tr >";
+               
             }
         }
     });
@@ -344,19 +378,25 @@ $('.btnupdate').on("click", function (e) {
         var amount = parseFloat($(this).find("td").eq(4).html()).toFixed(2);
 
         newcontent += "<tr >";
-        newcontent += "<td >" + productname + " </td >";
-        newcontent += "<td >" + txtDescription + " </td >";
-        newcontent += "<td >" + price + " </td >";
-        newcontent += "<td >" + qty + "</td >";
-        newcontent += "<td >" + amount + "</td >";
-        var hdnappendAmount = $(this).find(".hdnappendAmount").val();
-        var hdnappendhdnStoreItemId = $(this).find(".hdnappendhdnStoreItemId").val();
-        // alert('product id<>item id' + StatusId)
+        newcontent += "<td  >" + x + " </td >";
+        newcontent += "<td  class='txtStoreItem'>" + txtStoreItem + " </td >";
+        newcontent += "<td  class='txtDescription'>" + txtDescription + " </td >";
+        newcontent += "<td  >" + txtQuantity + " </td >";
+        newcontent += "<td  >" + txtMRP + " </td >";
+        newcontent += "<td  >" + txtAmount + " </td >";
         newcontent += "<td   >";
-        newcontent += "<input type='hidden' id='hdnappendAmount' class='hdnappendAmount' value=" + hdnappendAmount + " />";
-        newcontent += "<input type='hidden' id='hdnappendhdnStoreItemId' class='hdnappendhdnStoreItemId' value=" + hdnappendhdnStoreItemId + " />";
-        newcontent += "<a  class='glyphicon glyphicon-edit edit' style='cursor:pointer;'/>";
-        newcontent += "<a  class='glyphicon glyphicon-trash delete' style='cursor:pointer;'/>";
+        newcontent += "<input type='hidden' class='hdnappendhdnAccountCategoryName' value=" + hdnAccountCategoryName.replace(/\s/g, '') + " />";
+        newcontent += "<input type='hidden' class='hdnappendProductId' value=" + hdnProductId + " />";
+        newcontent += "<input type='hidden' class='hdnappendProductAccountId' value=" + hdnProductAccountId + " />";
+        newcontent += "<input type='hidden' class='hdnappendProductName' value=" + txtStoreItem + " />";
+        newcontent += "<input type='hidden' class='hdnappenItemDesc' value=" + txtDescription.replace(/(\s+&\s+|\s+)/g, '-') + " />";
+        newcontent += "<input type='hidden' class='hdnappendMRP' value=" + txtMRP + " />";
+        newcontent += "<input type='hidden' class='hdnappendQuantity' value=" + txtQuantity + " />";
+        newcontent += "<input type='hidden' class='hdnappendAmount' value=" + parseFloat(txtAmount) + " />";
+        newcontent += "<input type='hidden' class='hdnappendhdnStoreItemId' value=" + hdnStoreItemId + " />";
+        newcontent += "<input type='hidden' class='hdnappendhdnItemType' value=" + ItemType + " />";
+        newcontent += "<a  class='fa fa-edit edit' style='cursor:pointer;'/>";
+        newcontent += "<a  class='fa fa-trash delete' style='cursor:pointer;'/>";
         newcontent += "</td >";
         newcontent += "</tr >";
         totalamnt = parseFloat(totalamnt) + parseFloat(hdnappendAmount);
@@ -366,15 +406,15 @@ $('.btnupdate').on("click", function (e) {
     newcontent += "<tr >";
     newcontent += "<td ></td >";
     newcontent += "<td ></td >";
-    newcontent += "<td ></td >";
-    newcontent += "<td >Total</td >";
-    newcontent += "<td  align='right'>" + parseFloat(totalamnt).toFixed(2) + " </td >";
-    newcontent += "<td ></td >";
+    newcontent += "<td  ></td >";
+    newcontent += "<td  ><input type='hidden' id='hdnItemTotal' class='itemstotalhdnclass' value=" + itemstotal + " /></td >";
+    newcontent += "<td  >Total</td >";
+    newcontent += "<td  class='itemstotalclass'>" + numberWithCommas(parseFloat(itemstotal).toFixed(2)) + " </td >";
     newcontent += "</tr >";
 
     $('#tbodyitems').empty().append(newcontent);
-    document.getElementById("ProductsTotal").value = numberWithCommas(parseFloat(totalamnt).toFixed(2));
-    document.getElementById("hdnProductsTotal").value = parseFloat(totalamnt).toFixed(2);
+    document.getElementById("hdnProductsTotal").value = parseFloat(itemstotal).toFixed(2);
+    document.getElementById("Input_Total").value = parseFloat(itemstotal).toFixed(2);
     ClearItemAdd()
 });
 
@@ -517,10 +557,10 @@ $("#tbodyitems").on('click', '.edit', function (e) {
     var txtSrNo = tr.find("td").eq(0).html().trim();
     var txtStoreItem = tr.find("td").eq(1).html().trim();
     var txtDescription = tr.find("td").eq(2).html().trim();
-    var txtMRP = tr.find("td").eq(3).html().trim();
-    var txtQuantity = tr.find("td").eq(4).html().trim();
+    var txtQuantity = tr.find("td").eq(3).html().trim();
+    var txtMRP = tr.find("td").eq(4).html().trim();   
     var txtAmount = tr.find("td").eq(5).html().trim();
-    var hdnappendItemId = $(this).find(".hdnappendItemId").val();
+    var hdnappendItemId = tr.find(".hdnappendItemId").val();
 
     $('#txtDescription').val(txtDescription);
     $('#txtStoreItem').val(txtStoreItem);
