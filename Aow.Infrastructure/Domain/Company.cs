@@ -30,6 +30,8 @@ namespace Aow.Infrastructure.Domain
         public int NoOfDays { get; set; }
         public bool Status { get; set; }
         public virtual IList<FinancialYear> FinancialYears { get; set; }
+        public virtual IList<ProductCategory> ProductCategories { get; set; }
+        public virtual IList<LedgerCategory> LedgerCategories { get; set; }
         public virtual IList<AppUserCompany> AppUserCompanies { get; set; }
         public virtual IList<UserPayment> UserPayments { get; set; }
     }

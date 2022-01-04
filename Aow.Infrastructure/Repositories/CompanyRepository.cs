@@ -22,7 +22,10 @@ namespace Aow.Infrastructure.Repositories
 
         public async Task<List<Company>> GetAllCompanies()
         {
-            var result = await FindAll().Include(x => x.FinancialYears).ToListAsync();
+            var result = await FindAll().
+                Include(x => x.FinancialYears).ThenInclude(x => x.Vouchers).
+                Include(x => x.ProductCategories).ThenInclude(x => x.Products).
+                Include(x => x.LedgerCategories).ThenInclude(x => x.Ledgers).ToListAsync();
             return result;
         }
         public Task<PagedList<Company>> GetCompanies(PagingParameters ownerParameters)

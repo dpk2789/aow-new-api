@@ -1,5 +1,6 @@
 ﻿using Aow.Infrastructure.Common;
 using System;
+using System.Collections.Generic;
 
 namespace Aow.Infrastructure.Domain
 {
@@ -10,7 +11,7 @@ namespace Aow.Infrastructure.Domain
         public DateTime? End { get; set; }       
         public bool IsActive { get; set; }
         public bool? IsLocked { get; set; }
-        
+        public virtual IList<Voucher> Vouchers { get; set; }
         public Guid CompanyId { get; set; }
         public virtual Company Company { get; set; }
     }
